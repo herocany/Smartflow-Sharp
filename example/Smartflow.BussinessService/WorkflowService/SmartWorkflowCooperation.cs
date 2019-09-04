@@ -10,7 +10,7 @@ namespace Smartflow.BussinessService.WorkflowService
     {
         public override IWorkflowCooperationStrategy SelectStrategy()
         {
-            return new LastStrategy();
+            return base.SelectStrategy();
         }
 
         public override bool Check(ASTNode node, IList<WorkflowProcess> records)
