@@ -7,7 +7,7 @@ namespace Smartflow
 {
     public class FirstStrategy : IWorkflowCooperationStrategy
     {
-        public string Decide(IList<WorkflowProcess> records, string destination, Action<WorkflowProcess> action)
+        public string Decide(IList<WorkflowProcess> records, string destination, Action<WorkflowProcess> callback)
         {
             var record = records.OrderBy(e => e.CreateDateTime).FirstOrDefault();
 
@@ -16,7 +16,7 @@ namespace Smartflow
                 foreach (WorkflowProcess workflowProcess in records)
                 {
                     workflowProcess.Destination = record.Destination;
-                    action(workflowProcess);
+                    callback(workflowProcess);
                 }
             }
 

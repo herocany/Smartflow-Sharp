@@ -7,12 +7,12 @@ namespace Smartflow
 {
     public class LastStrategy : IWorkflowCooperationStrategy
     {
-        public string Decide(IList<WorkflowProcess> records, string destination, Action<WorkflowProcess> action)
+        public string Decide(IList<WorkflowProcess> records, string destination, Action<WorkflowProcess> callback)
         {
             foreach (WorkflowProcess workflowProcess in records)
             {
                 workflowProcess.Destination = destination;
-                action(workflowProcess);
+                callback(workflowProcess);
             }
 
             return destination;

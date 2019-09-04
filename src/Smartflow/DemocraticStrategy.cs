@@ -26,7 +26,7 @@ namespace Smartflow
 
         }
 
-        public string Decide(IList<WorkflowProcess> records, string destination, Action<WorkflowProcess> action)
+        public string Decide(IList<WorkflowProcess> records, string destination, Action<WorkflowProcess> callback)
         {
             string groupKey = GetDestination(records, destination);
             if (!String.IsNullOrEmpty(groupKey))
@@ -34,7 +34,7 @@ namespace Smartflow
                 foreach (WorkflowProcess record in records)
                 {
                     record.Destination = groupKey;
-                    action(record);
+                    callback(record);
                 }
             }
             return String.IsNullOrEmpty(groupKey) ? destination : groupKey;

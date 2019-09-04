@@ -7,6 +7,6 @@ namespace Smartflow
 {
     public interface IWorkflowCooperationStrategy
     {
-        string Decide(IList<WorkflowProcess> records, string destination, Action<WorkflowProcess> action);
+        string Decide(IList<WorkflowProcess> records, string destination, Action<WorkflowProcess> callback);
     }
 }
