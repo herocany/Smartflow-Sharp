@@ -145,7 +145,7 @@ namespace Smartflow
 
             if (validation)
             {
-                context.Instance.Jump(to.ID);
+                context.Instance.Jump(selectTransition);
 
                 var next = WorkflowInstance
                    .GetInstance(current.InstanceID)

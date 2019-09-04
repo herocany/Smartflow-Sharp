@@ -11,17 +11,27 @@ namespace Smartflow
         public void Persistent(WorkflowProcess process)
         {
             string sql = "INSERT INTO T_PROCESS(NID,Origin,Destination,TransitionID,InstanceID,NodeType,RelationshipID,Increment) VALUES(@NID,@Origin,@Destination,@TransitionID,@InstanceID,@NodeType,@RelationshipID,@Increment)";
-            Connection.Execute(sql, new
+            if (!String.IsNullOrEmpty(process.NID))
             {
-                NID = Guid.NewGuid().ToString(),
-                Origin = process.Origin,
-                Destination = process.Destination,
-                TransitionID = process.TransitionID,
-                InstanceID = process.InstanceID,
-                NodeType = process.NodeType.ToString(),
-                RelationshipID = process.RelationshipID,
-                Increment = process.Increment
-            });
+                Connection.Execute("UPDATE T_PROCESS SET Destination=@Destination WHERE NID=@NID", new{
+                    Destination= process.Destination,
+                    NID = process.NID
+                });
+            }
+            else
+            {
+                Connection.Execute(sql, new
+                {
+                    NID = Guid.NewGuid().ToString(),
+                    Origin = process.Origin,
+                    Destination = process.Destination,
+                    TransitionID = process.TransitionID,
+                    InstanceID = process.InstanceID,
+                    NodeType = process.NodeType.ToString(),
+                    RelationshipID = process.RelationshipID,
+                    Increment = process.Increment
+                });
+            }
         }
 
         public WorkflowProcess GetRecord(string instanceID, string destinationID)
@@ -38,7 +48,7 @@ namespace Smartflow
             return instance;
         }
 
-        public IList<WorkflowProcess> GetLatestRecords(string instanceID, string NID,int increment)
+        public IList<WorkflowProcess> GetLatestRecords(string instanceID, string NID, int increment)
         {
             string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_LATEST);
             return Connection.Query<WorkflowProcess>(query, new
