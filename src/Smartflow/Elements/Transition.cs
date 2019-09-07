@@ -49,7 +49,7 @@ namespace Smartflow.Elements
 
         internal override void Persistent()
         {
-            string sql = "INSERT INTO T_TRANSITION(NID,RelationshipID,Name,Destination,Origin,InstanceID,Expression) VALUES(@NID,@RelationshipID,@Name,@Destination,@Origin,@InstanceID,@Expression)";
+            string sql = "INSERT INTO T_TRANSITION(NID,RelationshipID,Name,Destination,Origin,InstanceID,Expression,ID) VALUES(@NID,@RelationshipID,@Name,@Destination,@Origin,@InstanceID,@Expression,@ID)";
             Connection.Execute(sql, new
             {
                 NID = Guid.NewGuid().ToString(),
@@ -58,7 +58,8 @@ namespace Smartflow.Elements
                 Destination = Destination,
                 Origin = Origin,
                 InstanceID = InstanceID,
-                Expression = Expression
+                Expression = Expression,
+                ID=ID
             });
         }
 
@@ -66,6 +67,7 @@ namespace Smartflow.Elements
         {
             this.name = element.Attribute("name").Value;
             this.destination = element.Attribute("destination").Value;
+            this.id = element.Attribute("id").Value;
             if (element.HasElements)
             {
                 XElement expression = element.Elements("expression").FirstOrDefault();

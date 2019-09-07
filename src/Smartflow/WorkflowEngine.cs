@@ -125,7 +125,7 @@ namespace Smartflow
             this.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
         }
 
-        protected void Invoke(WorkflowContext context, ASTNode to, string selectTransition, System.Action<ExecutingContext> executeAction)
+        protected void Invoke(WorkflowContext context, ASTNode to, string selectTransition, System.Action<ExecutingContext> callback)
         {
             WorkflowNode current = context.Instance.Current;
 
@@ -134,19 +134,13 @@ namespace Smartflow
             if (WorkflowCooperationService != null && current.Cooperation > 0)
             {
                 IList<WorkflowProcess> records = ProcessService.GetLatestRecords(current.InstanceID, current.NID, current.Increment);
-
                 validation = WorkflowCooperationService.Check(current, records);
 
-                selectTransition = WorkflowCooperationService
-                    .SelectStrategy()
-                    .Decide(records, to.ID,
-                    (workflowProcess) => ProcessService.Persistent(workflowProcess));
+                selectTransition = WorkflowCooperationService.SelectStrategy().Decide(records, to.ID);
             }
-
             if (validation)
             {
                 context.Instance.Jump(selectTransition);
-
                 var next = WorkflowInstance
                    .GetInstance(current.InstanceID)
                    .Current;
@@ -156,7 +150,7 @@ namespace Smartflow
                 }
             }
 
-            executeAction(new ExecutingContext()
+            callback(new ExecutingContext()
             {
                 From = current,
                 To = to,

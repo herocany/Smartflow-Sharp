@@ -11,27 +11,17 @@ namespace Smartflow
         public void Persistent(WorkflowProcess process)
         {
             string sql = "INSERT INTO T_PROCESS(NID,Origin,Destination,TransitionID,InstanceID,NodeType,RelationshipID,Increment) VALUES(@NID,@Origin,@Destination,@TransitionID,@InstanceID,@NodeType,@RelationshipID,@Increment)";
-            if (!String.IsNullOrEmpty(process.NID))
+            Connection.Execute(sql, new
             {
-                Connection.Execute("UPDATE T_PROCESS SET Destination=@Destination WHERE NID=@NID", new{
-                    Destination= process.Destination,
-                    NID = process.NID
-                });
-            }
-            else
-            {
-                Connection.Execute(sql, new
-                {
-                    NID = Guid.NewGuid().ToString(),
-                    Origin = process.Origin,
-                    Destination = process.Destination,
-                    TransitionID = process.TransitionID,
-                    InstanceID = process.InstanceID,
-                    NodeType = process.NodeType.ToString(),
-                    RelationshipID = process.RelationshipID,
-                    Increment = process.Increment
-                });
-            }
+                NID = Guid.NewGuid().ToString(),
+                Origin = process.Origin,
+                Destination = process.Destination,
+                TransitionID = process.TransitionID,
+                InstanceID = process.InstanceID,
+                NodeType = process.NodeType.ToString(),
+                RelationshipID = process.RelationshipID,
+                Increment = process.Increment
+            });
         }
 
         public WorkflowProcess GetRecord(string instanceID, string destinationID)
@@ -57,6 +47,15 @@ namespace Smartflow
                 NID = NID,
                 Increment = increment
             }).OrderBy(order => order.CreateDateTime).ToList<WorkflowProcess>();
+        }
+
+        public IList<dynamic> GetRecords(string instanceID)
+        {
+            string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_RECORD);
+            return Connection.Query(query, new
+            {
+                InstanceID = instanceID
+            }).OrderBy(order => order.CreateDateTime).ToList();
         }
     }
 }

@@ -96,6 +96,7 @@
     <Compile Include="WorkflowProcess.cs" />
     <Compile Include="WorkflowProcessService.cs" />
     <Compile Include="WorkflowService.cs" />
+    <Compile Include="WorkflowTransition.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SmartflowResource.resx">

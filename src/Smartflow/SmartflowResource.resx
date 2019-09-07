@@ -147,4 +147,21 @@
     <value>SELECT * FROM T_PROCESS WHERE InstanceID=@InstanceID AND RelationshipID=@NID  AND Increment=@Increment ORDER BY CreateDateTime ASC </value>
     <comment>获取最新审批过程记录</comment>
   </data>
+
+  <data name="SQL_WORKFLOW_PROCESS_RECORDS" xml:space="preserve">
+    <value>
+      SELECT Origin,Destination
+        ,(SELECT ID FROM T_TRANSITION T WHERE T.NID=X.TransitionID) ID
+         FROM T_PROCESS X 
+	       WHERE InstanceID=@InstanceID ORDER BY CreateDateTime ASC
+      </value>
+    <comment>获取最新审批过程记录</comment>
+  </data>
+  
+  <data name="SQL_WORKFLOW_TRANSITION_RECORD" xml:space="preserve">
+    <value>
+     SELECT [NID],[RELATIONSHIPID],[NAME],[DESTINATION],[ORIGIN],[INSTANCEID],[EXPRESSION],[ID] FROM T_TRANSITION WHERE NID=@NID
+    </value>
+    <comment>获取路线</comment>
+  </data>
 </root>

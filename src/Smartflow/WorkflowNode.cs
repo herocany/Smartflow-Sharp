@@ -9,26 +9,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-
 using Smartflow.Dapper;
 using Smartflow.Elements;
-
 
 namespace Smartflow
 {
     public class WorkflowNode : Node
     {
-        /// <summary>
-        /// 监控的过程服务
-        /// </summary>
-        protected IWorkProcessPersistent ProcessService
-        {
-            get
-            {
-                return WorkflowGlobalServiceProvider.Resolve<IWorkProcessPersistent>();
-            }
-        }
-
         protected WorkflowNode()
         {
 
@@ -51,15 +38,6 @@ namespace Smartflow
             return this.Transitions;
         }
 
-        /// <summary>
-        /// 上一个执行跳转路线
-        /// </summary>
-        public Transition FromTransition
-        {
-            get;
-            set;
-        }
-
         #region 节点方法
 
         public static WorkflowNode ConvertToReallyType(ASTNode node)
@@ -73,22 +51,10 @@ namespace Smartflow
             wfNode.Increment = node.Increment;
             wfNode.Cooperation = node.Cooperation;
             wfNode.Transitions = wfNode.QueryWorkflowNode(node.NID);
-            wfNode.FromTransition = wfNode.GetHistoryTransition();
             wfNode.Groups = wfNode.GetGroup();
             wfNode.Actors = wfNode.GetActors();
             wfNode.Actions = wfNode.GetActions();
             return wfNode;
-        }
-
-        /// <summary>
-        /// 上一个执行跳转节点
-        /// </summary>
-        /// <returns></returns>
-        public WorkflowNode GetFromNode()
-        {
-            if (FromTransition == null) return null;
-            ASTNode node = GetNode(FromTransition.Origin);
-            return WorkflowNode.ConvertToReallyType(node);
         }
 
         protected List<Actor> GetActors()
@@ -101,7 +67,6 @@ namespace Smartflow
             }).ToList();
         }
 
-
         protected List<Elements.Action> GetActions()
         {
             string query = " SELECT * FROM T_ACTION WHERE RelationshipID=@RelationshipID AND InstanceID=@InstanceID ";
@@ -110,37 +75,6 @@ namespace Smartflow
                 RelationshipID = NID,
                 InstanceID = InstanceID
             }).ToList();
-        }
-
-        /// <summary>
-        /// 获取回退线路
-        /// </summary>
-        /// <returns>路线</returns>
-        protected Transition GetHistoryTransition()
-        {
-            Transition transition = null;
-            try
-            {
-                WorkflowProcess process = ProcessService.GetRecord(InstanceID,this.ID);
-                if (process != null && NodeType != WorkflowNodeCategory.Start)
-                {
-                    ASTNode n = GetNode(process.Origin);
-                    while (n.NodeType == WorkflowNodeCategory.Decision)
-                    {
-                        process = ProcessService.GetRecord(InstanceID, n.ID);
-                        n = GetNode(process.Origin);
-
-                        if (n.NodeType == WorkflowNodeCategory.Start)
-                            break;
-                    }
-                    transition = GetTransition(process.TransitionID);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return transition;
         }
 
         /// <summary>
@@ -192,29 +126,7 @@ namespace Smartflow
             }
             return returnTransition;
         }
-
-        /// <summary>
-        /// 获取下一组
-        /// </summary>
-        /// <param name="transitionID">跳转ID</param>
-        /// <returns></returns>
-        public List<Group> GetNextGroup(string transitionID)
-        {
-            Transition executeTransition = this.GetExecuteTransition(transitionID);
-            ASTNode selectNode = this.GetNode(executeTransition.Destination);
-
-            string query = "SELECT * FROM T_GROUP WHERE RelationshipID=@RelationshipID AND InstanceID=@InstanceID";
-            return Connection.Query<Group>(query, new
-            {
-                RelationshipID = selectNode.NID,
-                InstanceID = InstanceID
-
-            }).ToList();
-        }
-
         #endregion
-
-
 
         internal void DoIncrement()
         {

@@ -382,6 +382,10 @@
             Draw._proto_NC[propertyName].id = generatorId();
         }
 
+        for (var prop in Draw._proto_LC) {
+            Draw._proto_LC[prop].id = generatorId();
+        }
+
         build.append(config.rootStart);
         $.each(Draw._proto_NC, function () {
             if (this.category !== 'marker') {
@@ -397,11 +401,11 @@
     /**
      * 数据导入
      * */
-    Draw.prototype.import = function (structure, disable, executeNodeID, process) {
+    Draw.prototype.import = function (structure, disable, executeNodeID,record) {
         var dwInstance = this,
             data = Draw.parse(structure).workflow;
 
-        var record = process || [];
+        var recordArray = record || [];
 
         function findUID(destination) {
             var id;
@@ -415,6 +419,19 @@
             return id;
         }
 
+        function findRecord(id, destination) {
+            for (var i = 0; i < recordArray.length; i++) {
+                 var records = recordArray[i];
+                for (var j = 0; j < records.length; j++) {
+                    var record = records[j];
+                    if (record.Key == destination && record.Value == id) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         $.each(data, function () {
             var node = this;
             node.category = node.category.toLowerCase();
@@ -422,10 +439,10 @@
             var instance = dwInstance.create(node.category, true);
             $.extend(instance, node, util.parseNode(node.layout));
             instance.disable = (disable || false);
+            instance.isSelect = findRecord(node.id, 'Destination');
             instance.draw(executeNodeID);
             node.$id = instance.$id;
         });
-
         $.each(data, function () {
             var self = this;
 
@@ -440,6 +457,8 @@
                 }
 
                 $.extend(transition, this);
+
+                transition.isSelect = findRecord(transition.id, 'ID');
 
                 transition.disable = (disable || false);
                 transition.draw(this.layout);
@@ -488,6 +507,7 @@
         //背景颜色
         this.bgColor = '#f06';
         this.bgCurrentColor = 'green';
+        this.isSelect = false;
         this.drawInstance = undefined;
     }
 
@@ -644,6 +664,14 @@
                     .append(config.lQuotation)
                     .append(L.getPoints().join(" "))
                     .append(config.rQuotation)
+
+                    .append(config.space)
+                    .append(config.id)
+                    .append(config.equal)
+                    .append(config.lQuotation)
+                    .append(L.id)
+                    .append(config.rQuotation)
+
                     .append(config.end);
 
                 if (self.category === 'decision') {
@@ -682,7 +710,7 @@
                         .append(config.lQuotation)
                         .append(marker.length)
                         .append(config.rQuotation)
-                        .append(config.afterClose)
+                        .append(config.afterClose);
 
                 });
 
@@ -734,14 +762,16 @@
         this.length = 0;
         this.line = line;
         Marker.base.Constructor.call(this, "标记位", "marker");
+        this.isSelect = this.line.isSelect;
     }
 
     Marker.extend(Shape, {
         draw: function () {
             var self = this,
-                dw = self.drawInstance.draw,
-                circle = dw.circle(self.r)
-                    .fill(self.bgColor);
+                dw = self.drawInstance.draw;
+
+            var color = this.isSelect ? self.bgCurrentColor : self.bgColor;
+            var circle = dw.circle(self.r).fill(color);
 
             circle.move(self.x, self.y);
             self.$id = circle.id();
@@ -805,13 +835,15 @@
             var L = (!!points) ? dw.draw.polyline(points) :
                 dw.draw.polyline([[self.x1, self.y1], [self.x2, self.y2]]);
 
+            var color = self.isSelect ? self.bgCurrentColor : self.bgColor;
+
             L.fill("none").stroke({
                 width: self.border,
-                color: self.bgColor
+                color: color
             });
 
             L.marker('end', 10, 10, function (add) {
-                add.path('M0,0 L0,6 L6,3 z').fill("#f00");
+                add.path('M0,0 L0,6 L6,3 z').fill(color);
                 this.attr({
                     refX: 5,
                     refY: 2.9,
@@ -888,7 +920,7 @@
             delete Draw._proto_LC[self.$id];
         },
         first: function () {
-            var pointArray = this.getPoints()
+            var pointArray = this.getPoints();
             var point = pointArray[0];
             var xy = point.split(",");
             return {
@@ -1022,13 +1054,12 @@
     }
 
     Node.extend(Shape, {
-        draw: function (b) {
+        draw: function () {
             var n = this,
-                dw = n.drawInstance,
-                color = (b == n.id && b && n.id) ?
-                    n.bgCurrentColor : n.bgColor,
+                dw = n.drawInstance;
 
-                rect = dw.draw.rect(n.w, n.h)
+            var color = n.isSelect ? n.bgCurrentColor : n.bgColor;
+            var rect = dw.draw.rect(n.w, n.h)
                     .attr({ fill: color, x: n.x, y: n.y });
 
             n.brush = dw.draw.text(n.name);

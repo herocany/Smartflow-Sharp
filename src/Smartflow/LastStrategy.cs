@@ -7,15 +7,11 @@ namespace Smartflow
 {
     public class LastStrategy : IWorkflowCooperationStrategy
     {
-        public string Decide(IList<WorkflowProcess> records, string destination, Action<WorkflowProcess> callback)
+        public string Decide(IList<WorkflowProcess> records, string destination)
         {
-            foreach (WorkflowProcess workflowProcess in records)
-            {
-                workflowProcess.Destination = destination;
-                callback(workflowProcess);
-            }
+            var record = records.OrderByDescending(e => e.CreateDateTime).FirstOrDefault();
 
-            return destination;
+            return String.IsNullOrEmpty(destination) ? record.Destination : destination;
         }
     }
 }

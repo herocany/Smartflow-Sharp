@@ -31,7 +31,6 @@ namespace Smartflow.Web.Mvc.Controllers
             ViewBag.instanceID = instanceID;
             if (!String.IsNullOrEmpty(instanceID))
             {
-                var executeNode = bwfs.GetCurrentPrevNode(instanceID);
                 var current = bwfs.GetCurrent(instanceID);
                 ViewBag.ButtonName = current.Name;
                 ViewBag.JumpAuth = current.Name == "开始" ? true : CommonMethods.CheckAuth(current.NID, instanceID, UserInfo);
@@ -59,7 +58,6 @@ namespace Smartflow.Web.Mvc.Controllers
         [HttpPost]
         public JsonResult GetCurrent(string instanceID)
         {
-            var executeNode = bwfs.GetCurrentPrevNode(instanceID);
             var current = bwfs.GetCurrent(instanceID);
             return Json(new
             {

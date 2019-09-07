@@ -38,6 +38,17 @@ namespace Smartflow
         public const string SQL_WORKFLOW_PROCESS_LATEST = "SQL_WORKFLOW_PROCESS_LATEST";
 
         /// <summary>
+        /// 审批过程所有记录
+        /// </summary>
+        public const string SQL_WORKFLOW_PROCESS_RECORD = "SQL_WORKFLOW_PROCESS_RECORDS";
+
+        /// <summary>
+        /// 获取路线
+        /// </summary>
+        public const string SQL_WORKFLOW_TRANSITION_RECORD = "SQL_WORKFLOW_TRANSITION_RECORD";
+
+
+        /// <summary>
         /// 验证MAIL地址，正则表达式
         /// </summary>
         public const string MAIL_URL_EXPRESSION = "MAIL_URL_EXPRESSION";

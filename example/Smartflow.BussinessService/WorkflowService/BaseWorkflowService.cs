@@ -30,11 +30,7 @@ namespace Smartflow.BussinessService.WorkflowService
             return GetCurrentNode(instanceID);
         }
 
-        public ASTNode GetCurrentPrevNode(string instanceID)
-        {
-            var current = GetCurrentNode(instanceID);
-            return current.GetFromNode();
-        }
+        
 
         public WorkflowNode GetCurrentNode(string instanceID)
         {

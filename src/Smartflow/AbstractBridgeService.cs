@@ -44,10 +44,15 @@ namespace Smartflow
         public dynamic GetJumpProcess(string instanceID)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            IList<dynamic> records =
+                WorkflowGlobalServiceProvider.Resolve<IWorkProcessPersistent>()
+                .GetRecords(instanceID);
+
             return new
             {
                 structure = instance.Resource,
-                id = instance.Current.ID
+                id = instance.Current.ID,
+                record = records
             };
         }
     }

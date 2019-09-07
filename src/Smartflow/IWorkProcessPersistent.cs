@@ -19,6 +19,8 @@ namespace Smartflow
 
         WorkflowProcess GetRecord(string instanceID, string destinationID);
 
+        IList<dynamic> GetRecords(string instanceID);
+
         IList<WorkflowProcess> GetLatestRecords(string instanceID, string NID,int Increment);
     }
 }
