@@ -123,15 +123,15 @@
         } else {
             loadGroup(nx.group);
             loadActor(nx.actor);
-            loadActions(nx.action);
         }
 
+        loadActions(nx.action);
         var nodeName = nx.category.toLocaleLowerCase();
         var el = layui.element;
         var tabs = {
             end: ['workflow-rule','workflow-role', 'workflow-form', 'workflow-actor','workflow-info'],
             node: ['workflow-rule', 'workflow-form'],
-            decision: ['workflow-role', 'workflow-form', 'workflow-actor', 'workflow-action', 'workflow-info'],
+            decision: ['workflow-role', 'workflow-form', 'workflow-actor', 'workflow-info'],
             start: ['workflow-rule', 'workflow-role', 'workflow-info', 'workflow-actor', 'workflow-action']
         };
 
@@ -210,15 +210,13 @@
         });
 
         form.on('checkbox(custTransferCheck)', function (data) {
-            var checkbox = getCheckbox(),
-                total = $("#selectItems .select-item").length;
-
-            if (checkbox.select.length == total) {
-                $("#selectAll").prop('checked', true);
-            } else {
-                $("#selectAll").prop('checked', false);
-            }
-            form.render('checkbox', "selectAll");
+            //var checkbox = getCheckbox();
+            //if (checkbox.select.length == total) {
+            //    $("#selectAll").prop('checked', true);
+            //} else {
+            //    $("#selectAll").prop('checked', false);
+            //}
+           // form.render('checkbox', "selectAll");
             doLeftCheckStatus();
         });
 
@@ -255,8 +253,8 @@
 
             $(this).addClass('layui-btn-disabled');
 
-            $("#selectAll").prop('checked', false);
-            form.render('checkbox', "selectAll");
+          //  $("#selectAll").prop('checked', false);
+           // form.render('checkbox', "selectAll");
             form.render('checkbox', 'assign_to_actor');
 
 

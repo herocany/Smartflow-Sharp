@@ -6,23 +6,23 @@
 <head>
     <title>流程节点配置</title>
     <link href="~/Content/design/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/Content/design/jquery.min.js"></script>
+    <script src="~/Content/design/utils.js"></script>
+    <script src="~/Content/design/layui/layui.all.js"></script>
     <style type="text/css">
-        .layui-table-tool-temp {
-            padding-right: 0;
+        .layui-table-tool-temp{
+            padding-right:0;
         }
-
         .layui-table-tool {
             padding: 5px 15px;
             min-height: initial;
             background-color: #FAFAFA;
-
         }
 
         .layui-elem-field legend {
             font-size: 16px;
             color: #32a6fa;
         }
-
         .layui-input,
         .layui-transfer-box,
         .layui-textarea {
@@ -30,11 +30,14 @@
             resize: none;
         }
 
-        .layui-textarea {
-            min-height: initial;
-            height: 60px;
+        .layui-form-item{
+            margin-bottom:5px;
         }
-
+     
+        .layui-textarea {
+            height: 40px !important;
+            min-height: 40px !important;
+        }
         .layui-to-tool {
             height: 340px;
             padding-top: 140px;
@@ -44,30 +47,41 @@
             vertical-align: middle;
             margin: 0 15px;
         }
-        
-        .smartflow-checkbox{
-           margin-top:10px;
+        .smartflow-checkbox {
+            margin-top: 10px;
         }
-
-        .smartflow-checkbox-box,.smartflow-checkbox-label{
-            vertical-align:middle;
-            display:inline;
-            user-select:none;
-            font-size:14px;
+        .smartflow-checkbox-box, .smartflow-checkbox-label {
+            vertical-align: middle;
+            display: inline;
+            user-select: none;
+            font-size: 14px;
         }
-
-        /*.layui-to-tool .layui-btn:first-child {
-            margin-bottom: 15px;
+        .layui-field-box {
+            height: 200px;
+            overflow: auto;
+            padding-top: 1px !important;
         }
-
-        .layui-to-tool .layui-btn {
-            display: block;
-            margin: 0;
-            padding: 0 15px;
-        }*/
+        .smartflow-actor{
+            overflow-y:auto;
+            border:solid 1px #EEE;
+            height:340px;
+            padding-left:10px;
+        }
+        .smartflow-search-input{
+            height:30px;line-height:30px;border:none;
+            width:270px;
+        }
+        .smartflow-search-icon{
+            background-color:#FAFAFA;border:none;
+            width: 20px;
+        }
+        .smartflow-search-icon>i{
+            font-size: 18px; color:#0094ff
+        }
+        .smartflow-border{
+            border:solid 1px #ddd;
+        }
     </style>
-    <script src="~/Content/design/jquery.min.js"></script>
-    <script src="~/Content/design/utils.js"></script>
 </head>
 <body>
     <div class="layui-container">
@@ -107,8 +121,8 @@
                     </form>
                     <fieldset class="layui-elem-field layui-field-title">
                         <legend>表达式配置</legend>
-                        <div class="layui-field-box" style="height:200px;overflow: auto;">
-                            <div class="layui-form" lay-filter="expression" id="expression"></div>
+                        <div class="layui-field-box">
+                            <div class="layui-form layui-form-pane" lay-filter="expression" id="expression"></div>
                         </div>
                     </fieldset>
                 </div>
@@ -128,16 +142,8 @@
                             </div>
                         </div>
                         <div class="layui-col-xs3">
-                            <div class="layui-container" style="height:340px;border:solid 1px #EEE;padding:0;">
-                                <div class="layui-form" style="padding-left:10px;" lay-filter="selectAll">
-                                    <div class="layui-form-item">
-                                        <input type="checkbox" id="selectAll" class="layui-form-checkbox" lay-filter="chkAll" title="已选择" lay-skin="primary" />
-                                    </div>
-                                </div>
-                                <div style="overflow-y:auto;border-top:solid 1px #EEE;height:300px;" id="selectItems">
-                                    <div class="layui-form" style="padding-left:10px;" lay-filter="assign_to_actor" id="assign_to_actor">
-
-                                    </div>
+                            <div class="smartflow-actor" id="selectItems">
+                                <div class="layui-form" lay-filter="assign_to_actor" id="assign_to_actor">
                                 </div>
                             </div>
                         </div>
@@ -152,36 +158,32 @@
         </div>
     </div>
     <script type="text/html" id="tools">
-        <div class="layui-form" style="border:solid 1px #ddd;">
-            <div class="layui-input-inline" style="width:270px;">
+        <div class="layui-form smartflow-border">
+            <div class="layui-input-inline">
                 <input type="text" name="searchKey" autocomplete="off" id="txtSearchKey"
-                       placeholder="请按用户名搜索" class="layui-input" style="height:30px;line-height:30px;border:none;">
+                       placeholder="请按用户名搜索" class="layui-input smartflow-search-input">
             </div>
-            <div class="layui-input-inline" style="width: 20px">
-                <button style="background-color:#FAFAFA;border:none;" lay-event="query">
-                    <i class="layui-icon" style="font-size: 18px; color:#0094ff"></i>
+            <div class="layui-input-inline">
+                <button class="smartflow-search-icon" lay-event="query">
+                    <i class="layui-icon"></i>
                 </button>
             </div>
         </div>
     </script>
-    <script src="~/Content/design/layui/layui.all.js"></script>
     <script src="~/Content/design/settings.js"></script>
-
     <script type="text/html" id="common_expression">
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">{{name}}</label>
             <div class="layui-input-block">
                 <textarea id={{id}} class="layui-textarea">{{expression}}</textarea>
             </div>
         </div>
     </script>
-
     <script type="text/html" id="common_user">
-        <div class="layui-form-item" style="margin-bottom:0px;">
+        <div class="layui-form-item">
             <input type="checkbox" name="custTransferLeftCheck" lay-filter="custTransferCheck" title="{{name}}"  actor="{{name}}"  actorID="{{value}}"  class="select-item" lay-skin="primary" />
         </div>
     </script>
-
     <script type="text/javascript">
           $(function () {
             SMF.init({
