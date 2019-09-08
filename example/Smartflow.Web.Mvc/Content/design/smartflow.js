@@ -31,8 +31,7 @@
         layout: 'layout',
         action:'action'
     };
-
-    ///检测为空
+    
     function checkNull(value) {
         return (!(value == '' || value == undefined));
     }
@@ -47,19 +46,12 @@
         this._decision = undefined;
         this._init();
     }
-
-    /*
-     *静态存储变量
-     */
+   
     Draw._proto_Cc = {};
     Draw._proto_NC = {};
     Draw._proto_LC = {};
     Draw._proto_RC = [];
-
-    /**
-     * 静态处理方法 
-     * @param {any} elements
-     */
+   
     Draw.remove = function (elements) {
         for (var i = 0; i < elements.length; i++) {
             var element = elements[i];
@@ -125,7 +117,6 @@
         return new XML(xml).root;
     }
 
-
     Draw.create = function (category) {
         var strategy = {
             node: function () {
@@ -144,8 +135,6 @@
         return strategy[category]();
     }
 
-   
-
     Draw.prototype._init = function () {
         var self = this,
             dw = self.draw;
@@ -155,13 +144,11 @@
         });
 
         self._initEvent();
-        //M0 0 l20 0 v0 100 l-10 -15 l-10 15z
         self._decision = dw.group()
             .add(dw.path("M0 0 50 -25 100 0 50 25z").fill("#f06"));
-
         dw.defs().add(self._decision);
-
     }
+
     Draw.prototype._initEvent = function () {
         var self = this;
         self.draw.each(function () {
@@ -177,20 +164,10 @@
         });
     }
 
-
-    /**
-     * 获取标准clientX轴
-     * @param {any} evt
-     */
     Draw.getClientX = function (evt) {
         return evt.clientX - 30;
     }
 
-    /**
-     * 私有方法，拖拉(移动图形)
-     * @param {any} evt
-     * @param {any} o
-     */
     Draw.prototype._drag = function (evt, o) {
         var self = this,
             nx = Draw._proto_NC[self.id()];
@@ -240,6 +217,7 @@
             this._shared.move();
         }
     }
+
     Draw.prototype._end = function (node, evt) {
         var self = this,
             nodeId = node.id;
@@ -351,10 +329,7 @@
         }
         return instance;
     }
-
-    /**
-     * 数据导出
-     * */
+   
     Draw.prototype.export = function () {
         var unique = 29,
             nodeCollection = [],
@@ -399,9 +374,6 @@
         return encodeURI(build.toString());
     }
 
-    /**
-     * 数据导入
-     * */
     Draw.prototype.import = function (structure, disable, executeNodeID,record) {
         var dwInstance = this,
             data = Draw.parse(structure).workflow;
@@ -1034,13 +1006,7 @@
             instance.bindEvent.call(SVG.get(current.$id), this);
         }
     }
-
-    /**
-     * 流程中节点类定义
-     * 继承Shape形状
-     * @param {any} name
-     * @param {any} category
-     */
+   
     function Node() {
         this.w = 180;
         this.h = 40;
@@ -1170,12 +1136,6 @@
         }
     });
 
-    /**
-     * 开始和结束图形的基类定义
-     * 继承Shape形状
-     * @param {any} name
-     * @param {any} category
-     */
     function Circle(name, category) {
         this.x = 10;
         this.y = 10;
@@ -1569,7 +1529,6 @@
                 && Draw.findById(this.$id, 'to').length > 0);
         }
     });
-
 
     function XML(xml) {
         this.xml = xml;
