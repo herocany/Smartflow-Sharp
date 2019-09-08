@@ -114,6 +114,7 @@ namespace Smartflow.Elements
                 InstanceID = InstanceID
             }).FirstOrDefault();
         }
+
         protected void ParseXml(XElement element)
         {
             this.name = element.Attribute("name").Value;

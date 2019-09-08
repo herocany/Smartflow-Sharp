@@ -73,6 +73,11 @@ namespace Smartflow.Elements
                    {
                        this.Transitions.Add(g as Transition);
                    });
+
+                nodes.Where(action => (action is Action)).ToList().ForEach(action =>
+                 {
+                     this.actions.Add(action as Action);
+                 });
             }
             return this;
         }

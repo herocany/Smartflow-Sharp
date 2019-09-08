@@ -52,11 +52,8 @@
             nx.cooperation = 0;
 
         } else {
-
             var transfer = layui.transfer,
-                rightData = transfer.getData('rightGroup'),
-                rightActionData = transfer.getData('rightActions');
-
+                rightData = transfer.getData('rightGroup');
             $(rightData).each(function () {
                 var self = this;
                 roleArray.push({
@@ -64,18 +61,7 @@
                     name: self.title
                 });
             });
-
-
-            $(rightActionData).each(function () {
-                actionArray.push({
-                    id: this.value,
-                    name: this.title
-                });
-            });
-
             nx.group = roleArray;
-            nx.action = actionArray;
-
             nx.actor.length = 0;
             var actorArray = [];
             //获取
@@ -91,8 +77,16 @@
             nx.actor=actorArray;
         }
 
-        nx.cooperation = cooperation;
+        var rightActionData = layui.transfer.getData('rightActions');
+        $(rightActionData).each(function () {
+            actionArray.push({
+                id: this.value,
+                name: this.title
+            });
+        });
 
+        nx.action = actionArray;
+        nx.cooperation = cooperation;
         if (name && nx.brush) {
             nx.name = name;
             nx.brush.text(nx.name);
