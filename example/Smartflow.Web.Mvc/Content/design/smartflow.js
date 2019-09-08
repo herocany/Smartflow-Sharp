@@ -155,8 +155,9 @@
         });
 
         self._initEvent();
+        //M0 0 l20 0 v0 100 l-10 -15 l-10 15z
         self._decision = dw.group()
-            .add(dw.path("M0 0 l20 0 v0 100 l-10 -15 l-10 15z").fill("#f06"));
+            .add(dw.path("M0 0 50 -25 100 0 50 25z").fill("#f06"));
 
         dw.defs().add(self._decision);
 
@@ -1336,8 +1337,6 @@
         this.cy = 10;
         this.disX = 0;
         this.disY = 0;
-        this.w = 20;
-        this.h = 100;
         this.cooperation = 0;
     }
 
@@ -1372,41 +1371,88 @@
             var n = SVG.get(this.$id);
 
             var x = n.x(),
-                y = n.y(),
-                w = this.w,
-                h = this.h,
-                tickness = this.tickness,
-                xt = x + w,
-                yt = y + h;
+                y = n.y();
 
             var direction = {
                 bottom: function (moveX, moveY) {
+                    var AX = x + 25;
+                    var AY = y +12.5;
+
+                    var BX = x + 50;
+                    var BY = y + 25;
+
+                    var CX = BX + 25;
+                    var CY = AY;
+
                     var center = {
-                        x: 10 + n.x(),
-                        y: n.y() + 90
+                        x: BX,
+                        y: BY
                     };
-                    return (x <= moveX && xt >= moveX
-                        && moveY >= yt - tickness
-                        && moveY <= yt) ? center : false;
+
+                    return (AX <= moveX && CX >= moveX
+                        && moveY >= AY
+                        && moveY <= BY) ? center : false;
                 },
                 top: function (moveX, moveY) {
 
+                    var AX = x + 25;
+                    var AY = y -12.5;
+
+                    var BX = x + 50;
+                    var BY = y - 25;
+
+                    var CX = BX + 25;
+                    var CY = AY;
+
                     var center = {
-                        y: n.y(),
-                        x: 10 + n.x()
+                        y: BY,
+                        x: BX
                     };
 
-                    return (x <= moveX && xt >= moveX
-                        && moveY >= y
-                        && moveY <= y + tickness) ? center : false;
+                    return (AX <= moveX && CX>= moveX
+                        && moveY >= BY
+                        && moveY <= AY) ? center : false;
                 },
                 left: function (moveX, moveY) {
-                    return false;
+                    var AX = x + 25;
+                    var AY = y - 12.5;
+
+                    var BX = x;
+                    var BY = y;
+
+                    var CX = BX + 25;
+                    var CY = BY+12.5;
+
+                    var center = {
+                        x: BX,
+                        y: BY
+                    };
+
+                    return (BX <= moveX && AX >= moveX
+                        && moveY >= AY
+                        && moveY <= CY) ? center : false;
                 },
                 right: function (moveX, moveY) {
-                    return false;
+               
+                    var BX = x+100;
+                    var BY = y;
+
+                    var AX = BX - 25;
+                    var AY = BY - 12.5;
+
+                    var CX = BX + 25;
+                    var CY = BY + 12.5;
+
+                    var center = {
+                        x: BX,
+                        y: BY
+                    };
+
+                    return (AX <= moveX && BX>= moveX
+                        && moveY >= AY
+                        && moveY <= CY) ? center : false;
                 }
-            }
+            };
 
             for (var propertName in direction) {
                 var _check = direction[propertName](mX, mY);
