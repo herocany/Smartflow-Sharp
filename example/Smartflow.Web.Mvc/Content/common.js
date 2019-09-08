@@ -17,7 +17,7 @@
                 title: '流程查看',
                 width: 960,
                 height: 560
-            })
+            });
         },
         open: function (url, w, h) {
             var x = window.screen.availHeight;
@@ -34,7 +34,7 @@
                 shade: [0.5],
                 shadeClose: false,
                 area: [option.width + 'px', option.height + 'px'],
-                offset: 'auto',
+                offset: 'auto'
             };
 
             //iframe窗
