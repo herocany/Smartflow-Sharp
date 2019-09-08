@@ -21,10 +21,17 @@ namespace Smartflow.Elements
     {
         protected List<Transition> transitions = new List<Transition>();
         protected WorkflowNodeCategory category = WorkflowNodeCategory.Node;
+        protected List<Action> actions = new List<Action>();
 
         private int cooperation = 0;
 
         private int increment = 0;
+
+        public List<Action> Actions
+        {
+            get { return actions; }
+            set { actions = value; }
+        }
 
         public List<Transition> Transitions
         {
@@ -69,7 +76,7 @@ namespace Smartflow.Elements
                 Increment= Increment
             });
 
-            if (Transitions != null)
+            if (Transitions.Count > 0)
             {
                 foreach (Transition transition in Transitions)
                 {
@@ -77,6 +84,17 @@ namespace Smartflow.Elements
                     transition.Origin = this.ID;
                     transition.InstanceID = InstanceID;
                     transition.Persistent();
+                }
+            }
+
+
+            if (Actions.Count > 0)
+            {
+                foreach (Action a in Actions)
+                {
+                    a.RelationshipID = this.NID;
+                    a.InstanceID = InstanceID;
+                    a.Persistent();
                 }
             }
         }

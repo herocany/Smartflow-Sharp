@@ -21,8 +21,7 @@ namespace Smartflow.Elements
     {
         protected List<Actor> actors = new List<Actor>();
         protected List<Group> groups = new List<Group>();
-        protected List<Action> actions = new List<Action>();
-
+        
         public List<Group> Groups
         {
             get { return groups; }
@@ -35,11 +34,7 @@ namespace Smartflow.Elements
             set { actors = value; }
         }
 
-        public List<Action> Actions
-        {
-            get { return actions; }
-            set { actions = value; }
-        }
+     
 
         internal override void Persistent()
         {
@@ -66,15 +61,6 @@ namespace Smartflow.Elements
                 }
             }
 
-            if (Actions.Count > 0)
-            {
-                foreach (Action a in Actions)
-                {
-                    a.RelationshipID = this.NID;
-                    a.InstanceID = InstanceID;
-                    a.Persistent();
-                }
-            }
         }
 
         internal override Element Parse(XElement element)

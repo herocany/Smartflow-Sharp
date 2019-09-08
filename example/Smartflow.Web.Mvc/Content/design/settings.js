@@ -131,7 +131,7 @@
         var tabs = {
             end: ['workflow-rule','workflow-role', 'workflow-form', 'workflow-actor','workflow-info'],
             node: ['workflow-rule', 'workflow-form'],
-            decision: ['workflow-role', 'workflow-form', 'workflow-actor', 'workflow-info'],
+            decision: ['workflow-role', 'workflow-form', 'workflow-actor','workflow-info'],
             start: ['workflow-rule', 'workflow-role', 'workflow-info', 'workflow-actor', 'workflow-action']
         };
 

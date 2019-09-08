@@ -1343,14 +1343,14 @@
     Decision.extend(Shape, {
         draw: function () {
             var dw = this.drawInstance.draw;
-
-            //this.drawInstance._decision.
+            var color = this.isSelect ? this.bgCurrentColor : this.bgColor;
+            this.drawInstance._decision
+                .node
+                .firstElementChild
+                .instance.attr({ fill: color});
 
             var el = dw.use(this.drawInstance._decision)
                 .move(this.x, this.y);
-
-            //var color =this.isSelect ? this.bgCurrentColor : this.bgColor;
-            //el.attr({ fill: color });
 
             this.$id = el.id();
             Draw._proto_NC[this.$id] = this;
