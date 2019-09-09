@@ -17,7 +17,6 @@ namespace Smartflow
     {
         void Persistent(WorkflowProcess process);
 
-        WorkflowProcess GetRecord(string instanceID, string destinationID);
 
         IList<dynamic> GetRecords(string instanceID);
 

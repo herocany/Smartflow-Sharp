@@ -24,19 +24,7 @@ namespace Smartflow
             });
         }
 
-        public WorkflowProcess GetRecord(string instanceID, string destinationID)
-        {
-            WorkflowProcess instance = new WorkflowProcess();
-            string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS);
-            instance = Connection.Query<WorkflowProcess>(query, new
-            {
-                InstanceID = instanceID,
-                Destination = destinationID
-
-            }).OrderByDescending(order => order.CreateDateTime).FirstOrDefault();
-
-            return instance;
-        }
+    
 
         public IList<WorkflowProcess> GetLatestRecords(string instanceID, string NID, int increment)
         {

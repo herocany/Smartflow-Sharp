@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="DapperFactory.cs" />
     <Compile Include="DefaultActionService.cs" />
+    <Compile Include="IWorkProcessPersistent.cs" />
     <Compile Include="LastStrategy.cs" />
     <Compile Include="DemocraticStrategy.cs" />
     <Compile Include="Elements\Action.cs" />
@@ -75,7 +76,6 @@
     <Compile Include="WorkflowNodeCategory.cs" />
     <Compile Include="ExecutingContext.cs" />
     <Compile Include="ITransition.cs" />
-    <Compile Include="IWorkProcessPersistent.cs" />
     <Compile Include="IWorkflow.cs" />
     <Compile Include="MailConfiguration.cs" />
     <Compile Include="MailService.cs" />
@@ -84,7 +84,7 @@
     <Compile Include="SmartflowConfiguration.cs" />
     <Compile Include="Elements\Actor.cs" />
     <Compile Include="SqlMapper.cs" />
-    <Compile Include="WorkflowConfig.cs" />
+    <Compile Include="WorkflowConfiguration.cs" />
     <Compile Include="WorkflowContext.cs" />
     <Compile Include="WorkflowDecision.cs" />
     <Compile Include="WorkflowEngine.cs" />

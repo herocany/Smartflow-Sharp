@@ -43,9 +43,9 @@ namespace Smartflow
         {
             Command command = GetExecuteCmd();
 
-            List<WorkflowConfig> settings= WorkflowConfig.GetSettings();
-            WorkflowConfig config= settings
-                .Where(cfg=>cfg.ID==long.Parse(command.ID))
+            IList<WorkflowConfiguration> settings = WorkflowConfiguration.GetSettings();
+            WorkflowConfiguration config = settings
+                .Where(cfg => cfg.ID == long.Parse(command.ID))
                 .FirstOrDefault();
 
             IDbConnection connection = DapperFactory.CreateConnection(config.ProviderName, config.ConnectionString);

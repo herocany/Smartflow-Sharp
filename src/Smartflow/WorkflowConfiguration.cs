@@ -7,7 +7,7 @@ using Smartflow.Dapper;
 
 namespace Smartflow
 {
-    public class WorkflowConfig
+    public class WorkflowConfiguration
     {
         public long ID
         {
@@ -42,11 +42,11 @@ namespace Smartflow
             set;
         }
 
-
-        public static List<WorkflowConfig> GetSettings()
+        public static List<WorkflowConfiguration> GetSettings()
         {
-            string query = " SELECT * FROM T_CONFIG ";
-            return DapperFactory.CreateWorkflowConnection().Query<WorkflowConfig>(query).ToList();
+            return DapperFactory.CreateWorkflowConnection()
+                   .Query<WorkflowConfiguration>(" SELECT * FROM T_CONFIG ")
+                   .ToList();
         }
     }
 }

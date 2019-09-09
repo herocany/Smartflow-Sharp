@@ -31,9 +31,9 @@ namespace Smartflow
         /// 获取配置
         /// </summary>
         /// <returns></returns>
-        public List<WorkflowConfig> GetSettings()
+        public List<WorkflowConfiguration> GetSettings()
         {
-            return WorkflowConfig.GetSettings();
+            return WorkflowConfiguration.GetSettings();
         }
 
         /// <summary>

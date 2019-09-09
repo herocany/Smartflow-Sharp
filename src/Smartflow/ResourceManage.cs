@@ -28,11 +28,6 @@ namespace Smartflow
         public const string SQL_WORKFLOW_INSTANCE = "SQL_WORKFLOW_INSTANCE";
 
         /// <summary>
-        /// 审批过程记录
-        /// </summary>
-        public const string SQL_WORKFLOW_PROCESS = "SQL_WORKFLOW_PROCESS";
-
-        /// <summary>
         /// 获取最新批次审批过程记录
         /// </summary>
         public const string SQL_WORKFLOW_PROCESS_LATEST = "SQL_WORKFLOW_PROCESS_LATEST";
