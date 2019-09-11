@@ -36,16 +36,6 @@ namespace Smartflow
             get { return singleton; }
         }
 
-        /// <summary>
-        /// 监控的过程服务
-        /// </summary>
-        protected IWorkProcessPersistent ProcessService
-        {
-            get
-            {
-                return WorkflowGlobalServiceProvider.Resolve<IWorkProcessPersistent>();
-            }
-        }
 
         /// <summary>
         /// 会签服务
@@ -57,6 +47,18 @@ namespace Smartflow
                 return WorkflowGlobalServiceProvider.Resolve<AbstractWorkflowCooperation>();
             }
         }
+
+        /// <summary>
+        /// 节点服务
+        /// </summary>
+        protected WorkflowNodeService NodeService
+        {
+            get
+            {
+                return new WorkflowNodeService();
+            }
+        }
+
 
         /// <summary>
         /// 根据传递的流程XML字符串,启动工作流
@@ -81,7 +83,9 @@ namespace Smartflow
                 string transitionTo = current.Transitions
                                   .FirstOrDefault(e => e.NID == context.TransitionID).Destination;
 
-                ASTNode to = current.GetNode(transitionTo);
+                ASTNode to = NodeService.Query(new { current.InstanceID })
+                            .Where(e => e.ID == transitionTo)
+                            .FirstOrDefault();
 
                 this.Invoke(context, to, transitionTo, (executeContext) => Processing(executeContext));
 
@@ -91,9 +95,9 @@ namespace Smartflow
                 }
                 else if (to.NodeType == WorkflowNodeCategory.Decision)
                 {
-                    WorkflowDecision wfDecision = WorkflowDecision.ConvertToReallyType(to);
-                    Transition transition = wfDecision.GetTransition();
+                    Transition transition = NodeService.GetTransition(to);
                     if (transition == null) return;
+
                     Jump(new WorkflowContext()
                     {
                         Instance = WorkflowInstance.GetInstance(instance.InstanceID),
@@ -111,16 +115,18 @@ namespace Smartflow
         /// <param name="executeContext">执行上下文</param>
         protected void Processing(ExecutingContext executeContext)
         {
-            ProcessService.Persistent(new WorkflowProcess()
-            {
-                RelationshipID = executeContext.From.NID,
-                Origin = executeContext.From.ID,
-                Destination = executeContext.To.ID,
-                TransitionID = executeContext.TransitionID,
-                InstanceID = executeContext.Instance.InstanceID,
-                NodeType = executeContext.From.NodeType,
-                Increment = executeContext.From.Increment
-            });
+            WorkflowGlobalServiceProvider
+                .Resolve<IWorkflowPersistent<WorkflowProcess>>()
+                .Persistent(new WorkflowProcess()
+                {
+                    RelationshipID = executeContext.From.NID,
+                    Origin = executeContext.From.ID,
+                    Destination = executeContext.To.ID,
+                    TransitionID = executeContext.TransitionID,
+                    InstanceID = executeContext.Instance.InstanceID,
+                    NodeType = executeContext.From.NodeType,
+                    Increment = executeContext.From.Increment
+                });
 
             this.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
         }
@@ -133,9 +139,11 @@ namespace Smartflow
 
             if (WorkflowCooperationService != null && current.Cooperation > 0)
             {
-                IList<WorkflowProcess> records = ProcessService.GetLatestRecords(current.InstanceID, current.NID, current.Increment);
-                validation = WorkflowCooperationService.Check(current, records);
+                IList<WorkflowProcess> records = WorkflowGlobalServiceProvider
+                            .Resolve<IWorkflowQuery<WorkflowProcess>>()
+                            .Query(new { current.InstanceID, current.NID, current.Increment });
 
+                validation = WorkflowCooperationService.Check(current, records);
                 selectTransition = WorkflowCooperationService.SelectStrategy().Decide(records, to.ID);
             }
             if (validation)
@@ -146,7 +154,7 @@ namespace Smartflow
                    .Current;
                 if (next.NodeType != WorkflowNodeCategory.End)
                 {
-                    next.DoIncrement();
+                    NodeService.DoIncrement(next);
                 }
             }
 

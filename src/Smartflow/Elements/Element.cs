@@ -8,13 +8,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using Smartflow;
 
 namespace Smartflow.Elements
 {
-    public abstract class Element : WorkflowInfrastructure
+    public abstract class Element 
     {
         protected string name = string.Empty;
         protected string id = string.Empty;
@@ -48,9 +45,5 @@ namespace Smartflow.Elements
             get;
             set;
         }
-
-        internal abstract void Persistent();
-
-        internal abstract Element Parse(XElement element);
     }
 }

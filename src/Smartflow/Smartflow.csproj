@@ -40,21 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DapperFactory.cs" />
+    <Compile Include="Internals\DapperFactory.cs" />
     <Compile Include="DefaultActionService.cs" />
-    <Compile Include="IWorkProcessPersistent.cs" />
+    <Compile Include="Internals\ServiceContainer.cs" />
+    <Compile Include="IWorkflowParse.cs" />
+    <Compile Include="IWorkflowPersistent.cs" />
+    <Compile Include="IWorkflowQuery.cs" />
     <Compile Include="LastStrategy.cs" />
     <Compile Include="DemocraticStrategy.cs" />
     <Compile Include="Elements\Action.cs" />
     <Compile Include="Elements\ASTNode.cs" />
     <Compile Include="Elements\Command.cs" />
-    <Compile Include="Elements\Decision.cs" />
     <Compile Include="Elements\Element.cs" />
-    <Compile Include="Elements\End.cs" />
     <Compile Include="AbstractBridgeService.cs" />
     <Compile Include="FirstStrategy.cs" />
     <Compile Include="IMailService.cs" />
-    <Compile Include="Internals\ElementContainer.cs" />
     <Compile Include="Internals\IResolution.cs" />
     <Compile Include="Internals\Manual.cs" />
     <Compile Include="Internals\ResolutionContext.cs" />
@@ -63,19 +63,22 @@
     <Compile Include="IRelationship.cs" />
     <Compile Include="Elements\Node.cs" />
     <Compile Include="Elements\Group.cs" />
-    <Compile Include="Elements\Start.cs" />
     <Compile Include="Elements\Transition.cs" />
     <Compile Include="Elements\Workflow.cs" />
     <Compile Include="IWorkflowAction.cs" />
     <Compile Include="IResolve.cs" />
     <Compile Include="AbstractWorkflowCooperation.cs" />
     <Compile Include="IWorkflowCooperationStrategy.cs" />
+    <Compile Include="WorkflowActionService.cs" />
     <Compile Include="WorkflowActor.cs" />
+    <Compile Include="WorkflowActorService.cs" />
+    <Compile Include="WorkflowCommandService.cs" />
+    <Compile Include="WorkflowConfigurationService.cs" />
     <Compile Include="WorkflowGroup.cs" />
+    <Compile Include="WorkflowGroupService.cs" />
     <Compile Include="WorkflowInstanceState.cs" />
     <Compile Include="WorkflowNodeCategory.cs" />
     <Compile Include="ExecutingContext.cs" />
-    <Compile Include="ITransition.cs" />
     <Compile Include="IWorkflow.cs" />
     <Compile Include="MailConfiguration.cs" />
     <Compile Include="MailService.cs" />
@@ -83,19 +86,20 @@
     <Compile Include="ResourceManage.cs" />
     <Compile Include="SmartflowConfiguration.cs" />
     <Compile Include="Elements\Actor.cs" />
-    <Compile Include="SqlMapper.cs" />
+    <Compile Include="Internals\SqlMapper.cs" />
     <Compile Include="WorkflowConfiguration.cs" />
     <Compile Include="WorkflowContext.cs" />
-    <Compile Include="WorkflowDecision.cs" />
     <Compile Include="WorkflowEngine.cs" />
     <Compile Include="WorkflowInfrastructure.cs" />
     <Compile Include="WorkflowActionFactory.cs" />
     <Compile Include="WorkflowGlobalServiceProvider.cs" />
     <Compile Include="WorkflowInstance.cs" />
     <Compile Include="WorkflowNode.cs" />
+    <Compile Include="WorkflowNodeService.cs" />
     <Compile Include="WorkflowProcess.cs" />
     <Compile Include="WorkflowProcessService.cs" />
     <Compile Include="WorkflowService.cs" />
+    <Compile Include="WorkflowTransitionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SmartflowResource.resx">

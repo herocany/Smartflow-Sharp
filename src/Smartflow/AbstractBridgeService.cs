@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Smartflow.Internals;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,8 +34,15 @@ namespace Smartflow
         /// <returns></returns>
         public List<WorkflowConfiguration> GetSettings()
         {
-            return WorkflowConfiguration.GetSettings();
+            return new WorkflowConfigurationService().Query(Utils.Empty).ToList();
         }
+
+        public IList<dynamic> GetRecords(string instanceID)
+        {
+            string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_RECORD);
+            return new WorkflowProcessService().GetRecords(instanceID);
+        }
+
 
         /// <summary>
         /// 获取当前执行节点的记录
@@ -44,9 +52,7 @@ namespace Smartflow
         public dynamic GetJumpProcess(string instanceID)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
-            IList<dynamic> records =
-                WorkflowGlobalServiceProvider.Resolve<IWorkProcessPersistent>()
-                .GetRecords(instanceID);
+            IList<dynamic> records = this.GetRecords(instanceID);
 
             return new
             {

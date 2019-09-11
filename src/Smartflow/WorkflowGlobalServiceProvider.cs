@@ -23,6 +23,7 @@ namespace Smartflow
             _globalCollection.Add(new MailService());
             _globalCollection.Add(new DefaultActionService());
             _globalCollection.Add(new WorkflowProcessService());
+
         }
 
         public static void RegisterGlobalService(object registerObject)

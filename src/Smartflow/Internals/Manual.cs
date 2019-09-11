@@ -17,7 +17,7 @@ namespace Smartflow.Internals
 {
     internal class Manual : IResolution
     {
-        private static readonly String WORKFLOW_XML_ROOT_NODE= "workflow";
+        private static readonly String WORKFLOW_XML_ROOT_NODE = "workflow";
 
         /// <summary>
         /// 解析xml
@@ -33,33 +33,19 @@ namespace Smartflow.Internals
             doc.Element(root)
                 .Elements()
                 .ToList()
-                .ForEach(element => {
+                .ForEach(element =>
+                {
                     string nodeName = element.Name.LocalName;
-                    if (ElementContainer.Contains(nodeName)){
-                        Element typeMapper = ElementContainer.Resolve(nodeName);
+                    if (ServiceContainer.Contains(nodeName))
+                    {
+
+                        IWorkflowParse typeMapper =
+                                ServiceContainer.Resolve(nodeName) as IWorkflowParse;
                         nodes.Add(typeMapper.Parse(element) as ASTNode);
                     }
                 });
-
-
             Workflow instance = new Workflow();
-            instance.Start = nodes
-                .Where(e =>e.NodeType == WorkflowNodeCategory.Start)
-                .Cast<Start>()
-                .FirstOrDefault();
-
-            instance.End= nodes
-                .Where(e => e.NodeType == WorkflowNodeCategory.End)
-                .Cast<End>()
-                .FirstOrDefault();
-
-            nodes.Where(e => e.NodeType == WorkflowNodeCategory.Decision)
-                .ToList()
-                .ForEach(n => instance.Decisions.Add(n as Decision));
-
-            nodes.Where(e => e.NodeType == WorkflowNodeCategory.Node)
-                 .ToList()
-                 .ForEach(n => instance.Nodes.Add(n as Node));
+            instance.Nodes.AddRange(nodes.Cast<Node>().ToList());
 
             return instance;
         }

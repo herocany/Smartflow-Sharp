@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Smartflow.Dapper;
-
+using Smartflow.Internals;
 namespace Smartflow
 {
-    public class WorkflowProcessService : WorkflowInfrastructure, IWorkProcessPersistent
+    public class WorkflowProcessService : WorkflowInfrastructure,IWorkflowPersistent<WorkflowProcess>,IWorkflowQuery<WorkflowProcess>
     {
         public void Persistent(WorkflowProcess process)
         {
@@ -24,19 +23,6 @@ namespace Smartflow
             });
         }
 
-    
-
-        public IList<WorkflowProcess> GetLatestRecords(string instanceID, string NID, int increment)
-        {
-            string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_LATEST);
-            return Connection.Query<WorkflowProcess>(query, new
-            {
-                InstanceID = instanceID,
-                NID = NID,
-                Increment = increment
-            }).OrderBy(order => order.CreateDateTime).ToList<WorkflowProcess>();
-        }
-
         public IList<dynamic> GetRecords(string instanceID)
         {
             string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_RECORD);
@@ -44,6 +30,12 @@ namespace Smartflow
             {
                 InstanceID = instanceID
             }).OrderBy(order => order.CreateDateTime).ToList();
+        }
+
+        public IList<WorkflowProcess> Query(object condition)
+        {
+            string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_LATEST);
+            return Connection.Query<WorkflowProcess>(query, condition).OrderBy(order => order.CreateDateTime).ToList<WorkflowProcess>();
         }
     }
 }

@@ -6,6 +6,7 @@
 using System;
 using System.Data;
 using System.Linq;
+using Smartflow.Internals;
 
 namespace Smartflow
 {

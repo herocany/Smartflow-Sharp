@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Smartflow.Dapper;
 
 namespace Smartflow
 {
@@ -40,13 +39,6 @@ namespace Smartflow
         {
             get;
             set;
-        }
-
-        public static List<WorkflowConfiguration> GetSettings()
-        {
-            return DapperFactory.CreateWorkflowConnection()
-                   .Query<WorkflowConfiguration>(" SELECT * FROM T_CONFIG ")
-                   .ToList();
         }
     }
 }

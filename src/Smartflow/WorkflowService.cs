@@ -10,23 +10,30 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
-using Smartflow.Dapper;
 using Smartflow.Elements;
 using Smartflow.Internals;
 
 namespace Smartflow
 {
-    public  class WorkflowService :WorkflowInfrastructure, IWorkflow
+    public class WorkflowService : WorkflowInfrastructure, IWorkflow
     {
+        protected WorkflowNodeService NodeService
+        {
+            get
+            {
+                return new WorkflowNodeService();
+            }
+        }
+
         public string Start(string resourceXml)
         {
             Workflow workflow = XMLServiceFactory.Create(resourceXml);
-            IList<Element> elements = workflow.GetElements();
-            string instaceID = CreateWorkflowInstance(workflow.Start.ID,resourceXml);
-            foreach (Element element in elements)
+            var start = workflow.Nodes.Where(n => n.NodeType == WorkflowNodeCategory.Start).FirstOrDefault();
+            string instaceID = CreateWorkflowInstance(start.ID, resourceXml);
+            foreach (Node node in workflow.Nodes)
             {
-                element.InstanceID = instaceID;
-                element.Persistent();
+                node.InstanceID = instaceID;
+                NodeService.Persistent(node);
             }
             return instaceID;
         }

@@ -16,6 +16,8 @@ namespace Smartflow.Internals
 {
     internal class Utils
     {
+        public readonly static Object Empty = new Object();
+
         public static WorkflowNodeCategory Convert(string category)
         {
             return (WorkflowNodeCategory)Enum.Parse(typeof(WorkflowNodeCategory), category, true);

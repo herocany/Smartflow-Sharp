@@ -17,35 +17,7 @@ namespace Smartflow.Elements
     {
         public Workflow()
         {
-            this.Decisions = new List<Decision>();
             this.Nodes = new List<Node>();
-        }
-
-        /// <summary>
-        /// 开始节点
-        /// </summary>
-        public Start Start
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 结束节点
-        /// </summary>
-        public End End
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 决策节点
-        /// </summary>
-        public List<Decision> Decisions
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -55,16 +27,6 @@ namespace Smartflow.Elements
         {
             get;
             set;
-        }
-
-        public IList<Element> GetElements()
-        {
-            List<Element> elements = new List<Element>();
-            elements.Add(this.Start);
-            elements.AddRange(this.Nodes);
-            elements.AddRange(this.Decisions);
-            elements.Add(this.End);
-            return elements;
         }
     }
 }

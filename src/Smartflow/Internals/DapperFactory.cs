@@ -10,9 +10,9 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Data.Common;
 
-namespace Smartflow
+namespace Smartflow.Internals
 {
-    public class DapperFactory
+    internal class DapperFactory
     {
         internal static IDbConnection CreateWorkflowConnection()
         {

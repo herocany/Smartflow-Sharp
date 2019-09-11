@@ -9,13 +9,18 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Smartflow.Dapper;
+using Smartflow.Internals;
 using Smartflow.Elements;
 
 namespace Smartflow
 {
     public class WorkflowNode : Node
     {
+        protected WorkflowNodeService NodeService
+        {
+            get { return new WorkflowNodeService(); }
+        }
+
         protected WorkflowNode()
         {
 
@@ -25,17 +30,23 @@ namespace Smartflow
         {
             foreach (Smartflow.Elements.Transition transition in this.Transitions)
             {
-                ASTNode an = this.GetNode(transition.Destination);
+                ASTNode an = FindNodeByID(transition.Destination);
+
                 Transition decisionTransition = transition;
                 while (an.NodeType == WorkflowNodeCategory.Decision)
                 {
-                    WorkflowDecision decision = WorkflowDecision.ConvertToReallyType(an);
-                    decisionTransition = decision.GetTransition();
-                    an = this.GetNode(decisionTransition.Destination);
+                    decisionTransition = NodeService.GetTransition(an);
+                    an = FindNodeByID(decisionTransition.Destination);
                 }
                 transition.Name = decisionTransition.Name;
             }
             return this.Transitions;
+        }
+
+        private ASTNode FindNodeByID(string ID)
+        {
+           return NodeService.Query(new { InstanceID })
+                   .Where(e => e.ID == ID).FirstOrDefault();
         }
 
         #region 节点方法
@@ -50,7 +61,12 @@ namespace Smartflow
             wfNode.InstanceID = node.InstanceID;
             wfNode.Increment = node.Increment;
             wfNode.Cooperation = node.Cooperation;
-            wfNode.Transitions = wfNode.QueryWorkflowNode(node.NID);
+
+            wfNode.Transitions = wfNode.NodeService
+                .TransitionService
+                .Query(new { node.InstanceID })
+                .Where(t=>t.RelationshipID== node.NID).ToList();
+
             wfNode.Groups = wfNode.GetGroup();
             wfNode.Actors = wfNode.GetActors();
             wfNode.Actions = wfNode.GetActions();
@@ -59,22 +75,18 @@ namespace Smartflow
 
         protected List<Actor> GetActors()
         {
-            string query = " SELECT * FROM T_ACTOR WHERE RelationshipID=@RelationshipID AND InstanceID=@InstanceID ";
-            return Connection.Query<Actor>(query, new
-            {
-                RelationshipID = NID,
-                InstanceID = InstanceID
-            }).ToList();
+            return NodeService
+                 .ActorService
+                 .Query(new { InstanceID })
+                 .Where(e => e.RelationshipID == NID).ToList();
         }
 
         protected List<Elements.Action> GetActions()
         {
-            string query = " SELECT * FROM T_ACTION WHERE RelationshipID=@RelationshipID AND InstanceID=@InstanceID ";
-            return Connection.Query<Elements.Action>(query, new
-            {
-                RelationshipID = NID,
-                InstanceID = InstanceID
-            }).ToList();
+            return NodeService
+                  .ActionService
+                  .Query(new { InstanceID })
+                  .Where(e => e.RelationshipID == NID).ToList();
         }
 
         /// <summary>
@@ -84,60 +96,21 @@ namespace Smartflow
         /// <returns>路线</returns>
         protected Transition GetTransition(string transitionID)
         {
-            string query = "SELECT * FROM T_TRANSITION WHERE NID=@TransitionID AND InstanceID=@InstanceID";
-            Transition transition = Connection.Query<Transition>(query, new
-            {
-                TransitionID = transitionID,
-                InstanceID = InstanceID
+            return NodeService
+                 .TransitionService
+                 .Query(new { InstanceID })
+                 .Where(e => e.NID == transitionID).FirstOrDefault();
 
-            }).FirstOrDefault();
-
-            return transition;
         }
 
         protected List<Group> GetGroup()
         {
-            string query = "SELECT * FROM T_GROUP WHERE RelationshipID=@RelationshipID AND InstanceID=@InstanceID";
-            return Connection.Query<Group>(query, new
-            {
-                RelationshipID = NID,
-                InstanceID = InstanceID
-            }).ToList();
+            return NodeService
+                 .GroupService
+                 .Query(new { InstanceID })
+                 .Where(e => e.RelationshipID == NID).ToList();
         }
 
-
-        /// <summary>
-        /// 获取当前执行的跳转路线
-        /// </summary>
-        /// <param name="transitionID">跳转ID</param>
-        /// <returns>跳转对象</returns>
-        protected Transition GetExecuteTransition(string transitionID)
-        {
-            Transition executeTransition = Transitions
-                .FirstOrDefault(t => t.NID == transitionID);
-
-            ASTNode an = this.GetNode(executeTransition.Destination);
-            Transition returnTransition = executeTransition;
-            while (an.NodeType == WorkflowNodeCategory.Decision)
-            {
-                WorkflowDecision decision = WorkflowDecision.ConvertToReallyType(an);
-                returnTransition = decision.GetTransition();
-                an = this.GetNode(returnTransition.Destination);
-            }
-            return returnTransition;
-        }
         #endregion
-
-        internal void DoIncrement()
-        {
-            this.Increment += 1;
-            string sql = "UPDATE T_NODE SET Increment=@Increment WHERE InstanceID=@InstanceID AND  NID=@NID ";
-            Connection.ExecuteScalar<long>(sql, new
-            {
-                NID = NID,
-                InstanceID = InstanceID,
-                Increment = this.Increment
-            });
-        }
     }
 }

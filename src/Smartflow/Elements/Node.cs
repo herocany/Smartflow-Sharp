@@ -9,11 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-
-using Smartflow.Dapper;
 using Smartflow;
 using System.Xml.Linq;
-using Smartflow.Internals;
 
 namespace Smartflow.Elements
 {
@@ -21,7 +18,15 @@ namespace Smartflow.Elements
     {
         protected List<Actor> actors = new List<Actor>();
         protected List<Group> groups = new List<Group>();
-        
+
+        protected Command command;
+
+        public Command Command
+        {
+            get { return command; }
+            set { command = value; }
+        }
+
         public List<Group> Groups
         {
             get { return groups; }
@@ -32,89 +37,6 @@ namespace Smartflow.Elements
         {
             get { return actors; }
             set { actors = value; }
-        }
-
-     
-
-        internal override void Persistent()
-        {
-            base.Persistent();
-
-            if (Groups.Count > 0)
-            {
-                foreach (Group r in Groups)
-                {
-                    r.RelationshipID = this.NID;
-                    r.InstanceID = InstanceID;
-                    r.Persistent();
-                }
-            }
-
-
-            if (Actors.Count > 0)
-            {
-                foreach (Actor a in Actors)
-                {
-                    a.RelationshipID = this.NID;
-                    a.InstanceID = InstanceID;
-                    a.Persistent();
-                }
-            }
-
-        }
-
-        internal override Element Parse(XElement element)
-        {
-            base.ParseXml(element);
-
-            if (element.HasElements)
-            {
-                List<Element> nodes = new List<Element>();
-                element.Elements().ToList().ForEach(entry =>
-                {
-                    string nodeName = entry.Name.LocalName;
-                    if (ElementContainer.Contains(nodeName))
-                    {
-                        nodes.Add(ElementContainer
-                            .Resolve(nodeName)
-                            .Parse(entry));
-                    }
-                });
-
-                nodes
-                    .Where(group => (group is Group))
-                    .ToList()
-                    .ForEach(g =>
-                    {
-                        this.Groups.Add(g as Group);
-                    });
-
-                nodes
-                   .Where(transition => (transition is Transition))
-                   .ToList()
-                   .ForEach(g =>
-                   {
-                       this.Transitions.Add(g as Transition);
-                   });
-
-                nodes
-                 .Where(actor => (actor is Actor))
-                 .ToList()
-                 .ForEach(actor =>
-                 {
-                     this.actors.Add(actor as Actor);
-                 });
-
-
-                nodes
-               .Where(action => (action is Action))
-               .ToList()
-               .ForEach(action =>
-               {
-                   this.actions.Add(action as Action);
-               });
-            }
-            return this;
         }
     }
 }

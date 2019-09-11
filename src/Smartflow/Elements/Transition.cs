@@ -9,8 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-
-using Smartflow.Dapper;
 using Smartflow;
 
 
@@ -45,38 +43,6 @@ namespace Smartflow.Elements
         {
             get { return expression; }
             set { expression = value; }
-        }
-
-        internal override void Persistent()
-        {
-            string sql = "INSERT INTO T_TRANSITION(NID,RelationshipID,Name,Destination,Origin,InstanceID,Expression,ID) VALUES(@NID,@RelationshipID,@Name,@Destination,@Origin,@InstanceID,@Expression,@ID)";
-            Connection.Execute(sql, new
-            {
-                NID = Guid.NewGuid().ToString(),
-                RelationshipID = RelationshipID,
-                Name = Name,
-                Destination = Destination,
-                Origin = Origin,
-                InstanceID = InstanceID,
-                Expression = Expression,
-                ID=ID
-            });
-        }
-
-        internal override Element Parse(XElement element)
-        {
-            this.name = element.Attribute("name").Value;
-            this.destination = element.Attribute("destination").Value;
-            this.id = element.Attribute("id").Value;
-            if (element.HasElements)
-            {
-                XElement expression = element.Elements("expression").FirstOrDefault();
-                if (expression != null)
-                {
-                    this.expression =expression.Value;
-                }
-            }
-            return this;
         }
     }
 }

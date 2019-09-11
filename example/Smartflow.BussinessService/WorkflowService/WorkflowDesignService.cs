@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Smartflow.Dapper;
+using Dapper;
 
 namespace Smartflow.BussinessService.WorkflowService
 {
