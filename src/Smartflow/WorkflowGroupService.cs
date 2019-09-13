@@ -21,7 +21,7 @@ namespace Smartflow
         public void Persistent(Group entry)
         {
             string sql = "INSERT INTO T_GROUP(NID,ID,RelationshipID,Name,InstanceID) VALUES(@NID,@ID,@RelationshipID,@Name,@InstanceID)";
-            Connection.Execute(sql, new
+            base.Connection.Execute(sql, new
             {
                 NID = Guid.NewGuid().ToString(),
                 entry.ID,

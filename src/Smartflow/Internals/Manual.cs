@@ -17,36 +17,24 @@ namespace Smartflow.Internals
 {
     internal class Manual : IResolution
     {
-        private static readonly String WORKFLOW_XML_ROOT_NODE = "workflow";
-
-        /// <summary>
-        /// 解析xml
-        /// </summary>
-        /// <param name="resourceXml"></param>
-        /// <returns></returns>
         public Workflow Parse(string resourceXml)
         {
-            String root = Manual.WORKFLOW_XML_ROOT_NODE;
             XDocument doc = XDocument.Parse(resourceXml);
             List<ASTNode> nodes = new List<ASTNode>();
-
-            doc.Element(root)
-                .Elements()
-                .ToList()
-                .ForEach(element =>
-                {
-                    string nodeName = element.Name.LocalName;
-                    if (ServiceContainer.Contains(nodeName))
-                    {
-
-                        IWorkflowParse typeMapper =
-                                ServiceContainer.Resolve(nodeName) as IWorkflowParse;
-                        nodes.Add(typeMapper.Parse(element) as ASTNode);
-                    }
-                });
+            List<XElement> elements = doc.Element("workflow").Elements().ToList();
             Workflow instance = new Workflow();
-            instance.Nodes.AddRange(nodes.Cast<Node>().ToList());
 
+            foreach (XElement element in elements)
+            {
+                string nodeName = element.Name.LocalName;
+                if (ServiceContainer.Contains(nodeName))
+                {
+                    IWorkflowParse typeMapper =ServiceContainer.Resolve(nodeName) as IWorkflowParse;
+                    nodes.Add(typeMapper.Parse(element) as ASTNode);
+                }
+            }
+
+            instance.Nodes.AddRange(nodes.Cast<Node>().ToList());
             return instance;
         }
     }
