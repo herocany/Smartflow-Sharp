@@ -21,7 +21,7 @@ namespace Smartflow
         {
             Workflow workflow = XMLServiceFactory.Create(resourceXml);
             var start = workflow.Nodes.Where(n => n.NodeType == WorkflowNodeCategory.Start).FirstOrDefault();
-            string instaceID = InstanceService.CreateWorkflowInstance(start.ID, resourceXml);
+            string instaceID = InstanceService.CreateInstance(start.ID, resourceXml);
             foreach (Node node in workflow.Nodes)
             {
                 node.InstanceID = instaceID;

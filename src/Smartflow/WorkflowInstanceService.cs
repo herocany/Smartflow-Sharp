@@ -24,7 +24,7 @@ namespace Smartflow
             });
         }
 
-        public string CreateWorkflowInstance(string nodeID, string resource)
+        public string CreateInstance(string nodeID, string resource)
         {
             string instanceID = Guid.NewGuid().ToString();
             string sql = "INSERT INTO T_INSTANCE(InstanceID,RelationshipID,State,Resource) VALUES(@InstanceID,@RelationshipID,@State,@Resource)";
