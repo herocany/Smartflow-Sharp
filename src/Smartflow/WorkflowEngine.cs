@@ -16,8 +16,7 @@ namespace Smartflow
     {
         private readonly static WorkflowEngine singleton = new WorkflowEngine();
 
-        private AbstractWorkflow workflowService = 
-                WorkflowGlobalServiceProvider.Resolve<AbstractWorkflow>();
+        private AbstractWorkflow workflowService = WorkflowGlobalServiceProvider.Resolve<AbstractWorkflow>();
 
         protected WorkflowEngine()
         {
