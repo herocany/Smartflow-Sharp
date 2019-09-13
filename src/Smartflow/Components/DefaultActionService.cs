@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Smartflow
+namespace Smartflow.Components
 {
     public class DefaultActionService : IWorkflowAction
     {

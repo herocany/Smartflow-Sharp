@@ -19,6 +19,15 @@ namespace Smartflow
             }
         }
 
+
+        protected IWorkflowQuery<WorkflowConfiguration> ConfigurationService
+        {
+            get
+            {
+                return WorkflowGlobalServiceProvider.Resolve<WorkflowService>().NodeService.ConfigurationService;
+            }
+        }
+
         /// <summary>
         /// 获取参与组
         /// </summary>
@@ -42,7 +51,7 @@ namespace Smartflow
         /// <returns></returns>
         public List<WorkflowConfiguration> GetSettings()
         {
-            return new WorkflowConfigurationService().Query(Utils.Empty).ToList();
+            return ConfigurationService.Query(Utils.Empty).ToList();
         }
 
         public IList<dynamic> GetRecords(string instanceID)

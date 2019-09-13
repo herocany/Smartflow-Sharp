@@ -4,6 +4,7 @@
  Github : https://github.com/chengderen/Smartflow-Sharp
  ********************************************************************
  */
+using Smartflow.Components;
 using System;
 using System.Collections;
 using System.Collections.Generic;

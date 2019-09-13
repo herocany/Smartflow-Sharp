@@ -9,6 +9,7 @@ namespace Smartflow
     {
         private WorkflowNodeService nodeService = new WorkflowNodeService();
 
+    
         public List<IWorkflowAction> Actions
         {
             get { return WorkflowGlobalServiceProvider.Query<IWorkflowAction>(); }
@@ -27,6 +28,8 @@ namespace Smartflow
             get{ return nodeService;}
             set{ nodeService = value;}
         }
+
+   
 
         public WorkflowProcessService ProcessService
         {

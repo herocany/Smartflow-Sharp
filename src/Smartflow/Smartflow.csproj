@@ -41,20 +41,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internals\DapperFactory.cs" />
-    <Compile Include="DefaultActionService.cs" />
+    <Compile Include="Components\DefaultActionService.cs" />
     <Compile Include="Internals\ServiceContainer.cs" />
     <Compile Include="AbstractWorkflow.cs" />
     <Compile Include="IWorkflowParse.cs" />
     <Compile Include="IWorkflowPersistent.cs" />
     <Compile Include="IWorkflowQuery.cs" />
-    <Compile Include="LastStrategy.cs" />
-    <Compile Include="DemocraticStrategy.cs" />
+    <Compile Include="Components\LastStrategy.cs" />
+    <Compile Include="Components\DemocraticStrategy.cs" />
     <Compile Include="Elements\Action.cs" />
     <Compile Include="Elements\ASTNode.cs" />
     <Compile Include="Elements\Command.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="AbstractBridgeService.cs" />
-    <Compile Include="FirstStrategy.cs" />
+    <Compile Include="Components\FirstStrategy.cs" />
     <Compile Include="IMailService.cs" />
     <Compile Include="Internals\IResolution.cs" />
     <Compile Include="Internals\Manual.cs" />
@@ -80,10 +80,10 @@
     <Compile Include="WorkflowInstanceState.cs" />
     <Compile Include="WorkflowNodeCategory.cs" />
     <Compile Include="ExecutingContext.cs" />
-    <Compile Include="MailConfiguration.cs" />
-    <Compile Include="MailService.cs" />
+    <Compile Include="Components\MailConfiguration.cs" />
+    <Compile Include="Components\MailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourceManage.cs" />
+    <Compile Include="Internals\ResourceManage.cs" />
     <Compile Include="SmartflowConfiguration.cs" />
     <Compile Include="Elements\Actor.cs" />
     <Compile Include="Internals\SqlMapper.cs" />
@@ -101,7 +101,7 @@
     <Compile Include="WorkflowTransitionService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SmartflowResource.resx">
+    <EmbeddedResource Include="Internals\SmartflowResource.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

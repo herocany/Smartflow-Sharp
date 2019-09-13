@@ -12,6 +12,11 @@ namespace Smartflow
 {
     public class WorkflowNodeService : WorkflowInfrastructure, IWorkflowPersistent<Node>, IWorkflowQuery<Node>, IWorkflowParse
     {
+        public IWorkflowQuery<WorkflowConfiguration>  ConfigurationService
+        {
+            get { return new WorkflowConfigurationService(); }
+        }
+
         protected WorkflowTransitionService TransitionService
         {
             get
@@ -19,6 +24,7 @@ namespace Smartflow
                 return new WorkflowTransitionService();
             }
         }
+
         protected WorkflowActionService ActionService
         {
             get
@@ -26,6 +32,7 @@ namespace Smartflow
                 return new WorkflowActionService();
             }
         }
+
         protected WorkflowGroupService GroupService
         {
 
@@ -34,6 +41,7 @@ namespace Smartflow
                 return new WorkflowGroupService();
             }
         }
+
         protected WorkflowActorService ActorService
         {
             get
@@ -42,6 +50,7 @@ namespace Smartflow
                 return new WorkflowActorService();
             }
         }
+
         protected WorkflowCommandService CommandService
         {
             get
@@ -149,7 +158,7 @@ namespace Smartflow
                  .Where(e => e.RelationshipID == n.NID)
                  .FirstOrDefault();
 
-            IList<WorkflowConfiguration> settings = new WorkflowConfigurationService().Query(Utils.Empty);
+            IList<WorkflowConfiguration> settings = ConfigurationService.Query(Utils.Empty);
             WorkflowConfiguration config = settings
                 .Where(cfg => cfg.ID == long.Parse(command.ID))
                 .FirstOrDefault();

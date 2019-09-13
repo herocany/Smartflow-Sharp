@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Resources;
 using System.Text;
 
-namespace Smartflow
+namespace Smartflow.Internals
 {
     /// <summary>
     /// 处理比较复杂的SQL语句、异常、工作流信息

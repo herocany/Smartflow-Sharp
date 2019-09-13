@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using Smartflow.Internals;
 
-namespace Smartflow
+namespace Smartflow.Components
 {
     public sealed class MailConfiguration
     {

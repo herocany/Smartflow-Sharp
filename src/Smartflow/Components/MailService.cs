@@ -11,8 +11,9 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
+using Smartflow.Internals;
 
-namespace Smartflow
+namespace Smartflow.Components
 {
     public class MailService : IMailService
     {
