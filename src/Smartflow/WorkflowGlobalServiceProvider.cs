@@ -21,6 +21,10 @@ namespace Smartflow
         static WorkflowGlobalServiceProvider()
         {
             _globalCollection.Add(new WorkflowService());
+            _globalCollection.Add(new WorkflowNodeService());
+            _globalCollection.Add(new WorkflowProcessService());
+            _globalCollection.Add(new WorkflowInstanceService());
+
             _globalCollection.Add(new MailService());
             _globalCollection.Add(new DefaultActionService());
         }

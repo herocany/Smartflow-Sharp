@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Smartflow.Elements
 {
-    public class Command : Element, IRelationship
+    public class Command : Element
     {
         private string text = string.Empty;
 

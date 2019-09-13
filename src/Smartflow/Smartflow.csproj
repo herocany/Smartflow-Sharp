@@ -40,12 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IWorkflowInstanceService.cs" />
+    <Compile Include="IWorkflowNodeService.cs" />
     <Compile Include="Internals\DapperFactory.cs" />
     <Compile Include="Components\DefaultActionService.cs" />
     <Compile Include="Internals\ServiceContainer.cs" />
     <Compile Include="AbstractWorkflow.cs" />
     <Compile Include="IWorkflowParse.cs" />
     <Compile Include="IWorkflowPersistent.cs" />
+    <Compile Include="IWorkflowProcessService.cs" />
     <Compile Include="IWorkflowQuery.cs" />
     <Compile Include="Components\LastStrategy.cs" />
     <Compile Include="Components\DemocraticStrategy.cs" />
@@ -61,7 +64,6 @@
     <Compile Include="Internals\ResolutionContext.cs" />
     <Compile Include="Internals\Utils.cs" />
     <Compile Include="Internals\XMLServiceFactory.cs" />
-    <Compile Include="IRelationship.cs" />
     <Compile Include="Elements\Node.cs" />
     <Compile Include="Elements\Group.cs" />
     <Compile Include="Elements\Transition.cs" />

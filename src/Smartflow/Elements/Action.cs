@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Smartflow.Elements
 {
-    public class Action : Element, IRelationship
+    public class Action : Element
     {
         public string RelationshipID
         {

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Smartflow.Elements
 {
-    public class Group : Element, IRelationship
+    public class Group : Element
     {
         public string RelationshipID
         {

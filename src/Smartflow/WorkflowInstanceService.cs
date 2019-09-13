@@ -7,13 +7,8 @@ using Smartflow.Internals;
 
 namespace Smartflow
 {
-    public class WorkflowInstanceService : WorkflowInfrastructure, IWorkflowQuery<WorkflowInstance>
+    public class WorkflowInstanceService : WorkflowInfrastructure, IWorkflowInstanceService, IWorkflowQuery<WorkflowInstance>
     {
-        protected WorkflowNodeService NodeService
-        {
-            get { return new WorkflowNodeService(); }
-        }
-
         public void Jump(string transitionTo, String instanceID)
         {
             string update = " UPDATE T_INSTANCE SET RelationshipID=@RelationshipID WHERE InstanceID=@InstanceID ";
@@ -56,7 +51,7 @@ namespace Smartflow
             {
                 return Connection.Query<WorkflowInstance, Node, WorkflowInstance>(sql, (instance, node) =>
                 {
-                    instance.Current = NodeService.GetNode(node);
+                    instance.Current = WorkflowGlobalServiceProvider.Resolve<IWorkflowNodeService>().GetNode(node);
                     return instance;
 
                 }, param: condition, splitOn: "Name").ToList();

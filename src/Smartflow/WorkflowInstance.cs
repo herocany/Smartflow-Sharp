@@ -42,7 +42,9 @@ namespace Smartflow
 
         public static WorkflowInstance GetInstance(string instanceID)
         {
-            return new WorkflowInstanceService().Query(new { InstanceID = instanceID }).FirstOrDefault();
+            return WorkflowGlobalServiceProvider.Resolve<IWorkflowInstanceService>()
+                .Query(new { InstanceID = instanceID })
+                .FirstOrDefault();
         }
     }
 }

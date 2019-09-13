@@ -12,7 +12,7 @@ using System.Data;
 
 namespace Smartflow
 {
-    public class WorkflowProcess :IRelationship
+    public class WorkflowProcess 
     {
         /// <summary>
         /// 外键

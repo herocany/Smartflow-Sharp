@@ -14,7 +14,7 @@ using Smartflow;
 
 namespace Smartflow.Elements
 {
-    public class Transition : Element, IRelationship
+    public class Transition : Element
     {
         private string destination = string.Empty;
         private string expression = string.Empty;

@@ -14,11 +14,11 @@ namespace Smartflow.Web.Mvc.Controllers
 {
     public class AuditController : BaseController
     {
-        private RecordService workflowRecordService = new RecordService();
-        private BaseWorkflowService bwfs = BaseWorkflowService.Instance;
-        private WorkflowDesignService designService = new WorkflowDesignService();
+        private readonly RecordService workflowRecordService = new RecordService();
+        private readonly BaseWorkflowService bwfs = BaseWorkflowService.Instance;
+        private readonly WorkflowDesignService designService = new WorkflowDesignService();
 
-        protected WorkflowNodeService NodeService
+        protected IWorkflowNodeService NodeService
         {
             get
             {

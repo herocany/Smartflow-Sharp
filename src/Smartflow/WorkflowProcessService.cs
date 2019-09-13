@@ -5,7 +5,7 @@ using System.Text;
 using Smartflow.Internals;
 namespace Smartflow
 {
-    public class WorkflowProcessService : WorkflowInfrastructure,IWorkflowPersistent<WorkflowProcess>,IWorkflowQuery<WorkflowProcess>
+    public class WorkflowProcessService : WorkflowInfrastructure,IWorkflowProcessService,IWorkflowPersistent<WorkflowProcess>,IWorkflowQuery<WorkflowProcess>
     {
         public void Persistent(WorkflowProcess process)
         {

@@ -11,7 +11,7 @@ namespace Smartflow
     /// </summary>
     public abstract class AbstractBridgeService
     {
-        protected WorkflowProcessService ProcessService
+        protected IWorkflowProcessService ProcessService
         {
             get
             {

@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Smartflow.Elements
 {
-    public class Actor : Element, IRelationship
+    public class Actor : Element
     {
         public string RelationshipID
         {

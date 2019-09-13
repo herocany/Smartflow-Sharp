@@ -52,7 +52,7 @@ namespace Smartflow.Internals
         public const string SMARTFLOW_SHARP_TITLE = "SMARTFLOW_SHARP_TITLE";
         public const string SMARTFLOW_SHARP_VERSION = "SMARTFLOW_SHARP_VERSION";
 
-        private static readonly ResourceManager resourceManage =new ResourceManager("Smartflow.SmartflowResource",Assembly.GetExecutingAssembly());
+        private static readonly ResourceManager resourceManage =new ResourceManager("Smartflow.Internals.SmartflowResource", Assembly.GetExecutingAssembly());
         
         public static string GetString(string key)
         {

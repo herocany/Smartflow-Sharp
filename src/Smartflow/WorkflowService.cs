@@ -17,6 +17,11 @@ namespace Smartflow
 {
     public class WorkflowService: AbstractWorkflow
     {
+        public IWorkflowPersistent<Element> WorkflowPersistent
+        {
+            get { return base.NodeService; }
+        }
+
         public override string Start(string resourceXml)
         {
             Workflow workflow = XMLServiceFactory.Create(resourceXml);
@@ -25,7 +30,7 @@ namespace Smartflow
             foreach (Node node in workflow.Nodes)
             {
                 node.InstanceID = instaceID;
-                NodeService.Persistent(node);
+                WorkflowPersistent.Persistent(node);
             }
             return instaceID;
         }
