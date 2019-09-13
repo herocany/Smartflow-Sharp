@@ -11,6 +11,14 @@ namespace Smartflow
     /// </summary>
     public abstract class AbstractBridgeService
     {
+        protected WorkflowProcessService ProcessService
+        {
+            get
+            {
+                return WorkflowGlobalServiceProvider.Resolve<WorkflowService>().ProcessService;
+            }
+        }
+
         /// <summary>
         /// 获取参与组
         /// </summary>
@@ -39,8 +47,7 @@ namespace Smartflow
 
         public IList<dynamic> GetRecords(string instanceID)
         {
-            string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_RECORD);
-            return new WorkflowProcessService().GetRecords(instanceID);
+             return ProcessService.GetRecords(instanceID);
         }
 
 

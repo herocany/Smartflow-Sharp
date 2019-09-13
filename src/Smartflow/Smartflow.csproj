@@ -43,6 +43,7 @@
     <Compile Include="Internals\DapperFactory.cs" />
     <Compile Include="DefaultActionService.cs" />
     <Compile Include="Internals\ServiceContainer.cs" />
+    <Compile Include="AbstractWorkflow.cs" />
     <Compile Include="IWorkflowParse.cs" />
     <Compile Include="IWorkflowPersistent.cs" />
     <Compile Include="IWorkflowQuery.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="Elements\Transition.cs" />
     <Compile Include="Elements\Workflow.cs" />
     <Compile Include="IWorkflowAction.cs" />
-    <Compile Include="IResolve.cs" />
     <Compile Include="AbstractWorkflowCooperation.cs" />
     <Compile Include="IWorkflowCooperationStrategy.cs" />
     <Compile Include="WorkflowActionService.cs" />
@@ -76,10 +76,10 @@
     <Compile Include="WorkflowConfigurationService.cs" />
     <Compile Include="WorkflowGroup.cs" />
     <Compile Include="WorkflowGroupService.cs" />
+    <Compile Include="WorkflowInstanceService.cs" />
     <Compile Include="WorkflowInstanceState.cs" />
     <Compile Include="WorkflowNodeCategory.cs" />
     <Compile Include="ExecutingContext.cs" />
-    <Compile Include="IWorkflow.cs" />
     <Compile Include="MailConfiguration.cs" />
     <Compile Include="MailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,7 +94,6 @@
     <Compile Include="WorkflowActionFactory.cs" />
     <Compile Include="WorkflowGlobalServiceProvider.cs" />
     <Compile Include="WorkflowInstance.cs" />
-    <Compile Include="WorkflowNode.cs" />
     <Compile Include="WorkflowNodeService.cs" />
     <Compile Include="WorkflowProcess.cs" />
     <Compile Include="WorkflowProcessService.cs" />

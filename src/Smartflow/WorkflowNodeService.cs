@@ -12,22 +12,21 @@ namespace Smartflow
 {
     public class WorkflowNodeService : WorkflowInfrastructure, IWorkflowPersistent<Node>, IWorkflowQuery<Node>, IWorkflowParse
     {
-        public WorkflowTransitionService TransitionService
+        protected WorkflowTransitionService TransitionService
         {
             get
             {
                 return new WorkflowTransitionService();
             }
         }
-        public WorkflowActionService ActionService
+        protected WorkflowActionService ActionService
         {
             get
             {
                 return new WorkflowActionService();
             }
         }
-
-        public WorkflowGroupService GroupService
+        protected WorkflowGroupService GroupService
         {
 
             get
@@ -35,7 +34,7 @@ namespace Smartflow
                 return new WorkflowGroupService();
             }
         }
-        public WorkflowActorService ActorService
+        protected WorkflowActorService ActorService
         {
             get
             {
@@ -43,8 +42,7 @@ namespace Smartflow
                 return new WorkflowActorService();
             }
         }
-
-        public WorkflowCommandService CommandService
+        protected WorkflowCommandService CommandService
         {
             get
             {
@@ -88,7 +86,7 @@ namespace Smartflow
         {
             entry.NID = Guid.NewGuid().ToString();
             string sql = "INSERT INTO T_NODE(NID,ID,Name,NodeType,InstanceID,Cooperation,Increment) VALUES(@NID,@ID,@Name,@NodeType,@InstanceID,@Cooperation,@Increment)";
-            base.Connection.Execute(sql, new { entry.NID, entry.ID, entry.Name, NodeType=entry.NodeType.ToString(), entry.InstanceID, entry.Cooperation, entry.Increment });
+            base.Connection.Execute(sql, new { entry.NID, entry.ID, entry.Name, NodeType = entry.NodeType.ToString(), entry.InstanceID, entry.Cooperation, entry.Increment });
 
             foreach (Transition transition in entry.Transitions)
             {
@@ -134,7 +132,7 @@ namespace Smartflow
             return Connection.Query<Node>(query, condition).ToList();
         }
 
-        internal void DoIncrement(Node node)
+        public void DoIncrement(Node node)
         {
             node.Increment += 1;
             string sql = "UPDATE T_NODE SET Increment=@Increment WHERE InstanceID=@InstanceID AND  NID=@NID ";
@@ -189,6 +187,39 @@ namespace Smartflow
             {
                 throw ex;
             }
+        }
+
+        public Node GetNode(Node entry)
+        {
+            entry.Transitions = TransitionService.Query(new { entry.InstanceID }).Where(t => t.RelationshipID == entry.NID).ToList();
+            entry.Groups = GroupService.Query(new { entry.InstanceID }).Where(e => e.RelationshipID == entry.NID).ToList();
+            entry.Actors = ActorService.Query(new { entry.InstanceID }).Where(e => e.RelationshipID == entry.NID).ToList();
+            entry.Actions = ActionService.Query(new { entry.InstanceID }).Where(e => e.RelationshipID == entry.NID).ToList();
+            entry.Command = CommandService.Query(new { entry.InstanceID }).Where(e => e.RelationshipID == entry.NID).FirstOrDefault();
+            return entry;
+        }
+
+        public List<Transition> GetExecuteTransitions(Node entry)
+        {
+            foreach (Smartflow.Elements.Transition transition in entry.Transitions)
+            {
+                ASTNode an = this.FindNodeByID(transition.Destination,entry.InstanceID);
+
+                Transition decisionTransition = transition;
+                while (an.NodeType == WorkflowNodeCategory.Decision)
+                {
+                    decisionTransition = this.GetTransition(an);
+                    an = this.FindNodeByID(decisionTransition.Destination, entry.InstanceID);
+                }
+                transition.Name = decisionTransition.Name;
+            }
+            return entry.Transitions;
+        }
+
+        private ASTNode FindNodeByID(string ID,string instanceID)
+        {
+            return this.Query(new { InstanceID= instanceID })
+                    .Where(e => e.ID == ID).FirstOrDefault();
         }
     }
 }

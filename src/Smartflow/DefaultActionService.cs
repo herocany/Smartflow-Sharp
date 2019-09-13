@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Smartflow
 {
-    public class DefaultActionService : IResolve, IWorkflowAction
+    public class DefaultActionService : IWorkflowAction
     {
         public IWorkflowAction Scan(string name)
         {
@@ -25,11 +25,10 @@ namespace Smartflow
             }
         }
 
-        private List<IWorkflowAction> GetWorkflowActions(ASTNode to)
+        private List<IWorkflowAction> GetWorkflowActions(Node to)
         {
             List<IWorkflowAction> partAction = new List<IWorkflowAction>();
-            WorkflowNode nodes = WorkflowNode.ConvertToReallyType(to);
-            nodes.Actions.ForEach(el =>
+            to.Actions.ForEach(el =>
             {
                 IWorkflowAction defaultAction = this.Scan(el.ID);
                 if (defaultAction != null)

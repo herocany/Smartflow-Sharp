@@ -22,7 +22,7 @@ namespace Smartflow
         /// <summary>
         /// 当前节点
         /// </summary>
-        public ASTNode From
+        public Node From
         {
             get;
             set;
@@ -31,7 +31,7 @@ namespace Smartflow
         /// <summary>
         /// 跳转到节点
         /// </summary>
-        public ASTNode To
+        public Node To
         {
             get;
             set;

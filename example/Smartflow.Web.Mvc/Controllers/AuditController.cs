@@ -18,6 +18,14 @@ namespace Smartflow.Web.Mvc.Controllers
         private BaseWorkflowService bwfs = BaseWorkflowService.Instance;
         private WorkflowDesignService designService = new WorkflowDesignService();
 
+        protected WorkflowNodeService NodeService
+        {
+            get
+            {
+                return WorkflowGlobalServiceProvider.Resolve<AbstractWorkflow>().NodeService;
+            }
+        }
+
         /// <summary>
         /// 审核框架
         /// </summary>
@@ -26,7 +34,7 @@ namespace Smartflow.Web.Mvc.Controllers
         /// <returns></returns>
         public ActionResult AuditFrame(string url, string instanceID)
         {
-            ViewBag.renderUrl = (!String.IsNullOrEmpty(instanceID))? string.Format("{0}/{1}", url,instanceID) :url;
+            ViewBag.renderUrl = (!String.IsNullOrEmpty(instanceID)) ? string.Format("{0}/{1}", url, instanceID) : url;
             ViewBag.url = url;
             ViewBag.instanceID = instanceID;
             if (!String.IsNullOrEmpty(instanceID))
@@ -52,7 +60,7 @@ namespace Smartflow.Web.Mvc.Controllers
         public JsonResult GetTransitions(string instanceID)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
-            return Json(instance.Current.GetTransitions());
+            return Json(NodeService.GetExecuteTransitions(instance.Current));
         }
 
         [HttpPost]
@@ -61,9 +69,9 @@ namespace Smartflow.Web.Mvc.Controllers
             var current = bwfs.GetCurrent(instanceID);
             return Json(new
             {
-                NID=current.NID,
+                NID = current.NID,
                 Name = current.Name,
-                Category=current.NodeType.ToString(),
+                Category = current.NodeType.ToString(),
                 HasAuth = (current.Name == "开始" ? true :
                               CommonMethods.CheckAuth(current.NID, instanceID, UserInfo))
             });
@@ -95,10 +103,10 @@ namespace Smartflow.Web.Mvc.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetAuditUser(string NID,string instanceID)
+        public JsonResult GetAuditUser(string NID, string instanceID)
         {
-           return Json(new UserService()
-                          .GetPendingUserList(NID,instanceID));
+            return Json(new UserService()
+                           .GetPendingUserList(NID, instanceID));
         }
     }
 }

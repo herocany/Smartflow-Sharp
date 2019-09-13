@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Smartflow.Elements
 {
-    public abstract  class ASTNode : Element
+    public abstract class ASTNode : Element
     {
         protected List<Transition> transitions = new List<Transition>();
         protected WorkflowNodeCategory category = WorkflowNodeCategory.Node;
@@ -52,21 +52,5 @@ namespace Smartflow.Elements
             get { return increment; }
             set { increment = value; }
         }
-
-        //internal virtual List<Transition> QueryWorkflowNode(string relationshipID)
-        //{
-        //    string query = "SELECT * FROM T_TRANSITION WHERE RelationshipID=@RelationshipID";
-        //    return Connection.Query<Transition>(query, new { RelationshipID = relationshipID }).ToList();
-        //}
-
-        //public ASTNode GetNode(string ID)
-        //{
-        //    string query = "SELECT * FROM T_NODE WHERE ID=@ID AND InstanceID=@InstanceID";
-        //    return Connection.Query<Node>(query, new
-        //    {
-        //        ID = ID,
-        //        InstanceID = InstanceID
-        //    }).FirstOrDefault();
-        //}
     }
 }

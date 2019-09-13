@@ -32,7 +32,7 @@ namespace Smartflow.BussinessService.WorkflowService
 
         
 
-        public WorkflowNode GetCurrentNode(string instanceID)
+        public Node GetCurrentNode(string instanceID)
         {
             return WorkflowInstance.GetInstance(instanceID).Current;
         }
