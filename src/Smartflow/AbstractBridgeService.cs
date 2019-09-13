@@ -19,7 +19,6 @@ namespace Smartflow
             }
         }
 
-
         protected IWorkflowQuery<WorkflowConfiguration> ConfigurationService
         {
             get
@@ -53,13 +52,7 @@ namespace Smartflow
         {
             return ConfigurationService.Query(Utils.Empty).ToList();
         }
-
-        public IList<dynamic> GetRecords(string instanceID)
-        {
-             return ProcessService.GetRecords(instanceID);
-        }
-
-
+    
         /// <summary>
         /// 获取当前执行节点的记录
         /// </summary>
@@ -68,7 +61,7 @@ namespace Smartflow
         public dynamic GetJumpProcess(string instanceID)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
-            IList<dynamic> records = this.GetRecords(instanceID);
+            IList<dynamic> records = ProcessService.GetRecords(instanceID);
 
             return new
             {
