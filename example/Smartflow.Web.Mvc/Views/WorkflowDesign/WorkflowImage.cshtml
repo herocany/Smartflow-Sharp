@@ -15,7 +15,10 @@
     <script type="text/javascript">
         $(function () {
 
-            $("#drawing").SMF({ container: 'drawing' });
+            $("#drawing").SMF({
+                container: 'drawing',
+                color: 'green'
+            });
             $.ajax({
                 url: '@Url.Action("GetProcess", "WorkflowDesign")',
                 type:'post',
