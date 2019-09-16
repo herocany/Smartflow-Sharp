@@ -29,13 +29,9 @@
         expression: 'expression',
         marker: 'marker',
         layout: 'layout',
-        action:'action'
+        action: 'action'
     };
-    
-    function checkNull(value) {
-        return (!(value == '' || value == undefined));
-    }
-
+ 
     function Draw(option) {
         this.draw = SVG(option.container);
         this.drawOption = $.extend({}, option);
@@ -112,27 +108,6 @@
         else {
             return (evt.target.correspondingUseElement || evt.target);
         }
-    }
-    Draw.parse = function (xml) {
-        return new XML(xml).root;
-    }
-
-    Draw.create = function (category) {
-        var strategy = {
-            node: function () {
-                return new Node();
-            },
-            start: function () {
-                return new Start();
-            },
-            end: function () {
-                return new End();
-            },
-            decision: function () {
-                return new Decision();
-            }
-        };
-        return strategy[category]();
     }
 
     Draw.prototype._init = function () {
@@ -320,7 +295,21 @@
     }
 
     Draw.prototype.create = function (category, after) {
-        var instance = Draw.create(category);
+        var instance;
+        switch (category) {
+            case "start":
+                instance = new Start();
+                break;
+            case "end":
+                instance = new End();
+                break;
+            case "decision":
+                instance = new Decision();
+                break;
+            default:
+                instance = new Node();
+                break;
+        }
         instance.drawInstance = this;
         instance.x = Math.floor(Math.random() * 200 + 1);
         instance.y = Math.floor(Math.random() * 200 + 1);
@@ -376,8 +365,8 @@
 
     Draw.prototype.import = function (structure, disable, executeNodeID,record) {
         var dwInstance = this,
-            data = Draw.parse(structure).workflow;
-
+            data = new XML(structure).root.workflow;
+        
         var recordArray = record || [];
 
         function findUID(destination) {
@@ -478,8 +467,6 @@
         //禁用事件
         this.disable = false;
         //背景颜色
-        this.bgColor = '#f06';
-        this.bgCurrentColor = 'green';
         this.isSelect = false;
         this.drawInstance = undefined;
     }
@@ -695,7 +682,10 @@
 
         $.each(self.actor, function () {
 
-            if (checkNull(this.id) && checkNull(this.name)) {
+            var chkId = (this.id == '' || this.id == undefined),
+                chkName = (this.name == '' || this.name == undefined);
+
+            if (!chkId && !chkName) {
                 build.append(config.start)
                     .append(config.actor);
                 eachAttributs(build, this);
@@ -743,7 +733,7 @@
             var self = this,
                 dw = self.drawInstance.draw;
 
-            var color = this.isSelect ? self.bgCurrentColor : self.bgColor;
+            var color = self.isSelect ? self.drawInstance.drawOption.color : self.drawInstance.drawOption.backgroundColor;
             var circle = dw.circle(self.r).fill(color);
 
             circle.move(self.x, self.y);
@@ -808,7 +798,7 @@
             var L = (!!points) ? dw.draw.polyline(points) :
                 dw.draw.polyline([[self.x1, self.y1], [self.x2, self.y2]]);
 
-            var color = self.isSelect ? self.bgCurrentColor : self.bgColor;
+            var color = self.isSelect ? dw.drawOption.color : dw.drawOption.backgroundColor;
 
             L.fill("none").stroke({
                 width: self.border,
@@ -1025,7 +1015,7 @@
             var n = this,
                 dw = n.drawInstance;
 
-            var color = n.isSelect ? n.bgCurrentColor : n.bgColor;
+            var color = n.isSelect ? dw.drawOption.color : dw.drawOption.backgroundColor;
             var rect = dw.draw.rect(n.w, n.h)
                     .attr({ fill: color, x: n.x, y: n.y });
 
@@ -1303,7 +1293,8 @@
     Decision.extend(Shape, {
         draw: function () {
             var dw = this.drawInstance.draw;
-            var color = this.isSelect ? this.bgCurrentColor : this.bgColor;
+            var color = this.isSelect ? this.drawInstance.drawOption.color : this.drawInstance.drawOption.backgroundColor;
+
             this.drawInstance._decision
                 .node
                 .firstElementChild
@@ -1666,7 +1657,11 @@
 
     $.fn.SMF = function (option) {
         var id = $(this).attr("id");
-        Draw._proto_Cc[id] = new Draw(option);
+
+        Draw._proto_Cc[id] = new Draw($.extend({
+            backgroundColor: '#f06',
+            color: 'green'
+        }, option));
     }
 
     $.SMF = {
