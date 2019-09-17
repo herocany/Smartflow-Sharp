@@ -8,9 +8,10 @@ namespace Smartflow
 {
     internal class WorkflowActionFactory
     {
-        public static IList<IWorkflowAction> Actions
+        public static IWorkflowAction Create(string name)
         {
-            get { return WorkflowGlobalServiceProvider.QueryActions(); }
+            return WorkflowGlobalServiceProvider.QueryActions()
+                      .FirstOrDefault(entry => string.Equals(entry.GetType().FullName, name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

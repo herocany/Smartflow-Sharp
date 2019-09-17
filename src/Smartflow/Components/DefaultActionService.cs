@@ -8,13 +8,6 @@ namespace Smartflow.Components
 {
     public class DefaultActionService : IWorkflowAction
     {
-        public IWorkflowAction Scan(string name)
-        {
-            return WorkflowActionFactory
-                      .Actions
-                      .FirstOrDefault(entry =>string.Equals(entry.GetType().FullName,name,StringComparison.OrdinalIgnoreCase));
-        }
-
         public void ActionExecute(ExecutingContext executingContext)
         {
             IList<IWorkflowAction> actions = GetWorkflowActions(executingContext.To);
@@ -30,7 +23,7 @@ namespace Smartflow.Components
             List<IWorkflowAction> partAction = new List<IWorkflowAction>();
             to.Actions.ForEach(el =>
             {
-                IWorkflowAction defaultAction = this.Scan(el.ID);
+                IWorkflowAction defaultAction = WorkflowActionFactory.Create(el.ID);
                 if (defaultAction != null)
                 {
                     partAction.Add(defaultAction);
