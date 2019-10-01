@@ -11,29 +11,18 @@ using System.Text;
 
 namespace Smartflow
 {
-    /// <summary>
-    /// 定义工作流数据库配置节点
-    /// </summary>
-    public class SmartflowConfiguration : ConfigurationSection
+    public class SmartflowConfiguration
     {
-        /// <summary>
-        /// 工作流数据库连接字符串
-        /// </summary>
-        [ConfigurationProperty("connectionString",IsRequired = true)]
         public string ConnectionString
         {
-            get { return this["connectionString"].ToString(); }
+            get;
+            set;
         }
 
-        /// <summary>
-        /// 数据访问提供者
-        /// </summary>
-        [ConfigurationProperty("providerName",
-            IsRequired = true,
-            DefaultValue = "System.Data.SqlClient")]
         public string ProviderName
         {
-            get { return this["providerName"].ToString(); }
+            get;
+            set;
         }
     }
 }

@@ -16,8 +16,8 @@ namespace Smartflow.Internals
     {
         internal static IDbConnection CreateWorkflowConnection()
         {
-            SmartflowConfiguration config = ConfigurationManager.GetSection("smartflowConfiguration") as
-                SmartflowConfiguration;
+            SmartflowConfiguration config =
+                WorkflowGlobalServiceProvider.Resolve<ISmartflowConfigurationService>().GetConfiguration();
             
             return DapperFactory.CreateConnection(config.ProviderName, config.ConnectionString);
         }

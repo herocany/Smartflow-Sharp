@@ -1,4 +1,5 @@
 ﻿using Smartflow.BussinessService.WorkflowService;
+using Smartflow.Components;
 using Smartflow.Web.Mvc.Code;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,13 @@ namespace Smartflow.Web.Mvc
     {
         protected void Application_Start()
         {
-
+            //优先放置在最前面
+            WorkflowGlobalServiceProvider.RegisterGlobalService(new SmartflowConfigurationService());
+            
             //注册全局的动作 即每跳转一个节点，都会执行动作。
             WorkflowGlobalServiceProvider.RegisterGlobalService(new PendingAction());
             WorkflowGlobalServiceProvider.RegisterGlobalService(new RecordAction());
+            WorkflowGlobalServiceProvider.RegisterGlobalService(new MailService());
 
             //注册局部动作 即跳转到特定节点中执行的动作
             WorkflowGlobalServiceProvider.RegisterPartService(new DefaultAction());
