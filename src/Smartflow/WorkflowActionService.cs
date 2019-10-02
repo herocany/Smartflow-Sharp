@@ -33,7 +33,7 @@ namespace Smartflow
 
         public IList<Elements.Action> Query(object condition)
         {
-            return base.Connection.Query<Elements.Action>(" SELECT * FROM T_GROUP WHERE InstanceID=@InstanceID ", condition).ToList();
+            return base.Connection.Query<Elements.Action>(" SELECT * FROM T_ACTION WHERE InstanceID=@InstanceID ", condition).ToList();
         }
     }
 }

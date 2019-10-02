@@ -12,7 +12,7 @@ namespace Smartflow
 {
     public class WorkflowNodeService : WorkflowInfrastructure, IWorkflowNodeService, IWorkflowPersistent<Element>, IWorkflowQuery<Node>, IWorkflowParse
     {
-        public IWorkflowQuery<WorkflowConfiguration>  ConfigurationService
+        public IWorkflowQuery<WorkflowConfiguration> ConfigurationService
         {
             get { return new WorkflowConfigurationService(); }
         }
@@ -139,8 +139,15 @@ namespace Smartflow
 
         public IList<Node> Query(object condition)
         {
+            IList<Node> nodes = new List<Node>();
+
             string query = "SELECT * FROM T_NODE WHERE  InstanceID=@InstanceID";
-            return Connection.Query<Node>(query, condition).ToList();
+            base.Connection.Query<Node>(query, condition).ToList().ForEach(e =>
+            {
+                nodes.Add(GetNode(e));
+            });
+
+            return nodes;
         }
 
         public void DoIncrement(Node node)
@@ -214,7 +221,7 @@ namespace Smartflow
         {
             foreach (Smartflow.Elements.Transition transition in entry.Transitions)
             {
-                ASTNode an = this.FindNodeByID(transition.Destination,entry.InstanceID);
+                ASTNode an = this.FindNodeByID(transition.Destination, entry.InstanceID);
 
                 Transition decisionTransition = transition;
                 while (an.NodeType == WorkflowNodeCategory.Decision)
@@ -227,9 +234,9 @@ namespace Smartflow
             return entry.Transitions;
         }
 
-        private ASTNode FindNodeByID(string ID,string instanceID)
+        private ASTNode FindNodeByID(string ID, string instanceID)
         {
-            return this.Query(new { InstanceID= instanceID })
+            return this.Query(new { InstanceID = instanceID })
                     .Where(e => e.ID == ID).FirstOrDefault();
         }
     }

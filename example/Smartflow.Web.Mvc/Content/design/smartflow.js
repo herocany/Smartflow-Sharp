@@ -6,6 +6,8 @@
  */
 (function ($) {
 
+    var support = (!!window.ActiveXObject || "ActiveXObject" in window);
+
     var config = {
         rootStart: '<workflow>',
         rootEnd: '</workflow>',
@@ -31,6 +33,30 @@
         layout: 'layout',
         action: 'action'
     };
+
+    Function.prototype.extend = function (Parent, Override) {
+        function F() { }
+        F.prototype = Parent.prototype;
+        this.prototype = new F();
+        this.prototype.constructor = this;
+        this.base = {};
+        this.base.Parent = Parent;
+        this.base.Constructor = Parent;
+        if (Override) {
+            $.extend(this.prototype, Override);
+        }
+    }
+
+    function StringBuilder() {
+        var elements = [];
+        this.append=function (text) {
+            elements.push(text);
+            return this;
+        },
+        this.toString=function () {
+            return elements.join('');
+        }
+    }
  
     function Draw(option) {
         this.draw = SVG(option.container);
@@ -108,6 +134,16 @@
         else {
             return (evt.target.correspondingUseElement || evt.target);
         }
+    }
+
+    Draw.getPosition = function (layout) {
+        var pos = layout.split(' ');
+        return {
+            x: Number(pos[0]),
+            y: Number(pos[2]),
+            disX: Number(pos[1]),
+            disY: Number(pos[3])
+        };
     }
 
     Draw.prototype._init = function () {
@@ -324,7 +360,7 @@
             nodeCollection = [],
             pathCollection = [],
             validateCollection = [],
-            build = util.builder();
+            build = new StringBuilder();
 
         $.each(Draw._proto_NC, function () {
             var self = this;
@@ -399,7 +435,7 @@
             node.category = node.category.toLowerCase();
 
             var instance = dwInstance.create(node.category, true);
-            $.extend(instance, node, util.parseNode(node.layout));
+            $.extend(instance, node, Draw.getPosition(node.layout));
             instance.disable = (disable || false);
             instance.isSelect = findRecord(node.id, 'Destination');
             instance.draw(executeNodeID);
@@ -541,7 +577,7 @@
     Shape.prototype.export = function () {
         var
             self = this,
-            build = util.builder();
+            build = new StringBuilder();
 
         build.append(config.start)
             .append(self.category)
@@ -984,7 +1020,7 @@
     }
 
     Line.update = function (current) {
-        if (util.ie) {
+        if (support) {
             var draw = document.getElementById(current.drawInstance.drawOption.container),
                 svg = draw.firstElementChild,
                 el = document.getElementById(current.$id);
@@ -1122,7 +1158,7 @@
                 && Draw.findById(this.$id, 'from').length > 0);
         },
         vertical: function () {
-            return util.ie ? 6 : 0;
+            return support ? 6 : 0;
         }
     });
 

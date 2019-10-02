@@ -15,21 +15,23 @@ namespace Smartflow
 {
     public static class WorkflowGlobalServiceProvider
     {
-        private static IList<object> _globalCollection = new List<object>();
+        private static IList<Type> _globalTypeCollection = new List<Type>();
+
         private static IList<IWorkflowAction> _partCollection = new List<IWorkflowAction>();
 
         static WorkflowGlobalServiceProvider()
         {
-            _globalCollection.Add(new WorkflowService());
-            _globalCollection.Add(new WorkflowNodeService());
-            _globalCollection.Add(new WorkflowProcessService());
-            _globalCollection.Add(new WorkflowInstanceService());
-            _globalCollection.Add(new DefaultActionService());
+            _globalTypeCollection.Add(typeof(MailService));
+            _globalTypeCollection.Add(typeof(WorkflowService));
+            _globalTypeCollection.Add(typeof(WorkflowNodeService));
+            _globalTypeCollection.Add(typeof(WorkflowProcessService));
+            _globalTypeCollection.Add(typeof(WorkflowInstanceService));
+            _globalTypeCollection.Add(typeof(DefaultActionService));
         }
 
-        public static void RegisterGlobalService(object registerObject)
+        public static void RegisterGlobalService(Type registerType)
         {
-            _globalCollection.Add(registerObject);
+            _globalTypeCollection.Add(registerType);
         }
 
         public static void RegisterPartService(IWorkflowAction action)
@@ -39,7 +41,11 @@ namespace Smartflow
 
         public static T Resolve<T>()
         {
-            return (T)_globalCollection.Where(o => (o is T)).FirstOrDefault();
+            Type map = _globalTypeCollection
+                      .Where(e => typeof(T).IsAssignableFrom(e))
+                      .FirstOrDefault();
+
+            return (T)Smartflow.Internals.Utils.CreateInstance(map);
         }
 
         /// <summary>
@@ -48,10 +54,10 @@ namespace Smartflow
         /// <typeparam name="T"></typeparam>
         public static void Remove<T>() where T : class
         {
-             _globalCollection.Where(o => (o is T))
-                .Cast<T>()
-                .ToList()
-                .ForEach((entry)=> _globalCollection.Remove(entry));
+            _globalTypeCollection
+               .Where(o => typeof(T).IsAssignableFrom(o))
+               .ToList()
+               .ForEach((entry) => _globalTypeCollection.Remove(entry));
         }
 
 
@@ -62,7 +68,13 @@ namespace Smartflow
         /// <returns></returns>
         public static List<T> Query<T>() where T : class
         {
-            return _globalCollection.Where(o => (o is T)).Cast<T>().ToList();
+            List<T> services = new List<T>();
+            _globalTypeCollection.Where(o => typeof(T).IsAssignableFrom(o)).ToList().ForEach(s =>
+            {
+                services.Add((T)Smartflow.Internals.Utils.CreateInstance(s));
+            });
+
+            return services;
         }
 
         public static IList<IWorkflowAction> QueryActions()

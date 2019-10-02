@@ -84,10 +84,9 @@
                 data: { WFID: designConfig.id },
                 success: function (serverData) {
                     flowName = serverData.appellation;
-
                     $.SMF
-                        .get(designConfig.container).import(serverData.structure);
-                    //SMF.revert(serverData.structure);
+                        .get(designConfig.container)
+                        .import(serverData.structure);
                 }
             };
             ajaxService(settings);
