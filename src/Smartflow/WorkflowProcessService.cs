@@ -3,25 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Smartflow.Internals;
+
 namespace Smartflow
 {
-    public class WorkflowProcessService : WorkflowInfrastructure,IWorkflowProcessService,IWorkflowPersistent<WorkflowProcess>,IWorkflowQuery<WorkflowProcess>
+    public class WorkflowProcessService : WorkflowInfrastructure, IWorkflowProcessService, IWorkflowPersistent<WorkflowProcess>, IWorkflowQuery<WorkflowProcess>
     {
         public void Persistent(WorkflowProcess process)
         {
-            string sql = "INSERT INTO T_PROCESS(NID,Origin,Destination,TransitionID,InstanceID,NodeType,RelationshipID,Increment) VALUES(@NID,@Origin,@Destination,@TransitionID,@InstanceID,@NodeType,@RelationshipID,@Increment)";
+            string sql = "INSERT INTO T_PROCESS(NID,Origin,Destination,TransitionID,InstanceID,NodeType,RelationshipID,Command) VALUES(@NID,@Origin,@Destination,@TransitionID,@InstanceID,@NodeType,@RelationshipID,@Command)";
             Connection.Execute(sql, new
             {
                 NID = Guid.NewGuid().ToString(),
-                Origin = process.Origin,
-                Destination = process.Destination,
-                TransitionID = process.TransitionID,
-                InstanceID = process.InstanceID,
+                process.Origin,
+                process.Destination,
+                process.TransitionID,
+                process.InstanceID,
                 NodeType = process.NodeType.ToString(),
-                RelationshipID = process.RelationshipID,
-                Increment = process.Increment
+                process.RelationshipID,
+                process.Command
             });
         }
+
 
         public IList<dynamic> GetRecords(string instanceID)
         {
@@ -32,10 +34,23 @@ namespace Smartflow
             }).OrderBy(order => order.CreateDateTime).ToList();
         }
 
+
         public IList<WorkflowProcess> Query(object condition)
         {
             string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_LATEST);
-            return Connection.Query<WorkflowProcess>(query, condition).OrderBy(order => order.CreateDateTime).ToList<WorkflowProcess>();
+            return Connection.Query<WorkflowProcess>(query, condition).ToList<WorkflowProcess>();
+        }
+
+
+        public void Detached(WorkflowProcess entry)
+        {
+            Connection.Execute(" DELETE FROM T_PROCESS WHERE NID=@NID ", new { entry.NID });
+        }
+
+
+        public void Update(WorkflowProcess entry)
+        {
+            Connection.Execute(" UPDATE T_PROCESS SET Command=@Command WHERE NID=@NID ", new { Command = 0, entry.NID });
         }
     }
 }

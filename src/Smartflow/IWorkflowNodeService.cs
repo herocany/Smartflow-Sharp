@@ -13,8 +13,6 @@ namespace Smartflow
             get;
         }
 
-        void DoIncrement(Node node);
-
         Transition GetTransition(ASTNode n);
 
         Node GetNode(Node entry);

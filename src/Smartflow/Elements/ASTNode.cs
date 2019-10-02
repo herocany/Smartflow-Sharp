@@ -18,8 +18,6 @@ namespace Smartflow.Elements
 
         private int cooperation = 0;
 
-        private int increment = 0;
-
         public List<Action> Actions
         {
             get { return actions; }
@@ -45,12 +43,6 @@ namespace Smartflow.Elements
         {
             get { return cooperation; }
             set { cooperation = value; }
-        }
-
-        public int Increment
-        {
-            get { return increment; }
-            set { increment = value; }
         }
     }
 }

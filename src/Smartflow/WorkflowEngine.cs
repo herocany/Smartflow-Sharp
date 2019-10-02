@@ -54,7 +54,20 @@ namespace Smartflow
                             .Where(e => e.ID == transitionTo)
                             .FirstOrDefault();
 
-                this.Invoke(context, to, transitionTo, (executeContext) => Processing(executeContext));
+                var executeContext = new ExecutingContext()
+                {
+                    From = current,
+                    To = to,
+                    TransitionID = context.TransitionID,
+                    Instance = context.Instance,
+                    Data = context.Data,
+                    ActorID = context.ActorID,
+                    ActorName = context.ActorName
+                };
+
+                Processing(executeContext);
+
+                this.Invoke(context, to, transitionTo, executeContext);
 
                 if (to.NodeType == WorkflowNodeCategory.End)
                 {
@@ -90,51 +103,35 @@ namespace Smartflow
                 TransitionID = executeContext.TransitionID,
                 InstanceID = executeContext.Instance.InstanceID,
                 NodeType = executeContext.From.NodeType,
-                Increment = executeContext.From.Increment
+                Command = executeContext.From.Cooperation
             });
-
-            workflowService.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
         }
 
-        protected void Invoke(WorkflowContext context, Node to, string selectTransition, System.Action<ExecutingContext> callback)
+        protected void Invoke(WorkflowContext context, Node to, string selectTransition, ExecutingContext executeContext)
         {
             Node current = context.Instance.Current;
 
             bool validation = true;
-
-            if (workflowService.WorkflowCooperationService != null && current.Cooperation > 0)
+            AbstractWorkflowCooperation abstractWorkflowCooperation = workflowService.WorkflowCooperationService;
+            if (abstractWorkflowCooperation != null && current.Cooperation > 0)
             {
-                IList<WorkflowProcess> records = workflowService.ProcessService
-                            .Query(new { current.InstanceID, current.NID, current.Increment });
-
-                validation = workflowService.WorkflowCooperationService.Check(current, records);
-                selectTransition = workflowService.WorkflowCooperationService.SelectStrategy().Decide(records, to.ID);
-            }
-            if (validation)
-            {
-
-                workflowService.InstanceService.Jump(selectTransition, context.Instance.InstanceID);
-
-                var next = WorkflowInstance
-                   .GetInstance(current.InstanceID)
-                   .Current;
-                if (next.NodeType != WorkflowNodeCategory.End)
+                IList<WorkflowProcess> records = workflowService.ProcessService.Query(new { current.InstanceID, current.NID, Command = current.Cooperation });
+                validation = abstractWorkflowCooperation.Check(current, records);
+                selectTransition = abstractWorkflowCooperation.SelectStrategy().Decide(records);
+                if (validation)
                 {
-                    workflowService.NodeService.DoIncrement(next);
+                    abstractWorkflowCooperation.Detached(records, selectTransition, (r) => workflowService.ProcessService.Detached(r), u => workflowService.ProcessService.Update(u));
                 }
             }
 
-            callback(new ExecutingContext()
+            executeContext.IsValid = validation;
+
+            if (executeContext.IsValid)
             {
-                From = current,
-                To = to,
-                TransitionID = context.TransitionID,
-                Instance = context.Instance,
-                Data = context.Data,
-                ActorID = context.ActorID,
-                ActorName = context.ActorName,
-                IsValid = validation
-            });
+                workflowService.InstanceService.Jump(selectTransition, context.Instance.InstanceID);
+            }
+
+            workflowService.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
         }
     }
 }

@@ -12,7 +12,7 @@ using System.Data;
 
 namespace Smartflow
 {
-    public class WorkflowProcess 
+    public class WorkflowProcess
     {
         /// <summary>
         /// 外键
@@ -85,11 +85,11 @@ namespace Smartflow
             get;
             set;
         }
-
+        
         /// <summary>
-        /// 批次记数
+        /// 命令类型0：决策命令 1：会签非决策命令
         /// </summary>
-        public int Increment
+        public int Command
         {
             get;
             set;

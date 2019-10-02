@@ -135,12 +135,12 @@
     <comment>获取流程图中的title信息</comment>
   </data>
   <data name="SQL_WORKFLOW_INSTANCE" xml:space="preserve">
-    <value>SELECT X.InstanceID,X.RelationshipID,X.Resource,Y.Name,Y.NID,Y.ID,Y.NodeType,Y.InstanceID,Y.Increment,Y.Cooperation FROM T_INSTANCE X INNER JOIN  T_NODE Y  ON (X.InstanceID=Y.InstanceID AND X.RelationshipID=Y.ID) WHERE X.InstanceID=@InstanceID</value>
+    <value>SELECT X.InstanceID,X.RelationshipID,X.Resource,Y.Name,Y.NID,Y.ID,Y.NodeType,Y.InstanceID,Y.Cooperation FROM T_INSTANCE X INNER JOIN  T_NODE Y  ON (X.InstanceID=Y.InstanceID AND X.RelationshipID=Y.ID) WHERE X.InstanceID=@InstanceID</value>
     <comment>流程实例信息</comment>
   </data>
 
   <data name="SQL_WORKFLOW_PROCESS_LATEST" xml:space="preserve">
-    <value>SELECT * FROM T_PROCESS WHERE InstanceID=@InstanceID AND RelationshipID=@NID  AND Increment=@Increment ORDER BY CreateDateTime ASC </value>
+    <value>SELECT * FROM T_PROCESS WHERE InstanceID=@InstanceID AND RelationshipID=@NID  AND Command=@Command ORDER BY CreateDateTime DESC </value>
     <comment>获取最新审批过程记录</comment>
   </data>
 
@@ -149,7 +149,7 @@
       SELECT Origin,Destination
         ,(SELECT ID FROM T_TRANSITION T WHERE T.NID=X.TransitionID) ID
          FROM T_PROCESS X 
-	       WHERE InstanceID=@InstanceID ORDER BY CreateDateTime ASC
+	       WHERE InstanceID=@InstanceID AND Command=0 ORDER BY CreateDateTime ASC
       </value>
     <comment>获取最新审批过程记录</comment>
   </data>

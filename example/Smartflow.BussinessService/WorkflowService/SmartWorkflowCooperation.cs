@@ -18,7 +18,7 @@ namespace Smartflow.BussinessService.WorkflowService
             if (node.Cooperation > 0)
             {
                 //两个人审批的时候
-                return records.Count >= 2;
+                return records.Count >= 3;
             }
             else
             {

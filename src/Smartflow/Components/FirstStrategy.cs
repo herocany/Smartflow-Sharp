@@ -7,11 +7,11 @@ namespace Smartflow.Components
 {
     public class FirstStrategy : IWorkflowCooperationStrategy
     {
-        public string Decide(IList<WorkflowProcess> records, string destination)
+        public string Decide(IList<WorkflowProcess> records)
         {
             var record = records.OrderBy(e => e.CreateDateTime).FirstOrDefault();
 
-            return record == null ? destination : record.Destination;
+            return record.Destination;
         }
     }
 }

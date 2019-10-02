@@ -9,5 +9,8 @@ namespace Smartflow
     {
        IList<dynamic> GetRecords(string instanceID);
 
+       void Detached(WorkflowProcess entry);
+
+       void Update(WorkflowProcess entry);
     }
 }

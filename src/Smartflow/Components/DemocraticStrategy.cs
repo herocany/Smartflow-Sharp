@@ -7,7 +7,7 @@ namespace Smartflow.Components
 {
     public class DemocraticStrategy : IWorkflowCooperationStrategy
     {
-        public string Decide(IList<WorkflowProcess> records, string destination)
+        public string Decide(IList<WorkflowProcess> records)
         {
             IList<string> selectDestinations = new List<string>();
             foreach (WorkflowProcess workflowProcess in records)
@@ -15,18 +15,13 @@ namespace Smartflow.Components
                 selectDestinations.Add(workflowProcess.Destination);
             }
 
-            if (!String.IsNullOrEmpty(destination))
-            {
-                selectDestinations.Add(destination);
-            }
 
             var data = from d in selectDestinations
                        group d by d into g
                        orderby g.Count() descending
                        select g.Key;
 
-            string groupKey = data.FirstOrDefault();
-            return String.IsNullOrEmpty(groupKey) ? destination : groupKey;
+            return data.FirstOrDefault();
         }
     }
 }

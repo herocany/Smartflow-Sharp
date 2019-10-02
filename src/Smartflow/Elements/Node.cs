@@ -38,5 +38,11 @@ namespace Smartflow.Elements
             get { return actors; }
             set { actors = value; }
         }
+
+        public Node Previous
+        {
+            get;
+            set;
+        }
     }
 }

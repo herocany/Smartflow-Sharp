@@ -59,6 +59,12 @@ namespace Smartflow
             }
         }
 
+        protected IWorkflowProcessService ProcessService
+        {
+            get { return WorkflowGlobalServiceProvider.Resolve<IWorkflowProcessService>(); }
+        }
+
+
         public Element Parse(XElement element)
         {
             Node node = new Node();
@@ -96,8 +102,8 @@ namespace Smartflow
             Node n = (entry as Node);
 
             entry.NID = Guid.NewGuid().ToString();
-            string sql = "INSERT INTO T_NODE(NID,ID,Name,NodeType,InstanceID,Cooperation,Increment) VALUES(@NID,@ID,@Name,@NodeType,@InstanceID,@Cooperation,@Increment)";
-            base.Connection.Execute(sql, new { entry.NID, entry.ID, entry.Name, NodeType = n.NodeType.ToString(), entry.InstanceID, n.Cooperation, n.Increment });
+            string sql = "INSERT INTO T_NODE(NID,ID,Name,NodeType,InstanceID,Cooperation) VALUES(@NID,@ID,@Name,@NodeType,@InstanceID,@Cooperation)";
+            base.Connection.Execute(sql, new { entry.NID, entry.ID, entry.Name, NodeType = n.NodeType.ToString(), entry.InstanceID, n.Cooperation });
 
             foreach (Transition transition in n.Transitions)
             {
@@ -150,12 +156,6 @@ namespace Smartflow
             return nodes;
         }
 
-        public void DoIncrement(Node node)
-        {
-            node.Increment += 1;
-            string sql = "UPDATE T_NODE SET Increment=@Increment WHERE InstanceID=@InstanceID AND  NID=@NID ";
-            Connection.ExecuteScalar<long>(sql, new { node.NID, node.InstanceID, node.Increment });
-        }
 
         /// <summary>
         /// 动态获取路线，根据决策节点设置条件表达式，自动去判断流转的路线
@@ -214,6 +214,7 @@ namespace Smartflow
             entry.Actors = ActorService.Query(new { entry.InstanceID }).Where(e => e.RelationshipID == entry.NID).ToList();
             entry.Actions = ActionService.Query(new { entry.InstanceID }).Where(e => e.RelationshipID == entry.NID).ToList();
             entry.Command = CommandService.Query(new { entry.InstanceID }).Where(e => e.RelationshipID == entry.NID).FirstOrDefault();
+            entry.Previous = GetPrevious(entry);
             return entry;
         }
 
@@ -234,10 +235,52 @@ namespace Smartflow
             return entry.Transitions;
         }
 
-        private ASTNode FindNodeByID(string ID, string instanceID)
+        private Node FindNodeByID(string ID, string instanceID)
         {
             return this.Query(new { InstanceID = instanceID })
                     .Where(e => e.ID == ID).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 上一个执行跳转节点
+        /// </summary>
+        /// <returns></returns>
+        public Node GetPrevious(Node entry)
+        {
+            Transition transition = GetHistoryTransition(entry);
+            if (transition == null) return null;
+
+            Node wrapNode = this.FindNodeByID(transition.Origin, entry.InstanceID);
+
+            return this.GetNode(wrapNode);
+        }
+
+        /// <summary>
+        /// 获取回退线路
+        /// </summary>
+        /// <returns>路线</returns>
+        protected Transition GetHistoryTransition(Node entry)
+        {
+            Transition transition = null;
+
+            WorkflowProcess process = ProcessService.Query(new { entry.InstanceID, entry.NID, Command = 0 }).FirstOrDefault();
+
+            if (process != null && entry.NodeType != WorkflowNodeCategory.Start)
+            {
+                ASTNode n = this.FindNodeByID(process.Origin, entry.InstanceID);
+
+                while (n.NodeType == WorkflowNodeCategory.Decision)
+                {
+                    process = ProcessService.Query(new { entry.InstanceID, n.NID, Command = 0 }).FirstOrDefault();
+
+                    n = this.FindNodeByID(process.Origin, entry.InstanceID);
+
+                    if (n.NodeType == WorkflowNodeCategory.Start)
+                        break;
+                }
+                transition = TransitionService.Query(new { NID = process.TransitionID }).FirstOrDefault();
+            }
+            return transition;
         }
     }
 }
