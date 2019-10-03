@@ -140,7 +140,7 @@
   </data>
 
   <data name="SQL_WORKFLOW_PROCESS_LATEST" xml:space="preserve">
-    <value>SELECT * FROM T_PROCESS WHERE InstanceID=@InstanceID AND RelationshipID=@NID  AND Command=@Command ORDER BY CreateDateTime DESC </value>
+    <value>SELECT * FROM T_PROCESS WHERE InstanceID=@InstanceID   AND Command=@Command ORDER BY CreateDateTime DESC </value>
     <comment>获取最新审批过程记录</comment>
   </data>
 
@@ -153,6 +153,9 @@
       </value>
     <comment>获取最新审批过程记录</comment>
   </data>
+
+ 
+  
   
   <data name="SQL_WORKFLOW_TRANSITION_RECORD" xml:space="preserve">
     <value>

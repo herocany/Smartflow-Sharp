@@ -47,24 +47,6 @@ namespace Smartflow
         }
 
         /// <summary>
-        /// 当前参与执行者ID
-        /// </summary>
-        public string ActorID
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 当前参与执行者名称
-        /// </summary>
-        public string ActorName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// 工作流实例
         /// </summary>
         public WorkflowInstance Instance

@@ -87,9 +87,9 @@ namespace Smartflow
         }
         
         /// <summary>
-        /// 命令类型0：决策命令 1：会签非决策命令
+        /// 命令类型0：决策指令 1：协办决策指令 2：回退指令
         /// </summary>
-        public int Command
+        public WorkflowOpertaion Command
         {
             get;
             set;

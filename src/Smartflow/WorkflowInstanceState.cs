@@ -27,6 +27,11 @@ namespace Smartflow
         End,
 
         /// <summary>
+        /// 流程驳回
+        /// </summary>
+        Reject,
+
+        /// <summary>
         /// 流程终止
         /// </summary>
         Termination,

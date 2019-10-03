@@ -97,6 +97,7 @@
     <Compile Include="WorkflowGlobalServiceProvider.cs" />
     <Compile Include="WorkflowInstance.cs" />
     <Compile Include="WorkflowNodeService.cs" />
+    <Compile Include="WorkflowOpertaion.cs" />
     <Compile Include="WorkflowProcess.cs" />
     <Compile Include="WorkflowProcessService.cs" />
     <Compile Include="WorkflowService.cs" />

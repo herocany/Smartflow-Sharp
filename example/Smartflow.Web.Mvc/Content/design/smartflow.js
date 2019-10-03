@@ -34,6 +34,10 @@
         action: 'action'
     };
 
+    Array.prototype.remove = function (dx,to) {
+        this.splice(dx, (to || 1));
+    }
+
     Function.prototype.extend = function (Parent, Override) {
         function F() { }
         F.prototype = Parent.prototype;

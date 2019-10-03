@@ -12,10 +12,11 @@ namespace Smartflow
     {
         public Element Parse(XElement element)
         {
-            Actor actor = new Actor();
-            actor.Name = element.Attribute("name").Value;
-            actor.ID = element.Attribute("id").Value;
-            return actor;
+            return new Actor
+            {
+                Name = element.Attribute("name").Value,
+                ID = element.Attribute("id").Value
+            };
         }
 
         public void Persistent(Actor entry)

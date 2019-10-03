@@ -16,7 +16,7 @@ namespace Smartflow
     {
         private readonly static WorkflowEngine singleton = new WorkflowEngine();
 
-        private AbstractWorkflow workflowService = WorkflowGlobalServiceProvider.Resolve<AbstractWorkflow>();
+        private readonly AbstractWorkflow workflowService = WorkflowGlobalServiceProvider.Resolve<AbstractWorkflow>();
 
         protected WorkflowEngine()
         {
@@ -60,14 +60,12 @@ namespace Smartflow
                     To = to,
                     TransitionID = context.TransitionID,
                     Instance = context.Instance,
-                    Data = context.Data,
-                    ActorID = context.ActorID,
-                    ActorName = context.ActorName
+                    Data = context.Data
                 };
 
-                Processing(executeContext);
+                Processing(executeContext, (WorkflowOpertaion)executeContext.From.Cooperation);
 
-                this.Invoke(context, to, transitionTo, executeContext);
+                this.Invoke(context, transitionTo, executeContext);
 
                 if (to.NodeType == WorkflowNodeCategory.End)
                 {
@@ -93,7 +91,7 @@ namespace Smartflow
         /// 跳转过程处理入库
         /// </summary>
         /// <param name="executeContext">执行上下文</param>
-        protected void Processing(ExecutingContext executeContext)
+        protected void Processing(ExecutingContext executeContext, WorkflowOpertaion command)
         {
             workflowService.ProcessService.Persistent(new WorkflowProcess()
             {
@@ -103,11 +101,11 @@ namespace Smartflow
                 TransitionID = executeContext.TransitionID,
                 InstanceID = executeContext.Instance.InstanceID,
                 NodeType = executeContext.From.NodeType,
-                Command = executeContext.From.Cooperation
+                Command = command
             });
         }
 
-        protected void Invoke(WorkflowContext context, Node to, string selectTransition, ExecutingContext executeContext)
+        protected void Invoke(WorkflowContext context, string selectTransition, ExecutingContext executeContext)
         {
             Node current = context.Instance.Current;
 
@@ -115,7 +113,10 @@ namespace Smartflow
             AbstractWorkflowCooperation abstractWorkflowCooperation = workflowService.WorkflowCooperationService;
             if (abstractWorkflowCooperation != null && current.Cooperation > 0)
             {
-                IList<WorkflowProcess> records = workflowService.ProcessService.Query(new { current.InstanceID, current.NID, Command = current.Cooperation });
+                IList<WorkflowProcess> records = workflowService.ProcessService.Query(new { current.InstanceID, Command = current.Cooperation })
+                    .Where(c => c.RelationshipID == current.NID)
+                    .ToList();
+
                 validation = abstractWorkflowCooperation.Check(current, records);
                 selectTransition = abstractWorkflowCooperation.SelectStrategy().Decide(records);
                 if (validation)
@@ -132,6 +133,81 @@ namespace Smartflow
             }
 
             workflowService.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
+        }
+
+        
+        /// <summary>
+        /// 原路退回，回退到上一节点
+        /// </summary>
+        /// <param name="context">工作流上下文</param>
+        public void Back(WorkflowContext context)
+        {
+            WorkflowInstance instance = context.Instance;
+
+            if (instance.State == WorkflowInstanceState.Running)
+            {
+                Node current = instance.Current;
+                Node previous = current.Previous;
+
+                if (previous != null)
+                {
+                    string transitionTo = previous.ID;
+
+                    Node to = workflowService.NodeService.Query(new { current.InstanceID })
+                                .Where(e => e.ID == transitionTo)
+                                .FirstOrDefault();
+
+                    Transition backTransition=previous
+                        .Transitions
+                        .FirstOrDefault(e => e.Destination == current.ID);
+
+                    var executeContext = new ExecutingContext()
+                    {
+                        From = current,
+                        To = to,
+                        TransitionID = backTransition.NID,
+                        Instance = instance,
+                        Data = context.Data
+                    };
+
+                    Processing(executeContext, WorkflowOpertaion.Back);
+
+                    workflowService.InstanceService.Jump(transitionTo, instance.InstanceID);
+
+                    if (to.NodeType == WorkflowNodeCategory.Decision)
+                    {
+                        Transition transition = workflowService.NodeService.GetTransition(to);
+                        if (transition == null) return;
+
+                        Back(new WorkflowContext()
+                        {
+                            Instance = WorkflowInstance.GetInstance(instance.InstanceID),
+                            TransitionID = transition.NID,
+                            ActorID = context.ActorID,
+                            Data = context.Data
+                        });
+                    }
+
+                    if (previous.NodeType == WorkflowNodeCategory.Start)
+                    {
+                        workflowService.ProcessService.DetachedAll(context.Instance.InstanceID);
+                    }
+
+                    workflowService.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// 流程被驳回
+        /// </summary>
+        /// <param name="instance">实例</param>
+        public void Reject(WorkflowInstance instance)
+        {
+            workflowService
+                .InstanceService
+                .Transfer(WorkflowInstanceState.Reject, instance.InstanceID);
         }
     }
 }

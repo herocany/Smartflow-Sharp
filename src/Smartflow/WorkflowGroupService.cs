@@ -12,10 +12,11 @@ namespace Smartflow
     {
         public Element Parse(XElement element)
         {
-            Group g = new Group();
-            g.Name = element.Attribute("name").Value;
-            g.ID = element.Attribute("id").Value;
-            return g;
+            return new Group
+            {
+                Name = element.Attribute("name").Value,
+                ID = element.Attribute("id").Value
+            };
         }
 
         public void Persistent(Group entry)

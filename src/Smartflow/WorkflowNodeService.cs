@@ -237,8 +237,9 @@ namespace Smartflow
 
         private Node FindNodeByID(string ID, string instanceID)
         {
-            return this.Query(new { InstanceID = instanceID })
-                    .Where(e => e.ID == ID).FirstOrDefault();
+            string query = "SELECT * FROM T_NODE WHERE  InstanceID=@InstanceID AND ID=@ID";
+            Node entry = base.Connection.Query<Node>(query, new { InstanceID = instanceID, ID }).FirstOrDefault();
+            return entry ?? GetNode(entry);
         }
 
         /// <summary>
@@ -263,7 +264,9 @@ namespace Smartflow
         {
             Transition transition = null;
 
-            WorkflowProcess process = ProcessService.Query(new { entry.InstanceID, entry.NID, Command = 0 }).FirstOrDefault();
+            WorkflowProcess process = ProcessService.Query(new { entry.InstanceID, Command = 0 })
+                .Where(c => c.Destination == entry.ID)
+                .FirstOrDefault();
 
             if (process != null && entry.NodeType != WorkflowNodeCategory.Start)
             {
@@ -271,14 +274,17 @@ namespace Smartflow
 
                 while (n.NodeType == WorkflowNodeCategory.Decision)
                 {
-                    process = ProcessService.Query(new { entry.InstanceID, n.NID, Command = 0 }).FirstOrDefault();
+                    process = ProcessService.Query(new { entry.InstanceID, Command = 0 })
+                             .FirstOrDefault(c => c.Destination == n.ID);
 
                     n = this.FindNodeByID(process.Origin, entry.InstanceID);
 
                     if (n.NodeType == WorkflowNodeCategory.Start)
                         break;
                 }
-                transition = TransitionService.Query(new { NID = process.TransitionID }).FirstOrDefault();
+
+                transition = 
+                     TransitionService.Query(new { entry.InstanceID}).FirstOrDefault(e=> e.NID== process.TransitionID);
             }
             return transition;
         }

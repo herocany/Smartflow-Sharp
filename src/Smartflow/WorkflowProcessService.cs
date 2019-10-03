@@ -20,10 +20,9 @@ namespace Smartflow
                 process.InstanceID,
                 NodeType = process.NodeType.ToString(),
                 process.RelationshipID,
-                process.Command
+                Command = (int)process.Command
             });
         }
-
 
         public IList<dynamic> GetRecords(string instanceID)
         {
@@ -34,19 +33,21 @@ namespace Smartflow
             }).OrderBy(order => order.CreateDateTime).ToList();
         }
 
-
         public IList<WorkflowProcess> Query(object condition)
         {
             string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_LATEST);
             return Connection.Query<WorkflowProcess>(query, condition).ToList<WorkflowProcess>();
         }
 
-
         public void Detached(WorkflowProcess entry)
         {
             Connection.Execute(" DELETE FROM T_PROCESS WHERE NID=@NID ", new { entry.NID });
         }
 
+        public void DetachedAll(string instanceID)
+        {
+            Connection.Execute(" DELETE FROM T_PROCESS WHERE InstanceID=@InstanceID ", new { InstanceID = instanceID });
+        }
 
         public void Update(WorkflowProcess entry)
         {
