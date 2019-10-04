@@ -172,7 +172,7 @@ namespace Smartflow
                 .Where(cfg => cfg.ID == long.Parse(command.ID))
                 .FirstOrDefault();
 
-            IDbConnection connection = DapperFactory.CreateConnection(config.ProviderName, config.ConnectionString);
+            IDbConnection connection = DbFactory.CreateConnection(config.ProviderName, config.ConnectionString);
             try
             {
                 DataTable resultSet = new DataTable(Guid.NewGuid().ToString());

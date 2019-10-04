@@ -71,7 +71,7 @@ namespace Smartflow.Components
         public static MailConfiguration Configure()
         {
             string sql = "SELECT * FROM T_MAIL";
-            return DapperFactory.CreateWorkflowConnection()
+            return DbFactory.CreateWorkflowConnection()
                 .Query<MailConfiguration>(sql).FirstOrDefault();
         }
     }

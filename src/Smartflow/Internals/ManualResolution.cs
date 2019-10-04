@@ -15,7 +15,7 @@ using Smartflow.Elements;
 
 namespace Smartflow.Internals
 {
-    internal class Manual : IResolution
+    internal class ManualResolution: IResolution
     {
         public Workflow Parse(string resourceXml)
         {

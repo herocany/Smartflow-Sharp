@@ -12,14 +12,14 @@ using System.Data.Common;
 
 namespace Smartflow.Internals
 {
-    internal class DapperFactory
+    internal class DbFactory
     {
         internal static IDbConnection CreateWorkflowConnection()
         {
             SmartflowConfiguration config =
                 WorkflowGlobalServiceProvider.Resolve<ISmartflowConfigurationService>().GetConfiguration();
             
-            return DapperFactory.CreateConnection(config.ProviderName, config.ConnectionString);
+            return DbFactory.CreateConnection(config.ProviderName, config.ConnectionString);
         }
 
         internal static IDbConnection CreateConnection(string providerName, string connectionString)

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Smartflow.BussinessService.WorkflowService
 {
-    public  class BaseWorkflowService
+    public class BaseWorkflowService
     {
         private static WorkflowEngine context = WorkflowEngine.Instance;
 
@@ -30,8 +30,6 @@ namespace Smartflow.BussinessService.WorkflowService
             return GetCurrentNode(instanceID);
         }
 
-        
-
         public Node GetCurrentNode(string instanceID)
         {
             return WorkflowInstance.GetInstance(instanceID).Current;
@@ -44,7 +42,7 @@ namespace Smartflow.BussinessService.WorkflowService
             return context.Start(structure.STRUCTUREXML);
         }
 
-        public void Jump(string instanceID, string transitionID,dynamic data)
+        public void Jump(string instanceID, string transitionID, dynamic data)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
             context.Jump(new WorkflowContext()
@@ -53,6 +51,32 @@ namespace Smartflow.BussinessService.WorkflowService
                 TransitionID = transitionID,
                 Data = data
             });
+        }
+
+        /// <summary>
+        /// 原路退回
+        /// </summary>
+        /// <param name="instanceID"></param>
+        /// <param name="transitionID"></param>
+        /// <param name="data"></param>
+        public void Back(string instanceID,  dynamic data)
+        {
+            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            context.Jump(new WorkflowContext()
+            {
+                Instance = instance,
+                Data = data
+            });
+        }
+
+        /// <summary>
+        /// 驳回
+        /// </summary>
+        /// <param name="instanceID"></param>
+        public void Reject(string instanceID)
+        {
+            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            context.Reject(instance);
         }
     }
 }

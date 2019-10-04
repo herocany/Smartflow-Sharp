@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AuditWindow</title>
+</head>
+<body>
+    <div class="smartflow-table" style="padding:0 10px;">
+        <table class="layui-table">
+            <tr>
+                <td class="table-cm">下一步操作</td>
+                <td>
+                    <select id="ddlOperate" class="layui-select"></select>
+                </td>
+            </tr>
+            <tr>
+                <td class="table-cm">审批意见</td>
+                <td>
+                    <textarea class="layui-textarea" id="txtMessage"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="button-container ">
+        <div class="button-group ac ">
+            <input type="button"
+                   id="btnOk"
+                   value="确定"
+                   class="layui-btn layui-btn-sm" />
+        </div>
+    </div>
+
+    <script type="text/html" id="common_audit_select">
+        <option to="{{Destination}}" value="{{NID}}" action="{{Action}}">{{Name}}</option>
+    </script>
+</body>
+</html>

@@ -20,7 +20,7 @@ namespace Smartflow
         /// </summary>
         protected IDbConnection Connection
         {
-            get { return DapperFactory.CreateWorkflowConnection(); }
+            get { return DbFactory.CreateWorkflowConnection(); }
         }
     }
 }

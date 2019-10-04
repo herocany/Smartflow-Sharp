@@ -42,7 +42,7 @@
     <Compile Include="ISmartflowConfigurationService.cs" />
     <Compile Include="IWorkflowInstanceService.cs" />
     <Compile Include="IWorkflowNodeService.cs" />
-    <Compile Include="Internals\DapperFactory.cs" />
+    <Compile Include="Internals\DbFactory.cs" />
     <Compile Include="Components\DefaultActionService.cs" />
     <Compile Include="Internals\ServiceContainer.cs" />
     <Compile Include="AbstractWorkflow.cs" />
@@ -60,7 +60,7 @@
     <Compile Include="Components\FirstStrategy.cs" />
     <Compile Include="IMailService.cs" />
     <Compile Include="Internals\IResolution.cs" />
-    <Compile Include="Internals\Manual.cs" />
+    <Compile Include="Internals\ManualResolution.cs" />
     <Compile Include="Internals\ResolutionContext.cs" />
     <Compile Include="Internals\Utils.cs" />
     <Compile Include="Internals\XMLServiceFactory.cs" />
