@@ -16,18 +16,7 @@ namespace Smartflow
             set;
         }
 
-        public string ActorID
-        {
-            get;
-            set;
-        }
-
-        public string ActorName
-        {
-            get;
-            set;
-        }
-
+    
         public dynamic Data
         {
             get;

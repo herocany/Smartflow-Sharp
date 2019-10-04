@@ -80,7 +80,6 @@ namespace Smartflow
                     {
                         Instance = WorkflowInstance.GetInstance(instance.InstanceID),
                         TransitionID = transition.NID,
-                        ActorID = context.ActorID,
                         Data = context.Data
                     });
                 }
@@ -167,7 +166,8 @@ namespace Smartflow
                         To = to,
                         TransitionID = backTransition.NID,
                         Instance = instance,
-                        Data = context.Data
+                        Data = context.Data,
+                        IsValid=true
                     };
 
                     Processing(executeContext, WorkflowOpertaion.Back);
@@ -176,14 +176,9 @@ namespace Smartflow
 
                     if (to.NodeType == WorkflowNodeCategory.Decision)
                     {
-                        Transition transition = workflowService.NodeService.GetTransition(to);
-                        if (transition == null) return;
-
                         Back(new WorkflowContext()
                         {
                             Instance = WorkflowInstance.GetInstance(instance.InstanceID),
-                            TransitionID = transition.NID,
-                            ActorID = context.ActorID,
                             Data = context.Data
                         });
                     }

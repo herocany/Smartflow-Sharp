@@ -44,16 +44,14 @@ namespace Smartflow.BussinessService.WorkflowService
             return context.Start(structure.STRUCTUREXML);
         }
 
-        public void Jump(string instanceID, string transitionID, string actorID, string actorName, dynamic data)
+        public void Jump(string instanceID, string transitionID,dynamic data)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
             context.Jump(new WorkflowContext()
             {
                 Instance = instance,
                 TransitionID = transitionID,
-                Data = data,
-                ActorID = actorID,
-                ActorName = actorName
+                Data = data
             });
         }
     }

@@ -98,7 +98,7 @@ namespace Smartflow.Web.Mvc.Controllers
             data.Message = message;
             data.Url = url;
             data.UserInfo = UserInfo;
-            bwfs.Jump(instanceID, transitionID, UserInfo.IDENTIFICATION.ToString(), UserInfo.EMPLOYEENAME, data);
+            bwfs.Jump(instanceID, transitionID,data);
             return Json(true);
         }
 
