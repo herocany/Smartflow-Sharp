@@ -10,7 +10,7 @@ namespace Smartflow.BussinessService.WorkflowService
 {
     public class RecordAction : IWorkflowAction
     {
-        private RecordService recordService = new RecordService();
+        private readonly RecordService recordService = new RecordService();
 
         public void ActionExecute(ExecutingContext executeContext)
         {

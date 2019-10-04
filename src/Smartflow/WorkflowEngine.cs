@@ -58,12 +58,11 @@ namespace Smartflow
                 {
                     From = current,
                     To = to,
-                    TransitionID = context.TransitionID,
                     Instance = context.Instance,
                     Data = context.Data
                 };
 
-                Processing(executeContext, (WorkflowOpertaion)executeContext.From.Cooperation);
+                Processing(executeContext, context.TransitionID, (WorkflowOpertaion)executeContext.From.Cooperation);
 
                 this.Invoke(context, transitionTo, executeContext);
 
@@ -90,14 +89,14 @@ namespace Smartflow
         /// 跳转过程处理入库
         /// </summary>
         /// <param name="executeContext">执行上下文</param>
-        protected void Processing(ExecutingContext executeContext, WorkflowOpertaion command)
+        protected void Processing(ExecutingContext executeContext,string transitionID, WorkflowOpertaion command)
         {
             workflowService.ProcessService.Persistent(new WorkflowProcess()
             {
                 RelationshipID = executeContext.From.NID,
                 Origin = executeContext.From.ID,
                 Destination = executeContext.To.ID,
-                TransitionID = executeContext.TransitionID,
+                TransitionID = transitionID,
                 InstanceID = executeContext.Instance.InstanceID,
                 NodeType = executeContext.From.NodeType,
                 Command = command
@@ -133,7 +132,6 @@ namespace Smartflow
 
             workflowService.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
         }
-
         
         /// <summary>
         /// 原路退回，回退到上一节点
@@ -164,13 +162,12 @@ namespace Smartflow
                     {
                         From = current,
                         To = to,
-                        TransitionID = backTransition.NID,
                         Instance = instance,
                         Data = context.Data,
                         IsValid=true
                     };
 
-                    Processing(executeContext, WorkflowOpertaion.Back);
+                    Processing(executeContext, backTransition.NID, WorkflowOpertaion.Back);
 
                     workflowService.InstanceService.Jump(transitionTo, instance.InstanceID);
 
@@ -193,16 +190,16 @@ namespace Smartflow
             }
         }
 
-
         /// <summary>
         /// 流程被驳回
         /// </summary>
         /// <param name="instance">实例</param>
         public void Reject(WorkflowInstance instance)
         {
-            workflowService
-                .InstanceService
-                .Transfer(WorkflowInstanceState.Reject, instance.InstanceID);
+            if (instance.State == WorkflowInstanceState.Running)
+            {
+                workflowService.InstanceService.Transfer(WorkflowInstanceState.Reject,instance.InstanceID);
+            }
         }
     }
 }

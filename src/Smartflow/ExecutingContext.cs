@@ -37,14 +37,6 @@ namespace Smartflow
             set;
         }
 
-        /// <summary>
-        /// 跳转路线ID
-        /// </summary>
-        public string TransitionID
-        {
-            get;
-            set;
-        }
 
         /// <summary>
         /// 工作流实例

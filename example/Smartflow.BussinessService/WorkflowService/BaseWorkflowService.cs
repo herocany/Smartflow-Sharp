@@ -16,7 +16,7 @@ namespace Smartflow.BussinessService.WorkflowService
 {
     public class BaseWorkflowService
     {
-        private static WorkflowEngine context = WorkflowEngine.Instance;
+        private static readonly WorkflowEngine context = WorkflowEngine.Instance;
 
         private readonly static BaseWorkflowService singleton = new BaseWorkflowService();
 
@@ -26,11 +26,6 @@ namespace Smartflow.BussinessService.WorkflowService
         }
 
         public ASTNode GetCurrent(string instanceID)
-        {
-            return GetCurrentNode(instanceID);
-        }
-
-        public Node GetCurrentNode(string instanceID)
         {
             return WorkflowInstance.GetInstance(instanceID).Current;
         }
@@ -57,9 +52,8 @@ namespace Smartflow.BussinessService.WorkflowService
         /// 原路退回
         /// </summary>
         /// <param name="instanceID"></param>
-        /// <param name="transitionID"></param>
         /// <param name="data"></param>
-        public void Back(string instanceID,  dynamic data)
+        public void Back(string instanceID, dynamic data)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
             context.Jump(new WorkflowContext()
@@ -76,7 +70,9 @@ namespace Smartflow.BussinessService.WorkflowService
         public void Reject(string instanceID)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            //一、驳回流程
             context.Reject(instance);
+            //二、删除当前节点中所有人待办任务
         }
     }
 }

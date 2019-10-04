@@ -10,7 +10,7 @@ namespace Smartflow.BussinessService.WorkflowService
 {
     public class PendingAction : IWorkflowAction
     {
-        private PendingService pendingService = new PendingService();
+        private readonly PendingService pendingService = new PendingService();
 
         public void ActionExecute(ExecutingContext executeContext)
         {
@@ -122,7 +122,6 @@ namespace Smartflow.BussinessService.WorkflowService
         /// <param name="executeContext"></param>
         public void WritePending(string actorID, ExecutingContext executeContext)
         {
-            
             pendingService.Insert(new Pending()
             {
                 ACTORID = actorID,
