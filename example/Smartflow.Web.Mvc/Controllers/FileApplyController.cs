@@ -22,7 +22,15 @@ namespace Smartflow.Web.Controllers
         [HttpPost]
         public JsonResult Save(FileApply model)
         {
-            fileApplyService.Persistent(model);
+            if (model.IDENTIFICATION == 0)
+            {
+                fileApplyService.Persistent(model);
+            }
+            else
+            {
+                fileApplyService.Update(model);
+            }
+
             return Json(true);
         }
 

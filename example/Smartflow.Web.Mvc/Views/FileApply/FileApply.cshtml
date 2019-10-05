@@ -20,6 +20,8 @@
             var model = {};
             model.INSTANCEID = instanceID;
             model.FNAME = $("#FNAME").val();
+            model.IDENTIFICATION = $("#IDENTIFICATION").val();
+
             model.SECRETGRADE = $("#SECRETGRADE").find("option:selected").text();
             model.DESCRIPTION = $("#DESCRIPTION").val();
             model.STRUCTUREID = $("#STRUCTUREID").val();
@@ -43,6 +45,7 @@
 </head>
 <body>
     <div class="layui-container">
+        @Html.HiddenFor(m=>m.IDENTIFICATION,new { value=0,required="false"})
         <table class="layui-table">
             <tr>
                 <td style="width:100px;text-align:right;">文件名称</td>
