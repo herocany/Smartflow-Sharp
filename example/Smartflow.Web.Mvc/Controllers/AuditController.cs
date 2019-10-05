@@ -65,8 +65,10 @@ namespace Smartflow.Web.Mvc.Controllers
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
             List<Transition> transitions = NodeService.GetExecuteTransitions(instance.Current);
-            if (instance.Current.Previous != null)
+            Node previous = instance.Current.Previous;
+            if (previous != null && previous.Cooperation == 0&&instance.Current.Cooperation==0)
             {
+                //会签节点不支持回退
                 transitions.Add(new Transition()
                 {
                     NID = "back",

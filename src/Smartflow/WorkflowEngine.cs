@@ -154,10 +154,6 @@ namespace Smartflow
                                 .Where(e => e.ID == transitionTo)
                                 .FirstOrDefault();
 
-                    Transition backTransition=previous
-                        .Transitions
-                        .FirstOrDefault(e => e.Destination == current.ID);
-
                     var executeContext = new ExecutingContext()
                     {
                         From = current,
@@ -167,18 +163,9 @@ namespace Smartflow
                         IsValid=true
                     };
 
-                    Processing(executeContext, backTransition.NID, WorkflowOpertaion.Back);
+                    Processing(executeContext,String.Empty, WorkflowOpertaion.Back);
 
                     workflowService.InstanceService.Jump(transitionTo, instance.InstanceID);
-
-                    if (to.NodeType == WorkflowNodeCategory.Decision)
-                    {
-                        Back(new WorkflowContext()
-                        {
-                            Instance = WorkflowInstance.GetInstance(instance.InstanceID),
-                            Data = context.Data
-                        });
-                    }
 
                     if (previous.NodeType == WorkflowNodeCategory.Start)
                     {
