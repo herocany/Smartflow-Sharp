@@ -24,12 +24,7 @@ namespace Smartflow.BussinessService.WorkflowService
         {
             get { return singleton; }
         }
-
-        public ASTNode GetCurrent(string instanceID)
-        {
-            return WorkflowInstance.GetInstance(instanceID).Current;
-        }
-
+    
         public string Start(string identification)
         {
             WorkflowDesignService workflowDesignService = new WorkflowDesignService();

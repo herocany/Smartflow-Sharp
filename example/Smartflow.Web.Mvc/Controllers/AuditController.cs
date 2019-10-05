@@ -40,7 +40,7 @@ namespace Smartflow.Web.Mvc.Controllers
             if (!String.IsNullOrEmpty(instanceID))
             {
                 WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
-                var current = bwfs.GetCurrent(instanceID);
+                var current = instance.Current;
 
                 ViewBag.ButtonName = current.Name;
                 ViewBag.JumpAuth = (current.Name == "开始" && instance.State == WorkflowInstanceState.Running) ? true :
