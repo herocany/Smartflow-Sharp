@@ -28,7 +28,7 @@ namespace Smartflow.Web.Controllers
 
         public ActionResult FileApplyList()
         {
-            return View(fileApplyService.Query());
+            return View(fileApplyService.GetFileApplyList());
         }
 
         public JsonResult Delete(long id)

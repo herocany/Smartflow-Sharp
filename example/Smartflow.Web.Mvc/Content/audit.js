@@ -5,7 +5,7 @@
         this.settings = $.extend({}, option);
 
         var $this = this;
-        $.each(['setCurrent', 'load', '_initEvent','loadAuditUser'], function (index, propertyName) {
+        $.each(['setCurrent', 'load', '_initEvent', 'loadAuditUser'], function (index, propertyName) {
             $this[propertyName]();
         });
     }
@@ -66,7 +66,7 @@
     }
 
     //表单验证
-    Audit.prototype.doValidation = function(){
+    Audit.prototype.doValidation = function () {
         return this.settings.iframeContent.doValidation();
     }
 
@@ -215,38 +215,23 @@
 
 
     Audit.prototype._on = function () {
-
         var $this = this;
-
         //审核窗口中确定按钮
         $("#btnOk")
             .unbind('click')
             .bind('click', function () {
-
-                var from = $("#ddlOperate option:selected").val(),
-                    message = $("#txtMessage").val(),
-                    name = $this.settings.node.name;
-
+                var selectTransition = $("#ddlOperate option:selected").val(),
+                    message = $("#txtMessage").val();
                 if (util.isEmpty(message)) {
-
-                    $this.jump(from,
-                        message,
-                        function () {
-                            util.close(function () {
-                                if (name == '开始') {
-                                    $this.doAction($this.settings.instanceID);
-                                }
-
-                                //加载审批记录
-                                $.each(['load', 'selectTab', 'setCurrent','loadAuditUser'], function (index, propertyName) {
-                                    $this[propertyName]();
-                                });
-                            });
-                        });
+                    $this[(selectTransition == 'back') ? 'back' : 'jump'](message, selectTransition);
                 } else {
                     alert('请填写审批意见');
                 }
             });
+
+        $("#btnReject").unbind('click').bind('click', function () {
+            $this.reject();
+        });
     }
 
     /**
@@ -257,7 +242,7 @@
             structureID = $this.getStructure();
         util.ajaxPost({
             url: this.settings.url,
-            data: { structureID: structureID},
+            data: { structureID: structureID },
             success: function (instanceID) {
                 $this.settings.instanceID = instanceID;
                 $this.openAuditWindow();
@@ -269,11 +254,12 @@
      * 审核
      * @param {any} transition 选择路线
      * @param {any} message    审核消息
-     * @param {any} callback   回调函数
      */
-    Audit.prototype.jump = function (transition, message, callback) {
-        var self = this,
-            settings = this.settings;
+    Audit.prototype.jump = function (message,transition) {
+        var $this = this,
+            settings = this.settings,
+            name = $this.settings.node.name;
+
         util.ajaxPost({
             url: settings.jump.url,
             traditional: true,
@@ -284,7 +270,69 @@
                 message: message
             },
             success: function () {
-                callback && callback.call(self, settings);
+
+                util.close(function () {
+                    if (name == '开始') {
+                        $this.doAction($this.settings.instanceID);
+                    }
+
+                    //加载审批记录
+                    $.each(['load', 'selectTab', 'setCurrent', 'loadAuditUser'], function (index, propertyName) {
+                        $this[propertyName]();
+                    });
+                });
+            }
+        });
+    }
+
+
+    /**
+    * 驳回
+    */
+    Audit.prototype.reject = function () {
+        var $this = this,
+            settings = this.settings;
+        util.ajaxPost({
+            url: settings.reject,
+            traditional: true,
+            data: { instanceID: settings.instanceID },
+            success: function () {
+               util.close(function () {
+                    //加载审批记录
+                    $.each(['load', 'selectTab', 'setCurrent', 'loadAuditUser'], function (index, propertyName) {
+                        $this[propertyName]();
+                    });
+                });
+            }
+        });
+    }
+
+    /**
+    * 回退
+    * @param {any} message    审核消息
+    */
+    Audit.prototype.back = function (message) {
+        var $this = this,
+            settings = this.settings,
+            name = $this.settings.node.name;
+        util.ajaxPost({
+            url: settings.back,
+            traditional: true,
+            data: {
+                instanceID: settings.instanceID,
+                url: settings.jump.pageUrl,
+                message: message
+            },
+            success: function () {
+                util.close(function () {
+                    if (name == '开始') {
+                        $this.doAction($this.settings.instanceID);
+                    }
+                    //加载审批记录
+                    $.each(['load', 'selectTab', 'setCurrent', 'loadAuditUser'], function (index, propertyName) {
+                        $this[propertyName]();
+                    });
+                });
             }
         });
     }

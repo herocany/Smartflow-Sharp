@@ -56,7 +56,7 @@ namespace Smartflow.BussinessService.WorkflowService
         public void Back(string instanceID, dynamic data)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
-            context.Jump(new WorkflowContext()
+            context.Back(new WorkflowContext()
             {
                 Instance = instance,
                 Data = data

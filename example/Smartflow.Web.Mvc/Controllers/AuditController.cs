@@ -39,9 +39,13 @@ namespace Smartflow.Web.Mvc.Controllers
             ViewBag.instanceID = instanceID;
             if (!String.IsNullOrEmpty(instanceID))
             {
+                WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
                 var current = bwfs.GetCurrent(instanceID);
+
                 ViewBag.ButtonName = current.Name;
-                ViewBag.JumpAuth = current.Name == "开始" ? true : CommonMethods.CheckAuth(current.NID, instanceID, UserInfo);
+                ViewBag.JumpAuth = (current.Name == "开始" && instance.State == WorkflowInstanceState.Running) ? true :
+                    instance.State == WorkflowInstanceState.Running
+                    && CommonMethods.CheckAuth(current.NID, instanceID, UserInfo);
             }
             else
             {
@@ -60,20 +64,31 @@ namespace Smartflow.Web.Mvc.Controllers
         public JsonResult GetTransitions(string instanceID)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
-            return Json(NodeService.GetExecuteTransitions(instance.Current));
+            List<Transition> transitions = NodeService.GetExecuteTransitions(instance.Current);
+            if (instance.Current.Previous != null)
+            {
+                transitions.Add(new Transition()
+                {
+                    NID = "back",
+                    Name = "原路退回"
+                });
+            }
+            return Json(transitions);
         }
 
         [HttpPost]
         public JsonResult GetCurrent(string instanceID)
         {
-            var current = bwfs.GetCurrent(instanceID);
+            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            var current = instance.Current;
             return Json(new
             {
-                NID = current.NID,
-                Name = current.Name,
+                current.NID,
+                current.Name,
                 Category = current.NodeType.ToString(),
-                HasAuth = (current.Name == "开始" ? true :
-                              CommonMethods.CheckAuth(current.NID, instanceID, UserInfo))
+                HasAuth = (current.Name == "开始" && instance.State == WorkflowInstanceState.Running) ? true :
+                    instance.State == WorkflowInstanceState.Running
+                    && CommonMethods.CheckAuth(current.NID, instanceID, UserInfo)
             });
         }
 
@@ -98,9 +113,27 @@ namespace Smartflow.Web.Mvc.Controllers
             data.Message = message;
             data.Url = url;
             data.UserInfo = UserInfo;
-            bwfs.Jump(instanceID, transitionID,data);
+            bwfs.Jump(instanceID, transitionID, data);
             return Json(true);
         }
+
+
+        public JsonResult Reject(string instanceID)
+        {
+            bwfs.Reject(instanceID);
+            return Json(true);
+        }
+
+        public JsonResult Back(string instanceID, string url, string message)
+        {
+            dynamic data = new ExpandoObject();
+            data.Message = message;
+            data.Url = url;
+            data.UserInfo = UserInfo;
+            bwfs.Back(instanceID, data);
+            return Json(true);
+        }
+
 
         [HttpPost]
         public JsonResult GetAuditUser(string NID, string instanceID)

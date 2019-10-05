@@ -1,5 +1,5 @@
-﻿@model System.Collections.Generic.IEnumerable<Smartflow.BussinessService.Models.FileApply>
-@using Smartflow.BussinessService.Models
+﻿@model System.Data.DataTable
+@using System.Data
 @{
     Layout = null;
 }
@@ -48,23 +48,25 @@
                 <tr>
                     <th style="width:160px;text-align:left;">文件名称</th>
                     <th style="width:70px;text-align:center;">申请密级</th>
+                    <th style="width:70px;text-align:center;">状态</th>
                     <th>备注</th>
                     <th style="width:120px;text-align:center;">操作</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (FileApply mdl in Model)
+                @foreach (DataRow row in Model.Rows)
                 {
-                    <tr>
-                        <td style="width:160px;text-align:left;">@mdl.FNAME</td>
-                        <td style="width:70px;text-align:center;">@mdl.SECRETGRADE</td>
-                        <td style="text-align:left;">@mdl.DESCRIPTION</td>
-                        <td style="width:180px;text-align:center;">
-                            <a class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:parent.util.openProcessImage('@Url.Action("WorkflowImage", "WorkflowDesign", new { instanceID = mdl.INSTANCEID })')" target="_self">查看流程图</a>
-                            <a class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:openWin('@Url.Action("AuditFrame", "Audit",new { url=Url.Action("FileApply","FileApply"),instanceID=mdl.INSTANCEID })')" target="_self">查看</a>
-                            <a class="layui-btn layui-btn-danger layui-btn-xs" href="javascript:delApply('@mdl.IDENTIFICATION')">删除</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td style="width:160px;text-align:left;">@row["FNAME"].ToString()</td>
+                    <td style="width:70px;text-align:center;">@row["SECRETGRADE"].ToString()</td>
+                    <td style="width:70px;text-align:center;color:red;">@row["State"].ToString()</td>
+                    <td style="text-align:left;">@row["DESCRIPTION"].ToString()</td>
+                    <td style="width:180px;text-align:center;">
+                        <a class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:parent.util.openProcessImage('@Url.Action("WorkflowImage", "WorkflowDesign", new { instanceID = row["INSTANCEID"].ToString()})')" target="_self">查看流程图</a>
+                        <a class="layui-btn layui-btn-primary layui-btn-xs" href="javascript:openWin('@Url.Action("AuditFrame", "Audit",new { url=Url.Action("FileApply","FileApply"),instanceID=row["INSTANCEID"].ToString() })')" target="_self">查看</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" href="javascript:delApply('@row["IDENTIFICATION"].ToString()')">删除</a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

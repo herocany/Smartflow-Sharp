@@ -22,5 +22,16 @@ namespace Smartflow.BussinessService.Services
                 .Query(e => e.INSTANCEID == instanceID)
                 .FirstOrDefault();
         }
+
+
+        public DataTable GetFileApplyList()
+        {
+            DataTable dt = new DataTable();
+            using (IDataReader dr = base.Connection.ExecuteReader("SELECT T.*,(select State from Smartflow.dbo.t_instance i Where i.InstanceID=T.InstanceID) State FROM T_APPLY T"))
+            {
+                dt.Load(dr);
+            }
+            return dt;
+        }
     }
 }

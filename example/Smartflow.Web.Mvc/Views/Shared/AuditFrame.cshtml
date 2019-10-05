@@ -28,7 +28,9 @@
                 template: auditTempate,
                 iframeContent: iframeContent,
                 auditUser: '@Url.Action("GetAuditUser", "Audit")',
-                auditID:'#common_current_audit_user',
+                auditID: '#common_current_audit_user',
+                reject: '@Url.Action("Reject", "Audit")',
+                back:'@Url.Action("Back", "Audit")',
                 record: {
                     url: '@Url.Action("GetRecords", "Audit")',
                     template: recordTemplate,
@@ -105,6 +107,12 @@
         </div>
         <div class="button-container ">
             <div class="button-group ac ">
+
+                <input type="button"
+                       id="btnReject"
+                       value="驳回"
+                       class="layui-btn layui-btn-sm" />
+
                 <input type="button"
                        id="btnOk"
                        value="确定"
