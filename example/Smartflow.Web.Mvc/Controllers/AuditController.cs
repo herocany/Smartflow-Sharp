@@ -37,21 +37,6 @@ namespace Smartflow.Web.Mvc.Controllers
             ViewBag.renderUrl = (!String.IsNullOrEmpty(instanceID)) ? string.Format("{0}/{1}", url, instanceID) : url;
             ViewBag.url = url;
             ViewBag.instanceID = instanceID;
-            if (!String.IsNullOrEmpty(instanceID))
-            {
-                WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
-                var current = instance.Current;
-
-                ViewBag.ButtonName = current.Name;
-                ViewBag.JumpAuth = (current.Name == "开始" && instance.State == WorkflowInstanceState.Running) ? true :
-                    instance.State == WorkflowInstanceState.Running
-                    && CommonMethods.CheckAuth(current.NID, instanceID, UserInfo);
-            }
-            else
-            {
-                ViewBag.JumpAuth = true;
-                ViewBag.ButtonName = "开始";
-            }
             return View();
         }
 
