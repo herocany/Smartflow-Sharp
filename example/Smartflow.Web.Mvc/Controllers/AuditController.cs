@@ -40,6 +40,15 @@ namespace Smartflow.Web.Mvc.Controllers
             return View();
         }
 
+        public ActionResult AuditWindow(string url,string instanceID)
+        {
+            ViewBag.instanceID = instanceID;
+            ViewBag.url = url;
+            return View();
+        }
+
+
+
         public JsonResult Start(string structureID)
         {
             return Json(bwfs.Start(structureID));
@@ -123,10 +132,11 @@ namespace Smartflow.Web.Mvc.Controllers
 
 
         [HttpPost]
-        public JsonResult GetAuditUser(string NID, string instanceID)
+        public JsonResult GetAuditUser(string instanceID)
         {
+            WorkflowInstance instance=WorkflowInstance.GetInstance(instanceID);
             return Json(new UserService()
-                           .GetPendingUserList(NID, instanceID));
+                           .GetPendingUserList(instance.Current.NID, instanceID));
         }
     }
 }

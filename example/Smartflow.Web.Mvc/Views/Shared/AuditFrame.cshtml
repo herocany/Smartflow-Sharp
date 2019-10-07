@@ -13,48 +13,24 @@
     <script src="~/Content/common.js"></script>
     <script src="~/Content/audit.js"></script>
     <script type="text/javascript">
-
         $(function () {
-
-            var auditTempate = $("#common_audit_operate").html(),
-                recordTemplate = $("#common_audit_record").html(),
-                dropTemplate = $("#common_audit_select").html();
-
-            var iframeContent = document.getElementById("iframeContent").contentWindow;
-
             $.Audit({
                 instanceID: '@ViewBag.instanceID',
-                url: '@Url.Action("Start", "Audit")',
-                template: auditTempate,
-                iframeContent: iframeContent,
+                start: '@Url.Action("Start", "Audit")',
+                record: '@Url.Action("GetRecords", "Audit")',
+                frame: document.getElementById("iframeContent").contentWindow,
+                recordTemplate: document.getElementById("common_audit_record").innerHTML,
                 auditUser: '@Url.Action("GetAuditUser", "Audit")',
                 auditID: '#common_current_audit_user',
-                reject: '@Url.Action("Reject", "Audit")',
-                back:'@Url.Action("Back", "Audit")',
-                record: {
-                    url: '@Url.Action("GetRecords", "Audit")',
-                    template: recordTemplate,
-                    id:'#audit'
-                },
-                jump: {
-                    url:'@Url.Action("Jump", "Audit")',
-                    pageUrl: '@ViewBag.url'
-                },
-                select: {
-                    template: dropTemplate,
-                    url: '@Url.Action("GetTransitions", "Audit")',
-                    id:'#ddlOperate'
-                },
-                node: {
-                    name: '开始',
-                    url: '@Url.Action("GetCurrent", "Audit")',
-                    id: '#btnAudit',
-                    container: '.button-container',
-                    NID: '0'
-                }
+                current: '@Url.Action("GetCurrent", "Audit")',
+                auditWindow: '@Url.Action("AuditWindow", "Audit")',
+                page: '@ViewBag.url',
+                recordID: '#audit',
+                buttonGroup: '#btnGroup',
+                buttonID: '#btnAudit',
+                name:'开始'
             });
         });
-
     </script>
 </head>
 <body>
@@ -73,55 +49,19 @@
         </div>
     </div>
 
-    <div id="common_current_audit_user"  style="position: absolute;bottom: 60px;left: 20px;">
-    </div>
+    <div id="common_current_audit_user"  class="audit_user"></div>
 
-    <div class="button-container clearfix">
+    <div class="button-container clearfix" id="btnGroup">
         <div class="button-group fr">
             <input type="button" id="btnAudit" value="开始" class="layui-btn layui-btn-sm" />
         </div>
     </div>
-    
+
     <script type="text/html" id="common_audit_record">
         <tr>
             <td class="flow-node">{{NODENAME}}</td>
             <td class="flow-message">{{MESSAGE}}</td>
         </tr>
-    </script>
-    <script type="text/html" id="common_audit_operate">
-        <div class="smartflow-table" style="padding:0 10px;">
-            <table class="layui-table">
-                <tr>
-                    <td class="table-cm">下一步操作</td>
-                    <td>
-                        <select id="ddlOperate" class="layui-select"></select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="table-cm">审批意见</td>
-                    <td>
-                        <textarea class="layui-textarea" id="txtMessage"></textarea>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="button-container ">
-            <div class="button-group ac ">
-
-                <input type="button"
-                       id="btnReject"
-                       value="驳回"
-                       class="layui-btn layui-btn-sm" />
-
-                <input type="button"
-                       id="btnOk"
-                       value="确定"
-                       class="layui-btn layui-btn-sm" />
-            </div>
-        </div>
-    </script>
-    <script type="text/html" id="common_audit_select">
-        <option to="{{Destination}}" value="{{NID}}" action="jump">{{Name}}</option>
     </script>
 </body>
 </html>

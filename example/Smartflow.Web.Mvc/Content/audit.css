@@ -62,3 +62,8 @@
     color: #6d7173;
 }
 
+.audit_user {
+    position: absolute;
+    bottom: 60px;
+    left: 20px;
+}

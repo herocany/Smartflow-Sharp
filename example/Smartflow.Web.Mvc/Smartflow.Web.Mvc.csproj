@@ -131,6 +131,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Content Include="Content\audit.css" />
     <Content Include="Content\audit.js" />
+    <Content Include="Content\auditWindow.js" />
     <Content Include="Content\common.css" />
     <Content Include="Content\common.js" />
     <Content Include="Content\design\design.js" />
