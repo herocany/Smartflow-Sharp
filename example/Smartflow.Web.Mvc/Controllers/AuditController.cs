@@ -42,6 +42,9 @@ namespace Smartflow.Web.Mvc.Controllers
 
         public ActionResult AuditWindow(string url,string instanceID)
         {
+
+           
+
             ViewBag.instanceID = instanceID;
             ViewBag.url = url;
             return View();
@@ -60,7 +63,11 @@ namespace Smartflow.Web.Mvc.Controllers
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
             List<Transition> transitions = NodeService.GetExecuteTransitions(instance.Current);
             Node previous = instance.Current.Previous;
-            if (previous != null && previous.Cooperation == 0&&instance.Current.Cooperation==0)
+
+            bool support = (previous != null && previous.Cooperation == 0 && instance.Current.Cooperation == 0
+                && WorkflowEnvironment.Option == Mode.Mix);
+
+            if (support)
             {
                 //会签节点不支持回退
                 transitions.Add(new Transition()
@@ -69,6 +76,7 @@ namespace Smartflow.Web.Mvc.Controllers
                     Name = "原路退回"
                 });
             }
+
             return Json(transitions);
         }
 

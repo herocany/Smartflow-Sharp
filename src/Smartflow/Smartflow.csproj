@@ -76,6 +76,7 @@
     <Compile Include="WorkflowActorService.cs" />
     <Compile Include="WorkflowCommandService.cs" />
     <Compile Include="WorkflowConfigurationService.cs" />
+    <Compile Include="WorkflowEnvironment.cs" />
     <Compile Include="WorkflowGroup.cs" />
     <Compile Include="WorkflowGroupService.cs" />
     <Compile Include="WorkflowInstanceService.cs" />

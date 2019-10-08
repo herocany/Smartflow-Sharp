@@ -52,7 +52,7 @@ namespace Smartflow
         {
             return ConfigurationService.Query(Utils.Empty).ToList();
         }
-    
+
         /// <summary>
         /// 获取当前执行节点的记录
         /// </summary>
@@ -67,6 +67,7 @@ namespace Smartflow
             {
                 structure = instance.Resource,
                 id = instance.Current.ID,
+                mode = WorkflowEnvironment.Option,
                 record = records
             };
         }
