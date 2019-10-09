@@ -15,21 +15,30 @@ using Smartflow.Elements;
 
 namespace Smartflow.Internals
 {
-    internal class ManualResolution: IResolution
+    internal class ManualResolution : IResolution
     {
+
         public Workflow Parse(string resourceXml)
         {
+            Workflow instance = new Workflow();
             XDocument doc = XDocument.Parse(resourceXml);
             List<ASTNode> nodes = new List<ASTNode>();
-            List<XElement> elements = doc.Element("workflow").Elements().ToList();
-            Workflow instance = new Workflow();
+            XElement root = doc.Element("workflow");
+            if (root.HasAttributes)
+            {
+                XAttribute attr = root.Attribute("mode");
+                instance.Mode = String.IsNullOrEmpty(attr.Value) ? WorkflowMode.Transition :
+                    (WorkflowMode)Enum.Parse(typeof(WorkflowMode), attr.Value, true);
+            }
+
+            List<XElement> elements = root.Elements().ToList();
 
             foreach (XElement element in elements)
             {
                 string nodeName = element.Name.LocalName;
                 if (ServiceContainer.Contains(nodeName))
                 {
-                    IWorkflowParse typeMapper =ServiceContainer.Resolve(nodeName) as IWorkflowParse;
+                    IWorkflowParse typeMapper = ServiceContainer.Resolve(nodeName) as IWorkflowParse;
                     nodes.Add(typeMapper.Parse(element) as ASTNode);
                 }
             }

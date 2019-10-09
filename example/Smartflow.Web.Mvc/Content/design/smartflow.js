@@ -9,7 +9,7 @@
     var support = (!!window.ActiveXObject || "ActiveXObject" in window);
 
     var config = {
-        rootStart: '<workflow>',
+        rootStart: '<workflow',
         rootEnd: '</workflow>',
         start: '<',
         end: '>',
@@ -31,7 +31,8 @@
         expression: 'expression',
         marker: 'marker',
         layout: 'layout',
-        action: 'action'
+        action: 'action',
+        mode:'mode'
     };
 
     Array.prototype.remove = function (dx,to) {
@@ -391,7 +392,15 @@
             Draw._proto_LC[prop].id = generatorId();
         }
 
-        build.append(config.rootStart);
+        build.append(config.rootStart)
+            .append(config.space)
+            .append(config.mode)
+            .append(config.equal)
+            .append(config.lQuotation)
+            .append(this.drawOption.mode)
+            .append(config.rQuotation)
+            .append(config.end);
+
         $.each(Draw._proto_NC, function () {
             if (this.category !== 'marker') {
                 build.append(this.export());
@@ -405,8 +414,12 @@
 
     Draw.prototype.import = function (structure, disable, executeNodeID,record) {
         var dwInstance = this,
-            data = new XML(structure).root.workflow;
-        
+            root = new XML(structure).root;
+
+        var data = root.workflow;
+
+        dwInstance.drawOption.mode = (root.mode || dwInstance.drawOption.mode);
+
         var recordArray = record || [];
 
         function findUID(destination) {
@@ -1665,6 +1678,11 @@
         }
         var el = this.docXml.firstChild;
         this.root[el.nodeName] = el.childNodes.length > 0 ? [] : {};
+
+        var $this = this;
+        $.each(el.attributes, function () {
+            $this.root[this.name] = this.value;
+        });
         this.parse(this.root[el.nodeName], el.childNodes);
     }
 
@@ -1700,6 +1718,7 @@
 
         Draw._proto_Cc[id] = new Draw($.extend({
             backgroundColor: '#f06',
+            mode: 'Transition',
             color: 'green'
         }, option));
     }

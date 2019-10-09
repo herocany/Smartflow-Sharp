@@ -218,8 +218,12 @@ namespace Smartflow
             return entry;
         }
 
-        public List<Transition> GetExecuteTransitions(Node entry)
+        public List<Transition> GetExecuteTransitions(WorkflowInstance instance)
         {
+            List<Transition> transitions = new List<Transition>();
+            Node entry = instance.Current;
+            Node previous = entry.Previous;
+
             foreach (Smartflow.Elements.Transition transition in entry.Transitions)
             {
                 ASTNode an = this.FindNodeByID(transition.Destination, entry.InstanceID);
@@ -232,7 +236,22 @@ namespace Smartflow
                 }
                 transition.Name = decisionTransition.Name;
             }
-            return entry.Transitions;
+
+            transitions.AddRange(entry.Transitions);
+
+            bool support = (previous != null && previous.Cooperation == 0 && entry.Cooperation == 0 && instance.Mode == WorkflowMode.Mix);
+
+            if (support)
+            {
+                transitions.Add(new Transition
+                {
+                    NID = "back",
+                    Name = "原路退回"
+
+                });
+            }
+
+            return transitions;
         }
 
         private Node FindNodeByID(string ID, string instanceID)
@@ -283,8 +302,8 @@ namespace Smartflow
                         break;
                 }
 
-                transition = 
-                     TransitionService.Query(new { entry.InstanceID}).FirstOrDefault(e=> e.NID== process.TransitionID);
+                transition =
+                     TransitionService.Query(new { entry.InstanceID }).FirstOrDefault(e => e.NID == process.TransitionID);
             }
             return transition;
         }

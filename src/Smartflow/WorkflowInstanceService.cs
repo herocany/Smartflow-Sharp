@@ -19,17 +19,18 @@ namespace Smartflow
             });
         }
 
-        public string CreateInstance(string nodeID, string resource)
+        public string CreateInstance(string nodeID, string resource, WorkflowMode mode)
         {
             string instanceID = Guid.NewGuid().ToString();
-            string sql = "INSERT INTO T_INSTANCE(InstanceID,RelationshipID,State,Resource) VALUES(@InstanceID,@RelationshipID,@State,@Resource)";
+            string sql = "INSERT INTO T_INSTANCE(InstanceID,RelationshipID,State,Resource,Mode) VALUES(@InstanceID,@RelationshipID,@State,@Resource,@Mode)";
 
             base.Connection.Execute(sql, new
             {
                 InstanceID = instanceID,
                 RelationshipID = nodeID,
                 State = WorkflowInstanceState.Running.ToString(),
-                Resource = resource
+                Resource = resource,
+                Mode=mode.ToString()
             });
             return instanceID;
         }

@@ -17,6 +17,6 @@ namespace Smartflow
 
         Node GetNode(Node entry);
 
-        List<Transition> GetExecuteTransitions(Node entry);
+        List<Transition> GetExecuteTransitions(WorkflowInstance instance);
     }
 }

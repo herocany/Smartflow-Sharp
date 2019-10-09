@@ -28,5 +28,11 @@ namespace Smartflow.Elements
             get;
             set;
         }
+
+        public WorkflowMode Mode
+        {
+            get;
+            set;
+        }
     }
 }

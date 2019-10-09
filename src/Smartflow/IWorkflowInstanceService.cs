@@ -9,7 +9,7 @@ namespace Smartflow
     {
         void Jump(string transitionTo, String instanceID);
 
-        string CreateInstance(string nodeID, string resource);
+        string CreateInstance(string nodeID, string resource,WorkflowMode mode);
 
         void Transfer(WorkflowInstanceState state, string instanceID);
     }

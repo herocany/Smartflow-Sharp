@@ -76,11 +76,11 @@
     <Compile Include="WorkflowActorService.cs" />
     <Compile Include="WorkflowCommandService.cs" />
     <Compile Include="WorkflowConfigurationService.cs" />
-    <Compile Include="WorkflowEnvironment.cs" />
     <Compile Include="WorkflowGroup.cs" />
     <Compile Include="WorkflowGroupService.cs" />
     <Compile Include="WorkflowInstanceService.cs" />
     <Compile Include="WorkflowInstanceState.cs" />
+    <Compile Include="WorkflowMode.cs" />
     <Compile Include="WorkflowNodeCategory.cs" />
     <Compile Include="ExecutingContext.cs" />
     <Compile Include="Components\MailConfiguration.cs" />

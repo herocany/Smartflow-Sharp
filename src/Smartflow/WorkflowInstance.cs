@@ -40,6 +40,12 @@ namespace Smartflow
             set;
         }
 
+        public WorkflowMode Mode
+        {
+            get;
+            set;
+        }
+
         public static WorkflowInstance GetInstance(string instanceID)
         {
             return WorkflowGlobalServiceProvider.Resolve<IWorkflowInstanceService>()

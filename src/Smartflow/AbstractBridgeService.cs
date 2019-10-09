@@ -67,7 +67,7 @@ namespace Smartflow
             {
                 structure = instance.Resource,
                 id = instance.Current.ID,
-                mode = WorkflowEnvironment.Option,
+                mode = instance.Mode,
                 record = records
             };
         }

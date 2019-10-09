@@ -40,17 +40,12 @@ namespace Smartflow.Web.Mvc.Controllers
             return View();
         }
 
-        public ActionResult AuditWindow(string url,string instanceID)
+        public ActionResult AuditWindow(string url, string instanceID)
         {
-
-           
-
             ViewBag.instanceID = instanceID;
             ViewBag.url = url;
             return View();
         }
-
-
 
         public JsonResult Start(string structureID)
         {
@@ -61,22 +56,7 @@ namespace Smartflow.Web.Mvc.Controllers
         public JsonResult GetTransitions(string instanceID)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
-            List<Transition> transitions = NodeService.GetExecuteTransitions(instance.Current);
-            Node previous = instance.Current.Previous;
-
-            bool support = (previous != null && previous.Cooperation == 0 && instance.Current.Cooperation == 0
-                && WorkflowEnvironment.Option == Mode.Mix);
-
-            if (support)
-            {
-                //会签节点不支持回退
-                transitions.Add(new Transition()
-                {
-                    NID = "back",
-                    Name = "原路退回"
-                });
-            }
-
+            List<Transition> transitions = NodeService.GetExecuteTransitions(instance);
             return Json(transitions);
         }
 
@@ -121,7 +101,6 @@ namespace Smartflow.Web.Mvc.Controllers
             return Json(true);
         }
 
-
         public JsonResult Reject(string instanceID)
         {
             bwfs.Reject(instanceID);
@@ -138,11 +117,10 @@ namespace Smartflow.Web.Mvc.Controllers
             return Json(true);
         }
 
-
         [HttpPost]
         public JsonResult GetAuditUser(string instanceID)
         {
-            WorkflowInstance instance=WorkflowInstance.GetInstance(instanceID);
+            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
             return Json(new UserService()
                            .GetPendingUserList(instance.Current.NID, instanceID));
         }
