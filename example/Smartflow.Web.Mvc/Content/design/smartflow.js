@@ -32,10 +32,10 @@
         marker: 'marker',
         layout: 'layout',
         action: 'action',
-        mode:'mode'
+        mode: 'mode'
     };
 
-    Array.prototype.remove = function (dx,to) {
+    Array.prototype.remove = function (dx, to) {
         this.splice(dx, (to || 1));
     }
 
@@ -54,18 +54,23 @@
 
     function StringBuilder() {
         var elements = [];
-        this.append=function (text) {
+        this.append = function (text) {
             elements.push(text);
             return this;
         },
-        this.toString=function () {
-            return elements.join('');
-        }
+            this.toString = function () {
+                return elements.join('');
+            }
     }
- 
+
     function Draw(option) {
         this.draw = SVG(option.container);
-        this.drawOption = $.extend({}, option);
+
+        this.drawOption = $.extend({
+            backgroundColor: '#f06',
+            mode: 'Transition',
+            color: 'green'
+        }, option);
 
         this.source = undefined;
 
@@ -73,12 +78,12 @@
         this._decision = undefined;
         this._init();
     }
-   
+
     Draw._proto_Cc = {};
     Draw._proto_NC = {};
     Draw._proto_LC = {};
     Draw._proto_RC = [];
-   
+
     Draw.remove = function (elements) {
         for (var i = 0; i < elements.length; i++) {
             var element = elements[i];
@@ -359,7 +364,7 @@
         }
         return instance;
     }
-   
+
     Draw.prototype.export = function () {
         var unique = 29,
             nodeCollection = [],
@@ -412,7 +417,7 @@
         return encodeURI(build.toString());
     }
 
-    Draw.prototype.import = function (structure, disable, executeNodeID,record) {
+    Draw.prototype.import = function (structure, disable, executeNodeID, record) {
         var dwInstance = this,
             root = new XML(structure).root;
 
@@ -436,7 +441,7 @@
 
         function findRecord(id, destination) {
             for (var i = 0; i < recordArray.length; i++) {
-                 var records = recordArray[i];
+                var records = recordArray[i];
                 for (var j = 0; j < records.length; j++) {
                     var record = records[j];
                     if (record.Key == destination && record.Value == id) {
@@ -546,7 +551,7 @@
         Shape.base.Constructor.call(this, name, category);
         this.form = undefined;
         this.group = [];
-        this.action= [];
+        this.action = [];
         this.actor = [];
         this.cooperation = 0;
         /*边界高度*/
@@ -1049,7 +1054,7 @@
             instance.bindEvent.call(SVG.get(current.$id), this);
         }
     }
-   
+
     function Node() {
         this.w = 180;
         this.h = 40;
@@ -1070,7 +1075,7 @@
 
             var color = n.isSelect ? dw.drawOption.color : dw.drawOption.backgroundColor;
             var rect = dw.draw.rect(n.w, n.h)
-                    .attr({ fill: color, x: n.x, y: n.y });
+                .attr({ fill: color, x: n.x, y: n.y });
 
             n.brush = dw.draw.text(n.name);
             n.brush.attr({
@@ -1351,7 +1356,7 @@
             this.drawInstance._decision
                 .node
                 .firstElementChild
-                .instance.attr({ fill: color});
+                .instance.attr({ fill: color });
 
             var el = dw.use(this.drawInstance._decision)
                 .move(this.x, this.y);
@@ -1386,7 +1391,7 @@
             var direction = {
                 bottom: function (moveX, moveY) {
                     var AX = x + 25;
-                    var AY = y +12.5;
+                    var AY = y + 12.5;
 
                     var BX = x + 50;
                     var BY = y + 25;
@@ -1406,7 +1411,7 @@
                 top: function (moveX, moveY) {
 
                     var AX = x + 25;
-                    var AY = y -12.5;
+                    var AY = y - 12.5;
 
                     var BX = x + 50;
                     var BY = y - 25;
@@ -1419,7 +1424,7 @@
                         x: BX
                     };
 
-                    return (AX <= moveX && CX>= moveX
+                    return (AX <= moveX && CX >= moveX
                         && moveY >= BY
                         && moveY <= AY) ? center : false;
                 },
@@ -1431,7 +1436,7 @@
                     var BY = y;
 
                     var CX = BX + 25;
-                    var CY = BY+12.5;
+                    var CY = BY + 12.5;
 
                     var center = {
                         x: BX,
@@ -1443,8 +1448,8 @@
                         && moveY <= CY) ? center : false;
                 },
                 right: function (moveX, moveY) {
-               
-                    var BX = x+100;
+
+                    var BX = x + 100;
                     var BY = y;
 
                     var AX = BX - 25;
@@ -1458,7 +1463,7 @@
                         y: BY
                     };
 
-                    return (AX <= moveX && BX>= moveX
+                    return (AX <= moveX && BX >= moveX
                         && moveY >= AY
                         && moveY <= CY) ? center : false;
                 }
@@ -1585,7 +1590,7 @@
     XML.config = {
         group: [],
         acotr: [],
-        action:[],
+        action: [],
         transition: [],
         marker: []
     }
@@ -1715,12 +1720,7 @@
 
     $.fn.SMF = function (option) {
         var id = $(this).attr("id");
-
-        Draw._proto_Cc[id] = new Draw($.extend({
-            backgroundColor: '#f06',
-            mode: 'Transition',
-            color: 'green'
-        }, option));
+        Draw._proto_Cc[id] = new Draw(option);
     }
 
     $.SMF = {
