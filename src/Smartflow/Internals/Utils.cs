@@ -18,6 +18,13 @@ namespace Smartflow.Internals
     {
         public readonly static Object Empty = new Object();
 
+        public readonly static Transition Return = new Transition
+        {
+            NID = "back",
+            Name = "原路回退"
+        };
+
+
         public static WorkflowNodeCategory Convert(string category)
         {
             return (WorkflowNodeCategory)Enum.Parse(typeof(WorkflowNodeCategory), category, true);

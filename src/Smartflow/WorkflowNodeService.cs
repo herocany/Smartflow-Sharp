@@ -243,12 +243,7 @@ namespace Smartflow
 
             if (support)
             {
-                transitions.Add(new Transition
-                {
-                    NID = "back",
-                    Name = "原路退回"
-
-                });
+                transitions.Add(Utils.Return);
             }
 
             return transitions;
