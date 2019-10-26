@@ -57,7 +57,7 @@
         this.append = function (text) {
             elements.push(text);
             return this;
-        },
+        }
             this.toString = function () {
                 return elements.join('');
             }
