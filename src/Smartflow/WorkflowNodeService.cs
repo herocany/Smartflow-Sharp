@@ -67,11 +67,12 @@ namespace Smartflow
 
         public Element Parse(XElement element)
         {
-            Node node = new Node();
-
-            node.Name = element.Attribute("name").Value;
-            node.ID = element.Attribute("id").Value;
-            node.Cooperation = Convert.ToInt32(element.Attribute("cooperation").Value);
+            Node node = new Node
+            {
+                Name = element.Attribute("name").Value,
+                ID = element.Attribute("id").Value,
+                Cooperation = Convert.ToInt32(element.Attribute("cooperation").Value)
+            };
             string category = element.Attribute("category").Value;
             node.NodeType = Utils.Convert(category);
 

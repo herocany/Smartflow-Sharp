@@ -15,7 +15,7 @@ namespace Smartflow.Internals
 {
     internal class ResolutionContext
     {
-        private IResolution resolution;
+        private readonly IResolution resolution;
 
         public ResolutionContext(IResolution resolution)
         {
