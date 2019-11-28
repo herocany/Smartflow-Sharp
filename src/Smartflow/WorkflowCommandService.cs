@@ -12,20 +12,11 @@ namespace Smartflow
     {
         public Element Parse(XElement element)
         {
-            if (element.HasElements)
+            return (element.HasElements) ? new Command
             {
-                Command cmd = new Command();
-
-                cmd.ID = element
-                    .Elements("id")
-                    .FirstOrDefault().Value;
-
-                cmd.Text = element
-                   .Elements("text")
-                   .FirstOrDefault().Value;
-                return cmd;
-            }
-            return null;
+                ID = element.Elements("id").FirstOrDefault().Value,
+                Text = element.Elements("text").FirstOrDefault().Value
+            } : null;
         }
 
         public void Persistent(Command entry)

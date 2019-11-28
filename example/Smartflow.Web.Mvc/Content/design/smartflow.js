@@ -6,8 +6,6 @@
  */
 (function ($) {
 
-    var support = (!!window.ActiveXObject || "ActiveXObject" in window);
-
     var config = {
         rootStart: '<workflow',
         rootEnd: '</workflow>',
@@ -57,15 +55,15 @@
         this.append = function (text) {
             elements.push(text);
             return this;
-        }
-            this.toString = function () {
-                return elements.join('');
-            }
+        };
+        this.toString = function () {
+            return elements.join('');
+        };
     }
 
     function Draw(option) {
         this.draw = SVG(option.container);
-
+        this.support = (!!window.ActiveXObject || "ActiveXObject" in window);
         this.drawOption = $.extend({
             backgroundColor: '#f06',
             mode: 'Transition',
@@ -1042,7 +1040,7 @@
     }
 
     Line.update = function (current) {
-        if (support) {
+        if (current.drawInstance.support) {
             var draw = document.getElementById(current.drawInstance.drawOption.container),
                 svg = draw.firstElementChild,
                 el = document.getElementById(current.$id);
@@ -1180,7 +1178,7 @@
                 && Draw.findById(this.$id, 'from').length > 0);
         },
         vertical: function () {
-            return support ? 6 : 0;
+            return this.drawInstance.support ? 6 : 0;
         }
     });
 
