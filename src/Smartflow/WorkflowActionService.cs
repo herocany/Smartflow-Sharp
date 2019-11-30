@@ -12,10 +12,11 @@ namespace Smartflow
     {
         public Element Parse(XElement element)
         {
-            Elements.Action a = new Elements.Action();
-            a.Name = element.Attribute("name").Value;
-            a.ID = element.Attribute("id").Value;
-            return a;
+            return new Elements.Action
+            {
+                Name = element.Attribute("name").Value,
+                ID = element.Attribute("id").Value
+            };
         }
 
         public void Persistent(Elements.Action entry)
