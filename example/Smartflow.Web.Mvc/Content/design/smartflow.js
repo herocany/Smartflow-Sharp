@@ -419,9 +419,10 @@
         var dwInstance = this,
             root = new XML(structure).root;
 
-        var data = root.workflow;
+        var data = root.workflow.nodes;
+        var r = root.workflow;
 
-        dwInstance.drawOption.mode = (root.mode || dwInstance.drawOption.mode);
+        dwInstance.drawOption.mode = (r.mode || dwInstance.drawOption.mode);
 
         var recordArray = record || [];
 
@@ -1577,6 +1578,7 @@
         }
     });
 
+
     function XML(xml) {
         this.xml = xml;
         this.support = (window.ActiveXObject);
@@ -1585,88 +1587,108 @@
         this.init();
     }
 
-    XML.config = {
-        group: [],
-        acotr: [],
-        action: [],
-        transition: [],
-        marker: []
-    }
-
-    XML.contains = function (name) {
-        var result = false;
-        $.each(['command', 'transition'], function (i, value) {
-            if (value == name) {
-                result = true;
-            }
-        });
-        return result;
-    }
-
-    XML.getAttributes = function (attrs) {
-        if (!attrs) return {};
-        var O = {};
-        var len = attrs.length;
-        for (var i = 0; i < len; i++) {
-            var attr = attrs[i];
-            O[attr.name] = attr.value;
-        }
-        return O;
-    }
-
-    XML.convert = function (nodes) {
-        var O = {};
-        $.each(nodes, function () {
-            if (!O[this.nodeName] && this.nodeName !== "marker") {
-                O[this.nodeName] = XML.getValue(this);
-            } else {
-                if (O[this.nodeName]) {
-                    O[this.nodeName].push(XML.marker(this));
-                } else {
-                    O[this.nodeName] = [XML.marker(this)];
+    XML.style = {
+        type: 'object',
+        mode: 'value',
+        struct: {
+            type: 'array',
+            id: 'value',
+            name: 'value',
+            layout: 'value',
+            category: 'value',
+            cooperation: 'value',
+            group: {
+                type: 'array',
+                id: 'value',
+                name: 'value'
+            },
+            acotr: {
+                type: 'array',
+                id: 'value',
+                name: 'value'
+            },
+            action: {
+                type: 'array',
+                id: 'value',
+                name: 'value'
+            },
+            command: {
+                type: 'object',
+                text: 'text',
+                id: 'text'
+            },
+            transition: {
+                type: 'array',
+                destination: 'value',
+                layout: 'value',
+                id: 'value',
+                name: 'value',
+                expression: 'text',
+                marker: {
+                    type: 'array',
+                    length: 'value',
+                    x: 'value',
+                    y: 'value'
                 }
             }
-        });
-        return O;
-    }
-
-    XML.marker = function (node) {
-        return XML.getAttributes(node.attributes);
-    }
-
-    XML.getValue = function (node) {
-        return (node.textContent || node.text || node.value);
-    }
-
-    XML.single = function (process, node, contains) {
-        var attr = XML.getAttributes(node.attributes),
-            name = node.nodeName,
-            innerObject = $.extend(attr,
-                (contains) ? XML.convert(node.childNodes) : {
-                    name: XML.getValue(node)
-                });
-
-        process[name] = XML.config[name] ? [innerObject] : innerObject;
-    }
-
-    XML.multiple = function (process, node, contains) {
-
-        var attr = XML.getAttributes(node.attributes),
-            name = node.nodeName,
-            innerArray = [];
-
-        var newObject = contains ?
-            $.extend(attr, XML.convert(node.childNodes)) :
-            $.extend(attr, { name: XML.getValue(node) });
-
-        if ($.isArray(process[name])) {
-            process[name].push(newObject);
-        } else {
-            $.each([newObject, process[name]], function () {
-                innerArray.push(this);
-            });
-            process[name] = innerArray;
         }
+    };
+
+    XML.nodeToObject = function (nodeWrap, propertyName, node) {
+        for (var i = 0, c = node.childNodes.length; i < c; i++) {
+            var n = node.childNodes[i];
+            if (n.nodeName == propertyName) {
+                nodeWrap[propertyName] = n.textContent;
+            }
+        }
+    }
+
+    XML.readAttributes = function (nodeWrap, nodeAttribute, node) {
+        for (var propertyName in nodeAttribute) {
+            if (propertyName === 'type') continue;
+            if (node.nodeName == 'command') {
+                XML.nodeToObject(nodeWrap, propertyName, node);
+            } else if (typeof nodeAttribute[propertyName] === 'string') {
+                var valueType = nodeAttribute[propertyName];
+                if (valueType == 'value') {
+                    for (var i = 0, len = node.attributes.length; i < len; i++) {
+                        var attr = node.attributes[i];
+                        if (attr.name === propertyName) {
+                            nodeWrap[propertyName] = attr[nodeAttribute[propertyName]];
+                            break;
+                        }
+                    }
+                } else {
+                    nodeWrap[propertyName] = node.textContent;
+                }
+
+            } else {
+                for (var j = 0, count = node.childNodes.length; j < count; j++) {
+                    var n = node.childNodes[j];
+                    if (n.nodeName == propertyName) {
+
+                        if (nodeAttribute[propertyName].type == 'array' && !nodeWrap[propertyName]) {
+                            nodeWrap[propertyName] = [XML.readAttributes(XML.create('object'), nodeAttribute[propertyName], n)];
+
+                        } else if (nodeAttribute[propertyName].type == 'array' && nodeWrap[propertyName]) {
+                            nodeWrap[propertyName].push(XML.readAttributes(XML.create('object'), nodeAttribute[propertyName], n));
+                        } else if (nodeAttribute[propertyName].type == 'object' && !nodeWrap[propertyName]) {
+                            nodeWrap[propertyName] = XML.readAttributes(XML.create('object'), nodeAttribute[propertyName], n);
+                        }
+                        //if (propertyName == 'transition' && n.nodeName == 'transition') {
+                        //    continue;
+                        //} else {
+                        //    break;
+                        //}
+                    }
+                }
+            }
+        }
+        return nodeWrap;
+    }
+
+    XML.create = function (type) {
+        return type === 'object' ? {} : [];
     }
 
     XML.prototype.init = function () {
@@ -1679,42 +1701,33 @@
             this.docXml = new DOMParser()
                 .parseFromString(this.xml, "text/xml");
         }
-        var el = this.docXml.firstChild;
-        this.root[el.nodeName] = el.childNodes.length > 0 ? [] : {};
 
-        var $this = this;
+        var el = this.docXml.firstChild,
+            nodeName = el.nodeName,
+            $this = this;
+
+        this.root[nodeName] = XML.create(XML.style.type);
+
         $.each(el.attributes, function () {
-            $this.root[this.name] = this.value;
+            $this.root[nodeName][this.name] = this[XML.style[this.name]];
         });
-        this.parse(this.root[el.nodeName], el.childNodes);
+
+        this.parse(this.root[nodeName], el.childNodes);
     }
 
-    XML.prototype.parse = function (process, nodes) {
-        var $this = this;
+    XML.prototype.parse = function (workflow, nodes) {
+        var $this = this, nodeArray = [];
+        var nodeAttribute = XML.style.struct;
         $.each(nodes, function () {
-            var node = this,
-                attr = XML.getAttributes(node.attributes),
-                name = node.nodeName;
-
-            if ($.isArray(process)) {
-                var result = XML.getAttributes(node.attributes);
-                process.push(result);
-
-                var elementCount = (node.childElementCount || node.childNodes.length);
-
-                if (elementCount > 0) {
-                    $this.parse(result, node.childNodes);
-                }
-            } else {
-
-                XML[
-                    process[name] ?
-                        "multiple" :
-                        "single"
-                ](process, node, XML.contains(name));
-            }
+            nodeArray.push(
+                XML.readAttributes({
+                category: this.nodeName
+                }, nodeAttribute, this)
+            );
         });
-    }
+
+        workflow.nodes = nodeArray;
+    };
 
     $.fn.SMF = function (option) {
         var id = $(this).attr("id");
