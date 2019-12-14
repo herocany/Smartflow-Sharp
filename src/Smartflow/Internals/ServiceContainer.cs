@@ -9,7 +9,7 @@ namespace Smartflow.Internals
     internal class ServiceContainer
     {
 
-        private static Dictionary<string, Type> innerHandleMap = new Dictionary<string, Type>();
+        private static readonly Dictionary<string, Type> innerHandleMap = new Dictionary<string, Type>();
 
         static ServiceContainer()
         {

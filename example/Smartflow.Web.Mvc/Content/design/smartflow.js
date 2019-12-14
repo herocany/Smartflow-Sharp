@@ -417,7 +417,7 @@
 
     Draw.prototype.import = function (structure, disable, executeNodeID, record) {
         var dwInstance = this,
-            root = new XML(structure).root;
+            root = new XML(structure, dwInstance.support).root;
 
         var data = root.workflow.nodes;
         var r = root.workflow;
@@ -1491,7 +1491,6 @@
                         .append("<![CDATA[")
                         .append(value)
                         .append("]]>")
-                        //.append(value)
                         .append(config.beforeClose)
                         .append(propertyName)
                         .append(config.end);
@@ -1579,9 +1578,9 @@
     });
 
 
-    function XML(xml) {
+    function XML(xml,support) {
         this.xml = xml;
-        this.support = (window.ActiveXObject);
+        this.support = support;
         this.docXml = undefined;
         this.root = {};
         this.init();
@@ -1666,10 +1665,8 @@
                 for (var j = 0, count = node.childNodes.length; j < count; j++) {
                     var n = node.childNodes[j];
                     if (n.nodeName == propertyName) {
-
                         if (nodeAttribute[propertyName].type == 'array' && !nodeWrap[propertyName]) {
                             nodeWrap[propertyName] = [XML.readAttributes(XML.create('object'), nodeAttribute[propertyName], n)];
-
                         } else if (nodeAttribute[propertyName].type == 'array' && nodeWrap[propertyName]) {
                             nodeWrap[propertyName].push(XML.readAttributes(XML.create('object'), nodeAttribute[propertyName], n));
                         } else if (nodeAttribute[propertyName].type == 'object' && !nodeWrap[propertyName]) {
