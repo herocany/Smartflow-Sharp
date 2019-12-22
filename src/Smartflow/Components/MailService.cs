@@ -68,13 +68,15 @@ namespace Smartflow.Components
             List<MailMessage> messageList = new List<MailMessage>();
             foreach (string recvier in recvierArray)
             {
-                MailMessage message = new MailMessage(new MailAddress(from, sender), new MailAddress(recvier));
-                message.Subject = subject;
-                message.SubjectEncoding = Encoding.UTF8;
-                message.Body = body;
-                message.BodyEncoding = Encoding.UTF8;
-                message.IsBodyHtml = true;
-                message.Priority = MailPriority.Normal;
+                MailMessage message = new MailMessage(new MailAddress(from, sender), new MailAddress(recvier))
+                {
+                    Subject = subject,
+                    SubjectEncoding = Encoding.UTF8,
+                    Body = body,
+                    BodyEncoding = Encoding.UTF8,
+                    IsBodyHtml = true,
+                    Priority = MailPriority.Normal
+                };
                 messageList.Add(message);
             }
             return messageList;

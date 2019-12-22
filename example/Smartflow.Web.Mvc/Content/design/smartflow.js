@@ -807,7 +807,6 @@
             self.line.setPointArray();
         },
         bindEvent: function (el) {
-            //绑定事件
             this.mousedown(function (evt) {
                 el.drawInstance._drag.call(this, evt, el.drawInstance);
             });
@@ -1536,8 +1535,8 @@
             this.off('dblclick');
         },
         validate: function () {
-            return (Draw.findById(this.$id, 'from').length > 0
-                && Draw.findById(this.$id, 'to').length == 0);
+            return Draw.findById(this.$id, 'from').length > 0
+                && Draw.findById(this.$id, 'to').length === 0;
         }
     });
 
@@ -1572,7 +1571,7 @@
             //this.off('dblclick');
         },
         validate: function () {
-            return (Draw.findById(this.$id, 'from').length == 0
+            return (Draw.findById(this.$id, 'from').length === 0
                 && Draw.findById(this.$id, 'to').length > 0);
         }
     });
@@ -1672,11 +1671,6 @@
                         } else if (nodeAttribute[propertyName].type == 'object' && !nodeWrap[propertyName]) {
                             nodeWrap[propertyName] = XML.readAttributes(XML.create('object'), nodeAttribute[propertyName], n);
                         }
-                        //if (propertyName == 'transition' && n.nodeName == 'transition') {
-                        //    continue;
-                        //} else {
-                        //    break;
-                        //}
                     }
                 }
             }
