@@ -922,13 +922,13 @@
             var self = this,
                 line = SVG.get(self.$id),
                 instance = Draw._proto_LC[self.$id];
-
+            
+            var mode = self.drawInstance.drawOption.mode.toLowerCase();
             if (mode !== 'mix') {
                 var marker = L.attr('marker-end'),
                     arrowId = /#[a-zA-Z0-9]+/.exec(marker)[0];
                 SVG.get(arrowId).remove();
             }
-
             SVG.get(self.$id).remove();
 
             $.each(self.markerArray, function () {
