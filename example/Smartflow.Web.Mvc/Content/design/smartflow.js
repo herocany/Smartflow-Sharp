@@ -925,7 +925,7 @@
             
             var mode = self.drawInstance.drawOption.mode.toLowerCase();
             if (mode !== 'mix') {
-                var marker = L.attr('marker-end'),
+                var marker = line.attr('marker-end'),
                     arrowId = /#[a-zA-Z0-9]+/.exec(marker)[0];
                 SVG.get(arrowId).remove();
             }
