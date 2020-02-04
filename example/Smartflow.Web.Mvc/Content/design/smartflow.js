@@ -921,15 +921,15 @@
         remove: function () {
             var self = this,
                 line = SVG.get(self.$id),
-                instance = Draw._proto_LC[self.$id],
-                marker = line.attr('marker-end'),
-                arrow = /#[a-zA-Z0-9]+/.exec(marker)[0];
+                instance = Draw._proto_LC[self.$id];
 
-            $.each([arrow, self.$id], function (index, propertyName) {
-                if (propertyName) {
-                    SVG.get(propertyName).remove();
-                }
-            });
+            if (mode !== 'mix') {
+                var marker = L.attr('marker-end'),
+                    arrowId = /#[a-zA-Z0-9]+/.exec(marker)[0];
+                SVG.get(arrowId).remove();
+            }
+
+            SVG.get(self.$id).remove();
 
             $.each(self.markerArray, function () {
                 SVG.get(this.$id).remove();
