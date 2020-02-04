@@ -8,7 +8,7 @@ using Smartflow.Internals;
 
 namespace Smartflow
 {
-    public class WorkflowCommandService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Command>, IWorkflowQuery<Elements.Command>, IWorkflowParse
+    public class WorkflowCommandService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Command, Action<string, object>>, IWorkflowQuery<Elements.Command>, IWorkflowParse
     {
         public Element Parse(XElement element)
         {
@@ -19,10 +19,10 @@ namespace Smartflow
             } : null;
         }
 
-        public void Persistent(Command entry)
+        public void Persistent(Command entry, Action<string, object> execute)
         {
             string sql = "INSERT INTO T_Command(NID,ID,RelationshipID,Text,InstanceID) VALUES(@NID,@ID,@RelationshipID,@Text,@InstanceID)";
-            Connection.Execute(sql, new
+            execute(sql, new
             {
                 NID = Guid.NewGuid().ToString(),
                 entry.ID,

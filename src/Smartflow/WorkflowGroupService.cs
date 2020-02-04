@@ -8,7 +8,7 @@ using Smartflow.Internals;
 
 namespace Smartflow
 {
-    public class WorkflowGroupService : WorkflowInfrastructure, IWorkflowPersistent<Group>, IWorkflowQuery<Group>, IWorkflowParse
+    public class WorkflowGroupService : WorkflowInfrastructure, IWorkflowPersistent<Group, Action<string, object>>, IWorkflowQuery<Group>, IWorkflowParse
     {
         public Element Parse(XElement element)
         {
@@ -19,10 +19,10 @@ namespace Smartflow
             };
         }
 
-        public void Persistent(Group entry)
+        public void Persistent(Group entry, Action<string, object> execute)
         {
             string sql = "INSERT INTO T_GROUP(NID,ID,RelationshipID,Name,InstanceID) VALUES(@NID,@ID,@RelationshipID,@Name,@InstanceID)";
-            base.Connection.Execute(sql, new
+            execute(sql, new
             {
                 NID = Guid.NewGuid().ToString(),
                 entry.ID,

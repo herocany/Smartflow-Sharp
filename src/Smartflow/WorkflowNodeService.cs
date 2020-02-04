@@ -10,7 +10,7 @@ using System.Data;
 
 namespace Smartflow
 {
-    public class WorkflowNodeService : WorkflowInfrastructure, IWorkflowNodeService, IWorkflowPersistent<Element>, IWorkflowQuery<Node>, IWorkflowParse
+    public class WorkflowNodeService : WorkflowInfrastructure, IWorkflowNodeService, IWorkflowPersistent<Element, Action<string, object>>, IWorkflowQuery<Node>, IWorkflowParse
     {
         public IWorkflowQuery<WorkflowConfiguration> ConfigurationService
         {
@@ -98,41 +98,41 @@ namespace Smartflow
             return node;
         }
 
-        public void Persistent(Element entry)
+        public void Persistent(Element entry, Action<string, object> execute)
         {
             Node n = (entry as Node);
 
             entry.NID = Guid.NewGuid().ToString();
             string sql = "INSERT INTO T_NODE(NID,ID,Name,NodeType,InstanceID,Cooperation) VALUES(@NID,@ID,@Name,@NodeType,@InstanceID,@Cooperation)";
-            base.Connection.Execute(sql, new { entry.NID, entry.ID, entry.Name, NodeType = n.NodeType.ToString(), entry.InstanceID, n.Cooperation });
+            execute(sql, new { entry.NID, entry.ID, entry.Name, NodeType = n.NodeType.ToString(), entry.InstanceID, n.Cooperation });
 
             foreach (Transition transition in n.Transitions)
             {
                 transition.RelationshipID = entry.NID;
                 transition.Origin = entry.ID;
                 transition.InstanceID = entry.InstanceID;
-                TransitionService.Persistent(transition);
+                TransitionService.Persistent(transition, execute);
             }
 
             foreach (Elements.Action a in n.Actions)
             {
                 a.RelationshipID = entry.NID;
                 a.InstanceID = entry.InstanceID;
-                ActionService.Persistent(a);
+                ActionService.Persistent(a, execute);
             }
 
             foreach (Group r in n.Groups)
             {
                 r.RelationshipID = entry.NID;
                 r.InstanceID = entry.InstanceID;
-                GroupService.Persistent(r);
+                GroupService.Persistent(r, execute);
             }
 
             foreach (Actor a in n.Actors)
             {
                 a.RelationshipID = entry.NID;
                 a.InstanceID = entry.InstanceID;
-                ActorService.Persistent(a);
+                ActorService.Persistent(a, execute);
             }
 
             if (n.Command != null)
@@ -140,7 +140,7 @@ namespace Smartflow
                 n.Command.InstanceID = entry.InstanceID;
                 n.Command.RelationshipID = entry.NID;
 
-                CommandService.Persistent(n.Command);
+                CommandService.Persistent(n.Command, execute);
             }
         }
 

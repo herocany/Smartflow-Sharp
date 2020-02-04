@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Smartflow
 {
-    public interface IWorkflowNodeService : IWorkflowPersistent<Element>, IWorkflowQuery<Node>, IWorkflowParse
+    public interface IWorkflowNodeService : IWorkflowPersistent<Element, Action<string, object>>, IWorkflowQuery<Node>, IWorkflowParse
     {
         IWorkflowQuery<WorkflowConfiguration> ConfigurationService
         {

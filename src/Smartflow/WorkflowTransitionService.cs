@@ -8,7 +8,7 @@ using Smartflow.Internals;
 
 namespace Smartflow
 {
-    public class WorkflowTransitionService : WorkflowInfrastructure, IWorkflowPersistent<Transition>, IWorkflowQuery<Transition>, IWorkflowParse
+    public class WorkflowTransitionService : WorkflowInfrastructure, IWorkflowPersistent<Transition, Action<string, object>>, IWorkflowQuery<Transition>, IWorkflowParse
     {
         public Element Parse(XElement element)
         {
@@ -27,10 +27,10 @@ namespace Smartflow
             return entry;
         }
 
-        public void Persistent(Transition entry)
+        public void Persistent(Transition entry, Action<string, object> execute)
         {
             string sql = "INSERT INTO T_TRANSITION(NID,RelationshipID,Name,Destination,Origin,InstanceID,Expression,ID) VALUES(@NID,@RelationshipID,@Name,@Destination,@Origin,@InstanceID,@Expression,@ID)";
-            base.Connection.Execute(sql, new
+            execute(sql, new
             {
                 NID = Guid.NewGuid().ToString(),
                 entry.RelationshipID,

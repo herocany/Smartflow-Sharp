@@ -9,4 +9,9 @@ namespace Smartflow
     {
         void Persistent(T entry);
     }
+
+    public interface IWorkflowPersistent<T, S> where T : class
+    {
+        void Persistent(T entry, S execute);
+    }
 }

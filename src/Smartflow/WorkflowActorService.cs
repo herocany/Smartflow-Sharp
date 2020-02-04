@@ -8,7 +8,7 @@ using Smartflow.Internals;
 
 namespace Smartflow
 {
-    public class WorkflowActorService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Actor>, IWorkflowQuery<Elements.Actor>, IWorkflowParse
+    public class WorkflowActorService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Actor, Action<string, object>>, IWorkflowQuery<Elements.Actor>, IWorkflowParse
     {
         public Element Parse(XElement element)
         {
@@ -19,10 +19,10 @@ namespace Smartflow
             };
         }
 
-        public void Persistent(Actor entry)
+        public void Persistent(Actor entry, Action<string, object> execute)
         {
             string sql = "INSERT INTO T_ACTOR(NID,ID,RelationshipID,Name,InstanceID) VALUES(@NID,@ID,@RelationshipID,@Name,@InstanceID)";
-            base.Connection.Execute(sql, new
+            execute(sql, new
             {
                 NID = Guid.NewGuid().ToString(),entry.ID,entry.RelationshipID,entry.Name,entry.InstanceID
             });
