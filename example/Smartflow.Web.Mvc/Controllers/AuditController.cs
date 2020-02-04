@@ -70,7 +70,7 @@ namespace Smartflow.Web.Mvc.Controllers
                 current.NID,
                 current.Name,
                 Category = current.NodeType.ToString(),
-                HasAuth = (current.Name == "开始" && instance.State == WorkflowInstanceState.Running) ? true :
+                HasAuth = (current.NodeType == WorkflowNodeCategory.Start && instance.State == WorkflowInstanceState.Running) ? true :
                     instance.State == WorkflowInstanceState.Running
                     && CommonMethods.CheckAuth(current.NID, instanceID, UserInfo)
             });
