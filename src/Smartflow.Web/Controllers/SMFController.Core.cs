@@ -102,6 +102,21 @@ namespace Smartflow.Web.Controllers
             WorkflowInstance instance = WorkflowInstance.GetInstance(id);
             return NodeService.GetExecuteTransition(instance);
         }
+
+        [HttpGet]
+        public IEnumerable<User> GetUser(string id)
+        {
+            WorkflowInstance instance = WorkflowInstance.GetInstance(id);
+            UserByNodeQueryService userByNodeQueryService = new UserByNodeQueryService();
+
+            Dictionary<String, string> queryArg = new Dictionary<string, string>
+            {
+                { "instanceID", id },
+                { "nodeID", instance.Current.NID }
+            };
+
+            return userByNodeQueryService.Query(queryArg);
+        }
     }
 
     public class PostContext

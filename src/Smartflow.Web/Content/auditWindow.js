@@ -25,8 +25,30 @@
             $this.doAction(setting.instanceID);
         }
 
+        loadAuditUser();
         parent.layer.closeAll();
+
     };
+
+
+    AuditWindow.prototype.loadAuditUser = function () {
+        var $this = this.settings;
+        util.ajaxService({
+            url: $this.auditUser + '/' + $this.instanceID,
+            type: 'get',
+            success: function (serverData) {
+                var actor = [];
+                $.each(serverData, function () {
+                    actor.push(this.UserName);
+                });
+
+                if (actor.length > 0) {
+                    alert("下一点节审批人的账号是：" + actor.join(','));
+                }
+            }
+        });
+    };
+
 
     AuditWindow.prototype._bindSelect = function () {
         //下拉框数据据绑定

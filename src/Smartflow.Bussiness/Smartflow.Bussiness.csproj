@@ -57,6 +57,7 @@
     <Compile Include="Queries\BridgeQueryService.cs" />
     <Compile Include="Queries\PendingQueryService.cs" />
     <Compile Include="Queries\RecordQueryService.cs" />
+    <Compile Include="Queries\UserByNodeQueryService.cs" />
     <Compile Include="Queries\UserByActorQueryService.cs" />
     <Compile Include="WorkflowService\FormAction.cs" />
     <Compile Include="WorkflowService\PendingAction.cs" />
