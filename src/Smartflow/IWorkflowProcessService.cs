@@ -5,14 +5,8 @@ using System.Text;
 
 namespace Smartflow
 {
-    public interface IWorkflowProcessService : IWorkflowPersistent<WorkflowProcess>, IWorkflowQuery<WorkflowProcess>
+    public interface IWorkflowProcessService : IWorkflowPersistent<WorkflowProcess, Action<String, object>>, IWorkflowQuery<IList<WorkflowProcess>, Dictionary<string, object>>
     {
-        IList<dynamic> GetRecords(string instanceID);
-
-        void Detached(WorkflowProcess entry);
-
-        void DetachedAll(string instanceID);
-
-        void Update(WorkflowProcess entry);
+        IList<dynamic> Query(string instanceID);
     }
 }

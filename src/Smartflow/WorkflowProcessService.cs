@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Smartflow.Internals;
-
+using Dapper;
 namespace Smartflow
 {
-    public class WorkflowProcessService : WorkflowInfrastructure, IWorkflowProcessService, IWorkflowPersistent<WorkflowProcess>, IWorkflowQuery<WorkflowProcess>
+    public class WorkflowProcessService : WorkflowInfrastructure, IWorkflowProcessService, IWorkflowPersistent<WorkflowProcess, Action<String, object>>, IWorkflowQuery<IList<WorkflowProcess>, Dictionary<string, object>>
     {
-        public void Persistent(WorkflowProcess process)
+        public void Persistent(WorkflowProcess process, Action<string, object> callback)
         {
-            string sql = "INSERT INTO T_PROCESS(NID,Origin,Destination,TransitionID,InstanceID,NodeType,RelationshipID,Command) VALUES(@NID,@Origin,@Destination,@TransitionID,@InstanceID,@NodeType,@RelationshipID,@Command)";
-            Connection.Execute(sql, new
+            callback(ResourceManage.SQL_WORKFLOW_PROCESS_INSERT, new
             {
                 NID = Guid.NewGuid().ToString(),
                 process.Origin,
@@ -20,38 +19,23 @@ namespace Smartflow
                 process.InstanceID,
                 NodeType = process.NodeType.ToString(),
                 process.RelationshipID,
-                Command = (int)process.Command
+                process.Direction
             });
         }
 
-        public IList<dynamic> GetRecords(string instanceID)
+        public IList<WorkflowProcess> Query(Dictionary<string, object> queryArg)
         {
-            string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_RECORD);
-            return Connection.Query(query, new
+            return Connection.Query<WorkflowProcess>(ResourceManage.SQL_WORKFLOW_PROCESS_LATEST, new { InstanceID = queryArg["InstanceID"], Direction = queryArg["Direction"].ToString() })
+                  .ToList<WorkflowProcess>();
+        }
+
+        public IList<dynamic> Query(string instanceID)
+        {
+            return Connection.Query(ResourceManage.SQL_WORKFLOW_PROCESS_RECORD, new
             {
-                InstanceID = instanceID
+                InstanceID = instanceID,
+                Direction = (int)WorkflowOpertaion.Go
             }).OrderBy(order => order.CreateDateTime).ToList();
-        }
-
-        public IList<WorkflowProcess> Query(object condition)
-        {
-            string query = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_PROCESS_LATEST);
-            return Connection.Query<WorkflowProcess>(query, condition).ToList<WorkflowProcess>();
-        }
-
-        public void Detached(WorkflowProcess entry)
-        {
-            Connection.Execute(" DELETE FROM T_PROCESS WHERE NID=@NID ", new { entry.NID });
-        }
-
-        public void DetachedAll(string instanceID)
-        {
-            Connection.Execute(" DELETE FROM T_PROCESS WHERE InstanceID=@InstanceID ", new { InstanceID = instanceID });
-        }
-
-        public void Update(WorkflowProcess entry)
-        {
-            Connection.Execute(" UPDATE T_PROCESS SET Command=@Command WHERE NID=@NID ", new { Command = 0, entry.NID });
         }
     }
 }

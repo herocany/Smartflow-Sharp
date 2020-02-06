@@ -15,9 +15,7 @@ namespace Smartflow.Elements
         protected List<Transition> transitions = new List<Transition>();
         protected WorkflowNodeCategory category = WorkflowNodeCategory.Node;
         protected List<Action> actions = new List<Action>();
-
         private int cooperation = 0;
-
         public List<Action> Actions
         {
             get { return actions; }
@@ -37,12 +35,13 @@ namespace Smartflow.Elements
         }
 
         /// <summary>
-        /// 是否会签 （协办），默认是不参与协办
+        /// 是否会签 
         /// </summary>
         public virtual int Cooperation
         {
             get { return cooperation; }
             set { cooperation = value; }
         }
+
     }
 }

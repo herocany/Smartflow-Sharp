@@ -6,11 +6,11 @@ using System.Text;
 
 namespace Smartflow.BussinessService.WorkflowService
 {
-    public class DefaultAction : IWorkflowAction
+    public class TestAction : IWorkflowAction
     {
         public void ActionExecute(ExecutingContext executingContext)
         {
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
     }
 }

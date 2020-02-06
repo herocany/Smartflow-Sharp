@@ -20,6 +20,11 @@ namespace Smartflow
         /// <summary>
         /// 回退指令
         /// </summary>
-        Back=2
+        Back=2,
+
+        /// <summary>
+        /// 前进指令
+        /// </summary>
+        Go=3
     }
 }

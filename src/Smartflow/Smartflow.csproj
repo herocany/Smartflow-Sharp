@@ -39,7 +39,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISmartflowConfigurationService.cs" />
+    <Compile Include="Components\DemocraticDiscuss.cs" />
+    <Compile Include="Components\FirstDiscuss.cs" />
+    <Compile Include="Components\LastDiscuss.cs" />
+    <Compile Include="Components\DefaultStrategyService.cs" />
+    <Compile Include="IStrategyService.cs" />
+    <Compile Include="IWorkflowDiscuss.cs" />
+    <Compile Include="Internals\ResourceManage.Cooperation.cs" />
+    <Compile Include="IWorkflowCooperationService.cs" />
+    <Compile Include="WorkflowCooperation.cs" />
+    <Compile Include="Internals\ResourceManage.Action.cs" />
+    <Compile Include="Internals\ResourceManage.Structure.cs" />
+    <Compile Include="Internals\ResourceManage.Transition.cs" />
+    <Compile Include="Internals\ResourceManage.Configuration.cs" />
+    <Compile Include="Internals\ResourceManage.Group.cs" />
+    <Compile Include="Internals\ResourceManage.Node.cs" />
+    <Compile Include="Internals\ResourceManage.Process.cs" />
+    <Compile Include="Internals\ResourceManage.Actor.cs" />
+    <Compile Include="Internals\ResourceManage.Command.cs" />
+    <Compile Include="Internals\ResourceManage.Instance.cs" />
+    <Compile Include="IWorkflowStrategy.cs" />
     <Compile Include="IWorkflowInstanceService.cs" />
     <Compile Include="IWorkflowNodeService.cs" />
     <Compile Include="Internals\DbFactory.cs" />
@@ -50,14 +69,11 @@
     <Compile Include="IWorkflowPersistent.cs" />
     <Compile Include="IWorkflowProcessService.cs" />
     <Compile Include="IWorkflowQuery.cs" />
-    <Compile Include="Components\LastStrategy.cs" />
-    <Compile Include="Components\DemocraticStrategy.cs" />
     <Compile Include="Elements\Action.cs" />
     <Compile Include="Elements\ASTNode.cs" />
     <Compile Include="Elements\Command.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="AbstractBridgeService.cs" />
-    <Compile Include="Components\FirstStrategy.cs" />
     <Compile Include="IMailService.cs" />
     <Compile Include="Internals\IResolution.cs" />
     <Compile Include="Internals\ManualResolution.cs" />
@@ -69,13 +85,12 @@
     <Compile Include="Elements\Transition.cs" />
     <Compile Include="Elements\Workflow.cs" />
     <Compile Include="IWorkflowAction.cs" />
-    <Compile Include="AbstractWorkflowCooperation.cs" />
-    <Compile Include="IWorkflowCooperationStrategy.cs" />
     <Compile Include="WorkflowActionService.cs" />
     <Compile Include="WorkflowActor.cs" />
     <Compile Include="WorkflowActorService.cs" />
     <Compile Include="WorkflowCommandService.cs" />
     <Compile Include="WorkflowConfigurationService.cs" />
+    <Compile Include="WorkflowCooperationService.cs" />
     <Compile Include="WorkflowGroup.cs" />
     <Compile Include="WorkflowGroupService.cs" />
     <Compile Include="WorkflowInstanceService.cs" />
@@ -87,9 +102,7 @@
     <Compile Include="Components\MailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Internals\ResourceManage.cs" />
-    <Compile Include="SmartflowConfiguration.cs" />
     <Compile Include="Elements\Actor.cs" />
-    <Compile Include="Internals\SqlMapper.cs" />
     <Compile Include="WorkflowConfiguration.cs" />
     <Compile Include="WorkflowContext.cs" />
     <Compile Include="WorkflowEngine.cs" />
@@ -102,7 +115,19 @@
     <Compile Include="WorkflowProcess.cs" />
     <Compile Include="WorkflowProcessService.cs" />
     <Compile Include="WorkflowService.cs" />
+    <Compile Include="WorkflowStructure.cs" />
+    <Compile Include="WorkflowStructureService.cs" />
     <Compile Include="WorkflowTransitionService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dapper\Dapper.csproj">
+      <Project>{a9e82305-9ea9-41e6-8ff6-ab3d6e3daf36}</Project>
+      <Name>Dapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smartflow.Common\Smartflow.Common.csproj">
+      <Project>{6c42e2eb-99c5-44d8-afe3-2593321e01f1}</Project>
+      <Name>Smartflow.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

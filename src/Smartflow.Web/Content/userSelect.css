@@ -1,0 +1,53 @@
+﻿.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+/*公共类*/
+
+#transferTable {
+    width: 720px;
+}
+
+.layui-form {
+    margin-top: 10px;
+}
+
+.layui-left, .layui-right, .layui-center {
+    height: 460px;
+}
+
+.layui-left {
+    float: left;
+    width: 332.5px;
+    /*background-color: #EEE;*/
+}
+
+.layui-right {
+    float: right;
+    width: 332.5px;
+    /*background-color: #ffd800;*/
+}
+
+.layui-center {
+    margin: 0 332.5px;
+    position: relative;
+}
+
+.layui-middle {
+    position: absolute;
+    text-align: center;
+    top: 230px;
+    margin-top: -40px;
+}
+
+.rigth_table_1 {
+    margin-left: 0 !important;
+    margin-top: 10px;
+}

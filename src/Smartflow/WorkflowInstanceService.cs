@@ -4,26 +4,30 @@ using System.Linq;
 using System.Text;
 using Smartflow.Elements;
 using Smartflow.Internals;
+using Dapper;
+using System.Data;
 
 namespace Smartflow
 {
-    public class WorkflowInstanceService : WorkflowInfrastructure, IWorkflowInstanceService, IWorkflowQuery<WorkflowInstance>
+    public class WorkflowInstanceService : WorkflowInfrastructure, IWorkflowInstanceService, IWorkflowQuery<IList<WorkflowInstance>, string>
     {
-        public void Jump(string transitionTo, String instanceID)
+        public void Jump(string transitionTo, String instanceID, WorkflowProcess process, IWorkflowPersistent<WorkflowProcess, Action<String, Object>> processService)
         {
-            string update = " UPDATE T_INSTANCE SET RelationshipID=@RelationshipID WHERE InstanceID=@InstanceID ";
-            Connection.Execute(update, new
+            IList<Action<IDbConnection, IDbTransaction>> commands = new List<Action<IDbConnection, IDbTransaction>>
             {
-                RelationshipID = transitionTo,
-                InstanceID = instanceID
-            });
+                (connection, transaction) => connection.Execute(ResourceManage.SQL_WORKFLOW_INSTANCE_UPDATE_RELATIONSHIP, new { RelationshipID = transitionTo, InstanceID = instanceID }, transaction),
+
+                (connection, transaction) => processService.Persistent(process, (commad, entry) => connection.Execute(commad, entry, transaction))
+            };
+
+            DbFactory.Execute(commands);
         }
 
         public string CreateInstance(string nodeID, string resource, WorkflowMode mode, Action<string, object> execute)
         {
             string instanceID = Guid.NewGuid().ToString();
-            string sql = "INSERT INTO T_INSTANCE(InstanceID,RelationshipID,State,Resource,Mode) VALUES(@InstanceID,@RelationshipID,@State,@Resource,@Mode)";
-            execute(sql, new
+
+            execute(ResourceManage.SQL_WORKFLOW_INSTANCE_INSERT, new
             {
                 InstanceID = instanceID,
                 RelationshipID = nodeID,
@@ -37,30 +41,36 @@ namespace Smartflow
 
         public void Transfer(WorkflowInstanceState state, string instanceID)
         {
-            string update = " UPDATE T_INSTANCE SET State=@State WHERE InstanceID=@InstanceID ";
-            base.Connection.Execute(update, new
+            base.Connection.Execute(ResourceManage.SQL_WORKFLOW_INSTANCE_UPDATE_TRANSFER, new
             {
                 State = state.ToString(),
                 InstanceID = instanceID
             });
         }
 
-        public IList<WorkflowInstance> Query(object condition)
+        public IList<WorkflowInstance> Query(string instanceID)
         {
-            string sql = ResourceManage.GetString(ResourceManage.SQL_WORKFLOW_INSTANCE);
             try
             {
-                return Connection.Query<WorkflowInstance, Node, WorkflowInstance>(sql, (instance, node) =>
+                return Connection.Query<WorkflowInstance, Node, WorkflowInstance>(ResourceManage.SQL_WORKFLOW_INSTANCE, (instance, node) =>
                 {
                     instance.Current = WorkflowGlobalServiceProvider.Resolve<IWorkflowNodeService>().GetNode(node);
                     return instance;
 
-                }, param: condition, splitOn: "Name").ToList();
+                }, param: new { InstanceID = instanceID }, splitOn: "Name").ToList();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        public WorkflowMode GetMode(string instanceID)
+        {
+            string mode = base.Connection.ExecuteScalar<string>(ResourceManage.SQL_WORKFLOW_INSTANCE_MODE, new { InstanceID = instanceID });
+
+            return String.IsNullOrEmpty(mode) ? WorkflowMode.Transition :
+                (WorkflowMode)Enum.Parse(typeof(WorkflowMode), mode);
         }
     }
 }

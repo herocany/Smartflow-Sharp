@@ -1,12 +1,8 @@
-﻿using Smartflow.BussinessService.WorkflowService;
-using Smartflow.Components;
-using Smartflow.Web.Mvc.Code;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace Smartflow.Web.Mvc
@@ -17,23 +13,12 @@ namespace Smartflow.Web.Mvc
     {
         protected void Application_Start()
         {
-            //优先放置在最前面
-            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(SmartflowConfigurationService));
-            
-            //注册全局的动作 即每跳转一个节点，都会执行动作。
-            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(PendingAction));
-            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(RecordAction));
+            var config = GlobalConfiguration.Configuration;
 
-            //注册局部动作 即跳转到特定节点中执行的动作
-            WorkflowGlobalServiceProvider.RegisterPartService(new DefaultAction());
-            WorkflowGlobalServiceProvider.RegisterPartService(new TestAction());
-
-            //自定义协办服务
-            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(SmartWorkflowCooperation));
-
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            config.Routes.MapHttpRoute(
+               name: "ActionApi",
+               routeTemplate: "api/{controller}/{action}/{id}",
+               defaults: new { id = RouteParameter.Optional });
         }
     }
 }

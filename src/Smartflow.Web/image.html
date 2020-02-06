@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Smartflow 业务流程图</title>
+    <link href="./Content/design/smartflow.css" rel="stylesheet" />
+    <script src="./Content/jquery.min.js"></script>
+    <script src="./Content/design/svg.js"></script>
+    <script src="./Content/design/smartflow.js?v=15.5.55.5.11"></script>
+    <script src="./Content/common.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var id = util.doQuery('id');
+            $("#drawing").SMF({
+                container: 'drawing',
+                color: '#009688'
+            });
+            util.ajaxService({
+                type: 'get',
+                url: 'api/process/get/' + id,
+                success: function (serverData) {
+                    var instance = $.SMF.getComponentById('drawing');
+                    instance.import(serverData.structure,
+                        true,
+                        serverData.id, serverData.record);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container_process">
+        <div class="container_draw" id="drawing"></div>
+    </div>
+</body>
+</html>

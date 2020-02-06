@@ -24,14 +24,14 @@ namespace Smartflow.Internals
             XDocument doc = XDocument.Parse(resourceXml);
             List<ASTNode> nodes = new List<ASTNode>();
             XElement root = doc.Element("workflow");
+            List<XElement> elements = root.Elements().ToList();
+
             if (root.HasAttributes)
             {
                 XAttribute attr = root.Attribute("mode");
                 instance.Mode = String.IsNullOrEmpty(attr.Value) ? WorkflowMode.Transition :
                     (WorkflowMode)Enum.Parse(typeof(WorkflowMode), attr.Value, true);
             }
-
-            List<XElement> elements = root.Elements().ToList();
 
             foreach (XElement element in elements)
             {

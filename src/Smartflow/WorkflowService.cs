@@ -12,39 +12,30 @@ using System.Text;
 
 using Smartflow.Elements;
 using Smartflow.Internals;
+using Dapper;
 
 namespace Smartflow
 {
-    public class WorkflowService: AbstractWorkflow
+    public class WorkflowService : AbstractWorkflow
     {
         public override string Start(string resourceXml)
         {
+            Workflow workflow = XMLServiceFactory.Create(resourceXml);
+            var start = workflow.Nodes.Where(n => n.NodeType == WorkflowNodeCategory.Start).FirstOrDefault();
 
-            IDbConnection connection = DbFactory.CreateWorkflowConnection();
-            connection.Open();
-            IDbTransaction transaction = connection.BeginTransaction();
-            try
+            IList<Action<IDbConnection, IDbTransaction, string>> commands = new List<Action<IDbConnection, IDbTransaction, string>>();
+            Func<IDbConnection, IDbTransaction, string> callback = (connection, transaction) => InstanceService.CreateInstance(start.ID, resourceXml, workflow.Mode, (command, entry) => connection.Execute(command, entry, transaction));
+
+            foreach (Node node in workflow.Nodes)
             {
-                Workflow workflow = XMLServiceFactory.Create(resourceXml);
-                var start = workflow.Nodes.Where(n => n.NodeType == WorkflowNodeCategory.Start).FirstOrDefault();
-                string instaceID = InstanceService.CreateInstance(start.ID, resourceXml, workflow.Mode, (command, entry) => connection.Execute(command, entry, transaction));
-                foreach (Node node in workflow.Nodes)
+                commands.Add((connection, transaction, id) =>
                 {
-                    node.InstanceID = instaceID;
+                    node.InstanceID = id;
                     base.NodeService.Persistent(node, (command, entry) => connection.Execute(command, entry, transaction));
-                }
-                transaction.Commit();
-                return instaceID;
+                });
             }
-            catch (Exception exception)
-            {
-                transaction.Rollback();
-                return exception.ToString();
-            }
-            finally
-            {
-                connection.Dispose();
-            }
+
+            return DbFactory.Execute(callback, commands);
         }
     }
 }

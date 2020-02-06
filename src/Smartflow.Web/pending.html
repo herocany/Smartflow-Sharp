@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="./Content/layui/css/layui.css" rel="stylesheet" />
+    <script src="./Content/jquery.min.js"></script>
+    <script src="./Content/layui/layui.all.js"></script>
+    <script src="./Content/common.js"></script>
+    <style type="text/css">
+        .pending_items li {
+            line-height: 30px;
+            height: 30px;
+        }
+
+        .pending_body {
+            background: #fafafa;
+            margin-top: 20px;
+        }
+
+        .layui-bg-red {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body class="pending_body">
+    <div class="layui-container">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                待办事项<span class="layui-badge layui-bg-red" id="pending_total">0</span>
+            </div>
+            <div class="layui-card-body">
+                <ul class="pending_items" id="pending_items"></ul>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            var ticket = util.doQuery('ticket');
+            var wrap = JSON.parse(decodeURIComponent(ticket)),
+                url = util.prefix + 'api/pending/get/' + wrap.IDENTIFICATION;
+
+            util.ajaxService({
+                url: url,
+                type: 'get',
+                success: function (serverData) {
+                    var htmlArray = [];
+                    $.each(serverData, function () {
+                        htmlArray.push("<li instanceID=" + this.InstanceID + " code=" + this.CateCode + " cateName=" + this.CateName + ">【" + this.CateName + "】<span>" + (this.Title ? this.Title : "新待办任务") + "</span></li>");
+                    });
+                    $("#pending_total").text(serverData.length || 0);
+                    $("#pending_items").html(htmlArray.join(''));
+                }
+            });
+
+            $("#pending_items").on('click', 'li', function (data) {
+                var instanceID = $(this).attr('instanceID');
+                var cateName = $(this).attr('cateName');
+                var cateCode = $(this).attr('code');
+                util.openWin('./auditFrame.html?code=' + cateCode + '&instanceID=' + instanceID+ '&ticket=' + ticket, cateName);
+            });
+
+        });
+    </script>
+</body>
+</html>

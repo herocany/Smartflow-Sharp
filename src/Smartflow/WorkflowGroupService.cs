@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Smartflow.Internals;
-
+using Dapper;
 namespace Smartflow
 {
-    public class WorkflowGroupService : WorkflowInfrastructure, IWorkflowPersistent<Group, Action<string, object>>, IWorkflowQuery<Group>, IWorkflowParse
+    public class WorkflowGroupService : WorkflowInfrastructure, IWorkflowPersistent<Group,Action<string, object>>, IWorkflowQuery<IList<Elements.Group>, string>, IWorkflowParse
     {
         public Element Parse(XElement element)
         {
@@ -21,8 +21,7 @@ namespace Smartflow
 
         public void Persistent(Group entry, Action<string, object> execute)
         {
-            string sql = "INSERT INTO T_GROUP(NID,ID,RelationshipID,Name,InstanceID) VALUES(@NID,@ID,@RelationshipID,@Name,@InstanceID)";
-            execute(sql, new
+            execute(ResourceManage.SQL_WORKFLOW_NODE_GROUP_INSERT, new
             {
                 NID = Guid.NewGuid().ToString(),
                 entry.ID,
@@ -32,11 +31,10 @@ namespace Smartflow
             });
         }
 
-        public IList<Group> Query(object condition)
+        public IList<Group> Query(string instanceID)
         {
             return base.Connection
-               .Query<Group>(" SELECT * FROM T_GROUP WHERE InstanceID=@InstanceID ", condition).ToList();
-
+               .Query<Group>(ResourceManage.SQL_WORKFLOW_NODE_GROUP_SELECT, new { InstanceID = instanceID }).ToList();
         }
     }
 }

@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>请假申请单</title>
+    <link href="../Content/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Content/common.css" rel="stylesheet" />
+    <script src="../Content/jquery.min.js"></script>
+    <script src="../Content/layui/layui.all.js"></script>
+    <script src="../Content/common.js?v=1111112200"></script>
+    <script type="text/javascript">
+        function del(id) {
+            util.ajaxService({
+                type: 'delete',
+                url: '../api/vacation/delete/' + id,
+                success: function () {
+                    doGridFresh();
+                }
+            });
+        }
+
+        $(function () {
+            var table = layui.table;
+            table.render({
+                elem: '#vacation_list'
+                , page: false
+                , defaultToolbar: false
+                , url: '../api/vacation/get'
+                , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                , cols: [[
+                    { width: 60, type: 'numbers', sort: false, title: '序号', align: 'center', unresize: true }
+                    , { field: 'Name', width: 160, title: '申请人', align: 'center' }
+                    , { field: 'VacationType', width: 100, title: '申请类型', sort: false, align: 'center' }
+                    , { field: 'Day', width: 140, title: '请假时长（天）', sort: false, align: 'center' }
+                    , {
+                        width: 160, title: '执行环节', align: 'center', templet: function (d) {
+                            return "<font color='red'>" + d.NodeName + "</font>";
+                        }, unresize: true
+                    }
+                    , { field: 'Reason', title: '理由', minWidth: 120, align: 'left' } //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                    , { fixed: 'right', title: '操作', toolbar: '#vacation_col_tool', width: 200, align: 'center' }
+                ]]
+            });
+            //监听行工具事件
+            table.on('tool(vacation_list)', function (obj) {
+                var data = obj.data;
+                var eventName = obj.event;
+                switch (eventName) {
+                    case "del":
+                        layer.confirm('删除？', function (index) {
+                            del(data.NID);
+                            layer.close(index);
+                        });
+                        break;
+                    case "edit":
+                        util.edit(data.NID, data.CateCode);
+                        break;
+                    case "image":
+                        util.image(data.NID, data.CateCode);
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
+
+        function doGridFresh() {
+            layui.table.reload('vacation_list');
+        }
+    </script>
+</head>
+<body>
+    <br />
+    <div class="layui-container">
+        <div class="layui-btn-group">
+            <input type="button" value="增加" class="layui-btn  layui-btn-sm" onclick="util.openWin(util.audit+'?code=7F1CC595-5BB1-4144-A72F-C509D4ACC3FB&ticket='+window.localStorage.getItem('ticket'), '请假申请')" />
+        </div>
+        <table class="layui-hide" id="vacation_list" lay-filter="vacation_list"></table>
+    </div>
+    <script type="text/html" id="vacation_col_tool">
+        <a class="layui-btn layui-btn-xs" lay-event="image">查看流程图</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <!--<i class="layui-icon layui-icon-picture-fine" style="font-size:20px;" lay-event="image"></i>
+        <i class="layui-icon layui-icon-file" style="font-size:20px;" lay-event="edit"></i>
+        <i class="layui-icon layui-icon-delete" style="font-size:20px;color:#FF5722;" lay-event="del"></i>-->
+    </script>
+</body>
+</html>

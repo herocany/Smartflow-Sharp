@@ -26,11 +26,10 @@ body {
 
 
 .smartflow_menu {
-    font-size: 20px;
     color: #FFF;
     display: block;
-    padding-right: 20px;
-    margin-top: 15px;
+    margin-right: 20px;
+    margin-top: 20px;
 }
 
 .smartflow_menu_item {

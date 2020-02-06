@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../Content/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Content/common.css" rel="stylesheet" />
+    <script src="../Content/jquery.min.js"></script>
+    <script src="../Content/layui/layui.all.js?v=1.000"></script>
+    <script src="../Content/common.js"></script>
+</head>
+<body>
+    <div class="layui-form" lay-filter="vaction_form">
+        <input type="hidden" name="StartDate" id="txtStartDate" />
+        <input type="hidden" name="EndDate" id="txtEndDate" />
+        <input type="hidden" name="NID" />
+        <input type="hidden" name="Day" id="txtDay"/>
+        <!--业务表单类型-->
+        <input type="hidden" name="CateCode" id="txtCateCode" value="7F1CC595-5BB1-4144-A72F-C509D4ACC3FB" />
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">申请人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="Name" lay-verify="required" lay-reqtext="申请人不能为空" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline" style="width:67%;margin-right: 0px;">
+                <label class="layui-form-label">请假类型 </label>
+                <div class="layui-input-block">
+                    <select name="VacationType" lay-filter="vaction_type" lay-verify="required" style="width:100%;">
+                        <option value=""></option>
+                        <option>事假</option>
+                        <option>病假</option>
+                        <option>产假</option>
+                        <option>年假</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">请假时长</label>
+            <div class="layui-input-block">
+                <input type="text" id="txtCreateDateTime" lay-filter="vaction_createdatetime" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">请假原因</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" name="Reason" lay-verify="required" lay-reqtext="请假原因不能为空" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            var form = layui.form;
+            form.render();
+            layui.laydate.render({
+                elem: '#txtCreateDateTime'
+                , type: 'date'
+                , range: true
+                , done: function (value, start, end) {
+                    var endDate = end.year + '-' + end.month + '-' + end.date;
+                    var startDate = start.year + '-' + start.month + '-' + start.date;
+
+                    $("#txtStartDate").val(startDate);
+                    $("#txtEndDate").val(endDate);
+                    $("#txtDay").val(getDay(startDate, endDate));
+                }
+            });
+
+            var id = util.doQuery('id');
+            if (id) {
+                util.ajaxService({
+                    type: 'get',
+                    url: '../api/vacation/Get/' + id,
+                    success: function (serverData) {
+                        form.val('vaction_form', serverData);
+
+                        var endDate = new Date(serverData.EndDate);
+                        var startDate = new Date(serverData.StartDate);
+
+                        $("#txtCreateDateTime").val(layui.util.toDateString(startDate, 'yyyy-MM-dd')
+                            + ' - ' + layui.util.toDateString(endDate, 'yyyy-MM-dd'));
+                    }
+                });
+            }
+        });
+
+        function getDay(startDate,endDate) {
+            var s = new Date(startDate);
+            var e = new Date(endDate);
+　　         var days = e.getTime() - s.getTime();
+　　         return  parseInt(days / (1000 * 60 * 60 * 24));
+        }
+
+        /*******************
+         * 保存实体入口
+         *******************/
+        function saveForm(instanceID,callback) {
+            var form = layui.form;
+            var data = form.val('vaction_form');
+            data.InstanceID = instanceID;
+            data.StartDate = layui.util.toDateString(data.StartDate, 'yyyy-MM-dd');
+            data.EndDate = layui.util.toDateString(data.EndDate, 'yyyy-MM-dd');
+            util.ajaxService({
+                type: 'post',
+                url: '../api/vacation/post',
+                data: data,
+                success: function (result) {
+                    callback && callback(instanceID, result);
+                }
+            });
+        }
+
+        //获取表单值。
+        function getForm() {
+            var form = layui.form;
+            return JSON.stringify(form.val('vaction_form'));
+        }
+
+        function doValidation() {
+            return true;
+        }
+    </script>
+</body>
+</html>

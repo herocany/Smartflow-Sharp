@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Smartflow.Elements;
+using Dapper;
 using Smartflow.Internals;
 
 namespace Smartflow
 {
-    public class WorkflowCommandService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Command, Action<string, object>>, IWorkflowQuery<Elements.Command>, IWorkflowParse
+    public class WorkflowCommandService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Command, Action<string, object>>, IWorkflowQuery<IList<Elements.Command>, string>, IWorkflowParse
     {
         public Element Parse(XElement element)
         {
@@ -21,8 +22,7 @@ namespace Smartflow
 
         public void Persistent(Command entry, Action<string, object> execute)
         {
-            string sql = "INSERT INTO T_Command(NID,ID,RelationshipID,Text,InstanceID) VALUES(@NID,@ID,@RelationshipID,@Text,@InstanceID)";
-            execute(sql, new
+            execute(ResourceManage.SQL_WORKFLOW_NODE_COMMAND_INSERT, new
             {
                 NID = Guid.NewGuid().ToString(),
                 entry.ID,
@@ -32,10 +32,12 @@ namespace Smartflow
             });
         }
 
-        public IList<Command> Query(object condition)
+        public IList<Command> Query(string instanceID)
         {
-            return base.Connection
-                .Query<Command>(" SELECT * FROM T_Command WHERE InstanceID=@InstanceID ", condition).ToList();
+            return base.Connection.Query<Command>(ResourceManage.SQL_WORKFLOW_NODE_COMMAND_SELECT, new
+            {
+                InstanceID = instanceID
+            }).ToList();
         }
     }
 }

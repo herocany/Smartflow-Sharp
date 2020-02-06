@@ -1,31 +1,20 @@
-﻿using Smartflow.BussinessService.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
+using Smartflow.BussinessService.Models;
+using Smartflow.BussinessService.Services;
 
 namespace Smartflow.Web.Mvc.Controllers
 {
-    public class UserController : Controller
+    public class UserController : ApiController
     {
-        private UserService userService = new UserService();
+        private readonly UserService userService = new UserService();
 
-        public JsonResult GetUser(string userName)
+        public User Get(string id)
         {
-            //演示使用
-            Smartflow.BussinessService.Models.User userInfo = new UserService()
-                .Get(u=>u.USERNAME==userName);
-
-            if (userInfo == null)
-            {
-                return Json(false);
-            }
-            else
-            {
-                System.Web.HttpContext.Current.Session["user"] = userInfo;
-                return Json(true);
-            }
+            return userService.Get(id);
         }
     }
 }

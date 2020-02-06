@@ -62,7 +62,7 @@ namespace Smartflow.Components
         /// <param name="body">邮件正文</param>
         protected List<MailMessage> GetSendMessageList(string from, string sender, string[] recvierArray, string subject, string body)
         {
-            if (recvierArray.Any(MAddress => !Regex.IsMatch(MAddress, ResourceManage.GetString(ResourceManage.MAIL_URL_EXPRESSION))))
+            if (recvierArray.Any(MAddress => !Regex.IsMatch(MAddress, ResourceManage.MAIL_URL_EXPRESSION)))
                 return null;
 
             List<MailMessage> messageList = new List<MailMessage>();

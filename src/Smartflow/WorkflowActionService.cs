@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Smartflow.Internals;
-
+using Dapper;
 namespace Smartflow
 {
-    public class WorkflowActionService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Action, Action<string, object>>, IWorkflowQuery<Elements.Action>, IWorkflowParse
+    public class WorkflowActionService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Action, Action<string, object>>, IWorkflowQuery<IList<Elements.Action>, string>, IWorkflowParse
     {
         public Element Parse(XElement element)
         {
@@ -19,10 +19,9 @@ namespace Smartflow
             };
         }
 
-        public void Persistent(Elements.Action entry, Action<string, object> execute)
+        public void Persistent(Elements.Action entry,Action<string, object> execute)
         {
-            string sql = "INSERT INTO T_ACTION(NID,ID,RelationshipID,Name,InstanceID) VALUES(@NID,@ID,@RelationshipID,@Name,@InstanceID)";
-            execute(sql, new
+            execute(ResourceManage.SQL_WORKFLOW_NODE_ACTION_INSERT, new
             {
                 NID = Guid.NewGuid().ToString(),
                 entry.ID,
@@ -32,9 +31,11 @@ namespace Smartflow
             });
         }
 
-        public IList<Elements.Action> Query(object condition)
+        public IList<Elements.Action> Query(String instanceID)
         {
-            return base.Connection.Query<Elements.Action>(" SELECT * FROM T_ACTION WHERE InstanceID=@InstanceID ", condition).ToList();
+            return base.Connection.Query<Elements.Action>(ResourceManage.SQL_WORKFLOW_NODE_ACTION_SELECT,
+                new { InstanceID = instanceID })
+                .ToList();
         }
     }
 }

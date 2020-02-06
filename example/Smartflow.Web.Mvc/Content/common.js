@@ -1,30 +1,17 @@
-﻿; (function () {
-
-    var currentIndex;
-
+﻿(function () {
     window.util = {
-        ajaxPost: function (option) {
-            var defaultSettings = {
+        prefix: 'http://localhost/Smartflow.Web/',
+        process: 'http://localhost/Smartflow.Web/image.html?id=',
+        pending: 'http://localhost/Smartflow.Web/pending.html?ticket=',
+        audit: '/Smartflow.Web/auditFrame.html',
+        ajaxService: function (settings) {
+            var defaultSettings = $.extend({
+                dataType: 'json',
                 type: 'post',
-                contentType: 'application/x-www-form-urlencoded',
-                dataType: 'json'
-            };
-            $.ajax($.extend(defaultSettings, option));
-        },
-        openProcessImage: function (url) {
-            this.create({
-                content: url,
-                title: '流程查看',
-                width: 960,
-                height: 560
-            });
-        },
-        open: function (url, w, h) {
-            var x = window.screen.availHeight;
-            var y = window.screen.availWidth;
-            var centerTop = (x - h) / 2;
-            var centerLeft = (y - w) / 2;
-            window.open(url, "", "width=" + w + ",height=" + h + ",top=" + centerTop + ",left=" + centerLeft);
+                cache: false
+            }, settings);
+
+            $.ajax(defaultSettings);
         },
         create: function (option) {
             var defaultSettings = {
@@ -36,30 +23,41 @@
                 area: [option.width + 'px', option.height + 'px'],
                 offset: 'auto'
             };
-
-            //iframe窗
-            currentIndex = layer.open($.extend(defaultSettings, option));
-        },
-        close: function (callback) {
-            //iframe窗
-            if (currentIndex) {
-
-                callback && callback.call(window);
-
-                layer.close(currentIndex);
-            }
+            layer.open($.extend(defaultSettings, option));
         },
         isEmpty: function (value) {
-            return (value == '') ? false : true;
+            return (value == '' || !value) ? false : true;
         },
-        refreshPage: function () {
-            /*刷新界面 */
-            var url = window.location.href;
-            if (url.indexOf("?") > -1) {
-                url = url.substring(0, url.lastIndexOf("?"));
-            }
-            window.location.href = url + '?t=' + new Date().getTime();
+        doQuery: function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var rw = window.location.search.substr(1).match(reg);
+            return (rw != null) ? decodeURI(rw[2]) : false;
+        },
+        openWin: function (url, title) {
+            var h = 660;
+            var w = 1000;
+            var top = (window.screen.availHeight - h) / 2;
+            var left = (window.screen.availWidth - w) / 2;
+            window.open(url, title, "width=" + w + ", height=" + h + ",top=" + top + ",left=" + left + ",titlebar=no,menubar=no,scrollbars=yes,resizable=yes,status=yes,toolbar=no,location=no");
+        },
+        edit: function (id, code, callback) {
+            util.ajaxService({
+                type: 'get',
+                url: util.prefix + 'api/bridge/get/' + id + '?categoryId=' + code,
+                success: function (serverData) {
+                    var ticket = window.localStorage.getItem('ticket');
+                    util.openWin(util.audit + '?code=' + serverData.CategoryID + '&instanceID=' + serverData.InstanceID + '&ticket=' + ticket);
+                }
+            });
+        },
+        image: function (id, code) {
+            util.ajaxService({
+                type: 'get',
+                url: util.prefix + 'api/bridge/get/' + id + '?categoryId=' + code,
+                success: function (serverData) {
+                    util.openWin(util.process + serverData.InstanceID);
+                }
+            });
         }
     };
-
 })();

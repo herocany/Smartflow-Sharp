@@ -5,10 +5,12 @@ using System.Text;
 using System.Xml.Linq;
 using Smartflow.Elements;
 using Smartflow.Internals;
+using Dapper;
 
 namespace Smartflow
 {
-    public class WorkflowActorService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Actor, Action<string, object>>, IWorkflowQuery<Elements.Actor>, IWorkflowParse
+
+    public class WorkflowActorService : WorkflowInfrastructure, IWorkflowPersistent<Elements.Actor, Action<string, object>>, IWorkflowQuery<IList<Elements.Actor>, string>,IWorkflowParse
     {
         public Element Parse(XElement element)
         {
@@ -21,17 +23,21 @@ namespace Smartflow
 
         public void Persistent(Actor entry, Action<string, object> execute)
         {
-            string sql = "INSERT INTO T_ACTOR(NID,ID,RelationshipID,Name,InstanceID) VALUES(@NID,@ID,@RelationshipID,@Name,@InstanceID)";
-            execute(sql, new
+            execute(ResourceManage.SQL_WORKFLOW_NODE_ACTOR_INSERT, new
             {
-                NID = Guid.NewGuid().ToString(),entry.ID,entry.RelationshipID,entry.Name,entry.InstanceID
+                NID = Guid.NewGuid().ToString(),
+                entry.ID,
+                entry.RelationshipID,
+                entry.Name,
+                entry.InstanceID
             });
         }
 
-        public IList<Actor> Query(object condition)
+        public IList<Actor> Query(string instanceID)
         {
             return base.Connection
-               .Query<Actor>(" SELECT * FROM T_ACTOR WHERE InstanceID=@InstanceID ",condition)
+               .Query<Actor>(ResourceManage.SQL_WORKFLOW_NODE_ACTOR_SELECT,
+               new { InstanceID = instanceID })
                .ToList();
         }
     }

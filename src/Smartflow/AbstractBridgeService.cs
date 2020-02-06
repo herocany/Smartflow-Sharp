@@ -19,13 +19,22 @@ namespace Smartflow
             }
         }
 
-        protected IWorkflowQuery<WorkflowConfiguration> ConfigurationService
+        protected IWorkflowQuery<IEnumerable<WorkflowConfiguration>> ConfigurationService
         {
             get
             {
                 return WorkflowGlobalServiceProvider.Resolve<WorkflowService>().NodeService.ConfigurationService;
             }
         }
+
+        public WorkflowStructureService WorkflowStructureService
+        {
+            get
+            {
+                return WorkflowGlobalServiceProvider.Resolve<WorkflowStructureService>();
+            }
+        }
+
 
         /// <summary>
         /// 获取参与组
@@ -42,15 +51,24 @@ namespace Smartflow
         /// <param name="actorIds"></param>
         /// <param name="searchKey"></param>
         /// <returns></returns>
-        public abstract List<WorkflowActor> GetActors(int pageIndex, int pageSize, out int total, string actorIDs, string searchKey);
+        public abstract List<WorkflowActor> GetActor(int pageIndex, int pageSize, out int total, string actorIDs, string searchKey);
+
+
+        /// <summary>
+        /// 获取参与者列表
+        /// </summary>
+        /// <param name="actorIds"></param>
+        /// <returns></returns>
+        public abstract List<WorkflowActor> GetActor(string actorIDs);
+
 
         /// <summary>
         /// 获取配置
         /// </summary>
         /// <returns></returns>
-        public List<WorkflowConfiguration> GetSettings()
+        public List<WorkflowConfiguration> GetDatabaseSourceList()
         {
-            return ConfigurationService.Query(Utils.Empty).ToList();
+            return ConfigurationService.Query().ToList();
         }
 
         /// <summary>
@@ -61,13 +79,12 @@ namespace Smartflow
         public dynamic GetJumpProcess(string instanceID)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
-            IList<dynamic> records = ProcessService.GetRecords(instanceID);
+            IList<dynamic> records = ProcessService.Query(instanceID);
 
             return new
             {
                 structure = instance.Resource,
                 id = instance.Current.ID,
-                mode = instance.Mode,
                 record = records
             };
         }

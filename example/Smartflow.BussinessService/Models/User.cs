@@ -6,11 +6,9 @@ using System.Text;
 
 namespace Smartflow.BussinessService.Models
 {
-    [Table("T_USER")]
     public class User
     {
-        [Key]
-        public long IDENTIFICATION
+        public string IDENTIFICATION
         {
             get;
             set;
@@ -27,13 +25,7 @@ namespace Smartflow.BussinessService.Models
             get;
             set;
         }
-
-        public string EMPLOYEENAME
-        {
-            get;
-            set;
-        }
-
+    
         public string ORGCODE
         {
             get;

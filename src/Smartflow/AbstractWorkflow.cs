@@ -1,4 +1,5 @@
-﻿using Smartflow.Elements;
+﻿using Smartflow.Components;
+using Smartflow.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,6 @@ namespace Smartflow
         public List<IWorkflowAction> Actions
         {
             get { return WorkflowGlobalServiceProvider.Query<IWorkflowAction>(); }
-        }
-
-        public AbstractWorkflowCooperation WorkflowCooperationService
-        {
-            get
-            {
-                return WorkflowGlobalServiceProvider.Resolve<AbstractWorkflowCooperation>();
-            }
         }
 
         public IWorkflowNodeService NodeService
@@ -36,6 +29,14 @@ namespace Smartflow
             get
             {
                 return WorkflowGlobalServiceProvider.Resolve<IWorkflowInstanceService>();
+            }
+        }
+
+        public IStrategyService StrategyService
+        {
+            get
+            {
+                return WorkflowGlobalServiceProvider.Resolve<IStrategyService>()??new DefaultStrategyService();
             }
         }
 

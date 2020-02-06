@@ -37,7 +37,6 @@ namespace Smartflow
             set;
         }
 
-
         /// <summary>
         /// 工作流实例
         /// </summary>
@@ -56,10 +55,7 @@ namespace Smartflow
             set;
         }
 
-        /// <summary>
-        /// 是否验证
-        /// </summary>
-        public bool IsValid
+        public bool Result
         {
             get;
             set;

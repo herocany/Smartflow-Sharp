@@ -4,20 +4,18 @@
  Github : https://github.com/chengderen/Smartflow-Sharp
  ********************************************************************
  */
-using Smartflow.Components;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Smartflow.Components;
 
 namespace Smartflow
 {
     public static class WorkflowGlobalServiceProvider
     {
-        private static IList<Type> _globalTypeCollection = new List<Type>();
+        private static readonly IList<Type> _globalTypeCollection = new List<Type>();
 
-        private static IList<IWorkflowAction> _partCollection = new List<IWorkflowAction>();
+        private static readonly IList<IWorkflowAction> _partCollection = new List<IWorkflowAction>();
 
         static WorkflowGlobalServiceProvider()
         {
@@ -27,6 +25,8 @@ namespace Smartflow
             _globalTypeCollection.Add(typeof(WorkflowProcessService));
             _globalTypeCollection.Add(typeof(WorkflowInstanceService));
             _globalTypeCollection.Add(typeof(DefaultActionService));
+            _globalTypeCollection.Add(typeof(WorkflowStructureService));
+            _globalTypeCollection.Add(typeof(WorkflowCooperationService));
         }
 
         public static void RegisterGlobalService(Type registerType)
@@ -45,7 +45,7 @@ namespace Smartflow
                       .Where(e => typeof(T).IsAssignableFrom(e))
                       .FirstOrDefault();
 
-            return (T)Smartflow.Internals.Utils.CreateInstance(map);
+            return (map == null) ? default : (T)Smartflow.Internals.Utils.CreateInstance(map);
         }
 
         /// <summary>
@@ -59,7 +59,6 @@ namespace Smartflow
                .ToList()
                .ForEach((entry) => _globalTypeCollection.Remove(entry));
         }
-
 
         /// <summary>
         /// 查询注册到全局里面的

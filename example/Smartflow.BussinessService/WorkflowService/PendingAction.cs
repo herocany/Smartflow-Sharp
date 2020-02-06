@@ -51,7 +51,7 @@ namespace Smartflow.BussinessService.WorkflowService
                         WritePending(user.IDENTIFICATION.ToString(), executeContext);
                     }
 
-                    if (executeContext.IsValid)
+                    if (executeContext.Result)
                     {
                         string NID = executeContext.Instance.Current.NID;
                         pendingService.Delete(pending => pending.NODEID == NID && pending.INSTANCEID == instanceID);
@@ -83,7 +83,6 @@ namespace Smartflow.BussinessService.WorkflowService
                 userList.AddRange(userService.GetUserList(string.Join(",", gList)));
             }
 
-            //去重了
             return userList
                 .ToLookup(p => p.IDENTIFICATION)
                 .Select(c => c.First())

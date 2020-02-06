@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -10,8 +11,9 @@ namespace Smartflow
         void Persistent(T entry);
     }
 
-    public interface IWorkflowPersistent<T, S> where T : class
+    public interface IWorkflowPersistent<T,S> where T : class
     {
-        void Persistent(T entry, S execute);
+        void Persistent(T entry,S execute);
     }
+
 }

@@ -16,7 +16,7 @@ namespace Smartflow.BussinessService.WorkflowService
 {
     public class BaseBridgeService : AbstractBridgeService
     {
-        private IDbConnection Connection = DBUtils.CreateConnection();
+        private IDbConnection connection = DBUtils.CreateConnection();
 
         /// <summary>
         /// 处理依据roleID查询少引号的情况
@@ -38,7 +38,7 @@ namespace Smartflow.BussinessService.WorkflowService
         {
             string query = " SELECT * FROM T_ROLE WHERE 1=1 ";
             List<WorkflowGroup> groupList = new List<WorkflowGroup>();
-            using (IDataReader dr = Connection.ExecuteReader(query))
+            using (IDataReader dr = connection.ExecuteReader(query))
             {
                 while (dr.Read())
                 {
@@ -52,7 +52,9 @@ namespace Smartflow.BussinessService.WorkflowService
             return groupList;
         }
 
-        public override List<WorkflowActor> GetActors(int pageIndex, int pageSize, out int total, string actorIDs, string searchKey)
+
+
+        public override List<WorkflowActor> GetActor(int pageIndex, int pageSize, out int total, string actorIDs, string searchKey)
         {
             string conditionStr = string.Empty;
             if (!String.IsNullOrEmpty(actorIDs))
@@ -65,9 +67,9 @@ namespace Smartflow.BussinessService.WorkflowService
             }
 
             string query = String.Format("SELECT TOP {0} * FROM T_USER WHERE IDENTIFICATION NOT IN (SELECT TOP {1} IDENTIFICATION  FROM T_USER WHERE 1=1 {2} ORDER BY IDENTIFICATION ASC) {2}  ORDER BY IDENTIFICATION ASC ", pageSize, pageSize * (pageIndex - 1), conditionStr);
-            total = Connection.ExecuteScalar<int>(String.Format("SELECT COUNT(1) FROM T_USER WHERE 1=1 {0}", conditionStr));
+            total = connection.ExecuteScalar<int>(String.Format("SELECT COUNT(1) FROM T_USER WHERE 1=1 {0}", conditionStr));
             List<WorkflowActor> actors = new List<WorkflowActor>();
-            using (var dr = Connection.ExecuteReader(query))
+            using (var dr = connection.ExecuteReader(query))
             {
                 while (dr.Read())
                 {
@@ -78,12 +80,44 @@ namespace Smartflow.BussinessService.WorkflowService
                         Data = new
                         {
                             OrgName = dr["ORGNAME"],
-                            OrgCode = dr["OrgCode"]
+                            OrgCode = dr["ORGCODE"]
                         }
                     });
                 }
             }
             return actors;
         }
+
+        public override List<WorkflowActor> GetActor(string actorIDs)
+        {
+            if (String.IsNullOrEmpty(actorIDs))
+            {
+                return new List<WorkflowActor>();
+            }
+            else
+            {
+                string conditionStr = string.Format(" AND IDENTIFICATION IN ({0})", BindQueryConditionQuot(actorIDs));
+                string query = String.Format(" SELECT * FROM T_USER WHERE 1=1 {0} ORDER BY IDENTIFICATION ASC ", conditionStr);
+                List<WorkflowActor> actors = new List<WorkflowActor>();
+                using (var dr = connection.ExecuteReader(query))
+                {
+                    while (dr.Read())
+                    {
+                        actors.Add(new WorkflowActor()
+                        {
+                            ID = dr["IDENTIFICATION"].ToString(),
+                            Name = string.Format("{0}", dr["USERNAME"]),
+                            Data = new
+                            {
+                                OrgName = dr["ORGNAME"],
+                                OrgCode = dr["ORGCODE"]
+                            }
+                        });
+                    }
+                }
+                return actors;
+            }
+        }
+
     }
 }

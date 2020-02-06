@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using Smartflow.Internals;
+using Dapper;
 
 namespace Smartflow.Components
 {

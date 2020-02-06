@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>审批窗口</title>
+    <link href="./Content/layui/css/layui.css" rel="stylesheet" />
+    <link href="./Content/audit.css?v=1.22.12" rel="stylesheet" />
+    <script src="./Content/jquery.min.js"></script>
+    <script src="./Content/jquery.cookie.js"></script>
+    <script src="./Content/layui/layui.all.js"></script>
+    <script src="./Content/common.js"></script>
+    <script src="./Content/auditWindow.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $.AuditWindow({
+                back: util.prefix+'api/smf/back',
+                jump: util.prefix+'api/smf/jump',
+                select: util.prefix+'api/smf/GetTransition',
+                current: util.prefix+'api/smf/get',
+                buttonId: '#btnOk',
+                tips: '请填写审批意见',
+                selectOption: '#ddlOperate'
+            });
+        });
+    </script>
+</head>
+<body>
+    <form class="layui-form" lay-filter="next_form" style="margin:15px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">下一步操作</label>
+            <div class="layui-input-block">
+                <select id="ddlOperate" name="to" lay-filter="ddl_operate" class="layui-select"></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">审批意见</label>
+            <div class="layui-input-block">
+                <textarea name="message" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </form>
+    <div class="button-container" id="btnGroup">
+        <div class="button-group ac">
+            <input type="button"
+                   id="btnOk"
+                   value="确定"
+                   class="layui-btn layui-btn-normal" />
+        </div>
+    </div>
+</body>
+</html>

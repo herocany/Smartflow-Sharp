@@ -4,11 +4,11 @@
  ********************************************************************
  */
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Smartflow.Internals;
 using System.Data;
+using System.Collections.Generic;
 
 namespace Smartflow
 {
@@ -85,11 +85,11 @@ namespace Smartflow
             get;
             set;
         }
-        
+
         /// <summary>
-        /// 命令类型0：决策指令 1：协办决策指令 2：回退指令
+        /// 命令类型0：决策指令 1：协办决策指令 2：回退指令 3:前进
         /// </summary>
-        public WorkflowOpertaion Command
+        public WorkflowOpertaion Direction
         {
             get;
             set;

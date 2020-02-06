@@ -5,8 +5,18 @@ using System.Text;
 
 namespace Smartflow
 {
-    public interface IWorkflowQuery<T> where T : class
+    public interface IWorkflowQuery<out T> where T : class
     {
-        IList<T> Query(Object condition);
+        T Query();
+    }
+
+    public interface IWorkflowQuery<out T, in S> where T : class
+    {
+        T Query(S queryArg);
+    }
+
+    public interface IWorkflowQuery
+    {
+        IList<T> Query<T>(String instanceID);
     }
 }

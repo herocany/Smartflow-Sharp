@@ -11,14 +11,14 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Smartflow;
 
-
 namespace Smartflow.Elements
 {
     public class Transition : Element
     {
         private string destination = string.Empty;
         private string expression = string.Empty;
-       
+        private WorkflowOpertaion direction = WorkflowOpertaion.Go;
+
         public string RelationshipID
         {
             get;
@@ -31,13 +31,17 @@ namespace Smartflow.Elements
             set;
         }
      
-     
+        public WorkflowOpertaion Direction
+        {
+            get {return direction; }
+            set { direction=value; }
+        }
+
         public string Destination
         {
             get { return destination; }
             set { destination = value; }
         }
-
      
         public string Expression
         {

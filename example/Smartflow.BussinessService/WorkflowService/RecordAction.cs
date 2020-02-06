@@ -17,23 +17,13 @@ namespace Smartflow.BussinessService.WorkflowService
             if (executeContext.Instance.Current.NodeType != WorkflowNodeCategory.Decision)
             {
                 //写入审批记录
-                WriteRecord(executeContext);
+                recordService.Insert(new Record()
+                {
+                    INSTANCEID = executeContext.Instance.InstanceID,
+                    NODENAME = executeContext.From.Name,
+                    MESSAGE = executeContext.Data.Message
+                });
             }
-        }
-
-        /// <summary>
-        /// 写入审批记录
-        /// </summary>
-        /// <param name="executeContext"></param>
-        public void WriteRecord(ExecutingContext executeContext)
-        {
-            //写入审批记录
-            recordService.Insert(new Record()
-            {
-                INSTANCEID = executeContext.Instance.InstanceID,
-                NODENAME = executeContext.From.Name,
-                MESSAGE = executeContext.Data.Message
-            });
         }
     }
 }

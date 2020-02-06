@@ -16,14 +16,13 @@ namespace Smartflow.Internals
 {
     internal class Utils
     {
-        public readonly static Object Empty = new Object();
+        public static readonly string CONST_REJECT_TRANSITION_ID = "NID_REJECT_ID_80_11";
 
-        public readonly static Transition Return = new Transition
+        public static readonly Transition CONST_REJECT_TRANSITION = new Transition
         {
-            NID = "back",
-            Name = "原路回退"
+            NID = Utils.CONST_REJECT_TRANSITION_ID,
+            Name = "否决"
         };
-
 
         public static WorkflowNodeCategory Convert(string category)
         {

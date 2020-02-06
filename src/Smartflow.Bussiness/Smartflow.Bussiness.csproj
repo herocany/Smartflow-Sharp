@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4415DE6A-4569-4B91-97E6-900C1E23F7FD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Smartflow.Bussiness</RootNamespace>
+    <AssemblyName>Smartflow.Bussiness</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\CreateBridge.cs" />
+    <Compile Include="Commands\CreateRecord.cs" />
+    <Compile Include="Commands\DeletePending.cs" />
+    <Compile Include="Commands\CreatePending.cs" />
+    <Compile Include="Commands\DeletePendingByActor.cs" />
+    <Compile Include="Models\Bridge.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Pending.cs" />
+    <Compile Include="Models\Record.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Queries\BridgeQueryService.cs" />
+    <Compile Include="Queries\PendingQueryService.cs" />
+    <Compile Include="Queries\RecordQueryService.cs" />
+    <Compile Include="Queries\UserByActorQueryService.cs" />
+    <Compile Include="WorkflowService\FormAction.cs" />
+    <Compile Include="WorkflowService\PendingAction.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkflowService\RecordAction.cs" />
+    <Compile Include="Queries\UserByRoleQueryService.cs" />
+    <Compile Include="WorkflowService\BaseBridgeService.cs" />
+    <Compile Include="WorkflowService\TestAction.cs" />
+    <Compile Include="Queries\CategoryQueryService.cs" />
+    <Compile Include="WorkflowService\CooperationPending.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dapper\Dapper.csproj">
+      <Project>{a9e82305-9ea9-41e6-8ff6-ab3d6e3daf36}</Project>
+      <Name>Dapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smartflow.Common\Smartflow.Common.csproj">
+      <Project>{6c42e2eb-99c5-44d8-afe3-2593321e01f1}</Project>
+      <Name>Smartflow.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smartflow\Smartflow.csproj">
+      <Project>{c77dd279-74f0-4a0a-b534-2cf858ede21d}</Project>
+      <Name>Smartflow</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
