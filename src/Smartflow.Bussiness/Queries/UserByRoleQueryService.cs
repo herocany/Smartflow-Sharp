@@ -6,17 +6,16 @@ using System.Collections.Generic;
 using Dapper;
 using Smartflow.Bussiness.Models;
 using Smartflow.Common;
+using Smartflow.Bussiness.Scripts;
 
 namespace Smartflow.Bussiness.Queries
 {
     public class UserByRoleQueryService : IQuery<IList<User>, string>
     {
-        private readonly string SQL_COMMAND_SELECT = @"SELECT Identification UniqueId,OrgCode,UserName FROM T_USER WHERE Identification IN (SELECT UUID FROM T_UMR  WHERE RID IN ({0}))";
-
         public IList<User> Query(string id)
         {
             return DBUtils.CreateConnection()
-                .Query<User>(string.Format(SQL_COMMAND_SELECT, id)).ToList();
+                .Query<User>(string.Format(ResourceManage.SQL_USER_SELECT_2, id)).ToList();
         }
     }
 }

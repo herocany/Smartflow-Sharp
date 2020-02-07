@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using Smartflow.Bussiness.Models;
+using Smartflow.Bussiness.Scripts;
 using Smartflow.Common;
 
 namespace Smartflow.Bussiness.Queries
@@ -13,7 +14,7 @@ namespace Smartflow.Bussiness.Queries
         public Bridge Query(string instanceID)
         {
             return DBUtils.CreateWFConnection()
-               .Query<Bridge>(" SELECT * FROM T_Bridge Where InstanceID=@InstanceID ", new
+               .Query<Bridge>(ResourceManage.SQL_BRIDGE_SELECT_BY_INSTANCEID, new
                {
                    InstanceID = instanceID
                }).FirstOrDefault();
@@ -22,7 +23,7 @@ namespace Smartflow.Bussiness.Queries
         public Bridge Query(Dictionary<string, string> queryArg)
         {
             return DBUtils.CreateWFConnection()
-                  .Query<Bridge>(" SELECT * FROM T_Bridge Where FormID=@FormID AND @CategoryID=@CategoryID", new
+                  .Query<Bridge>(ResourceManage.SQL_BRIDGE_SELECT, new
                   {
                       FormID = queryArg["FormID"],
                       CategoryID = queryArg["CategoryID"]

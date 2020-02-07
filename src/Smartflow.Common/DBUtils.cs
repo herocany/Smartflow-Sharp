@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
@@ -12,7 +13,7 @@ namespace Smartflow.Common
         public static IDbConnection CreateConnection()
         {
             ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings["demoConnection"];
-            IDbConnection connection = 
+            IDbConnection connection =
                 DbProviderFactories.GetFactory(connectionStringSettings.ProviderName).CreateConnection();
             connection.ConnectionString = connectionStringSettings.ConnectionString;
             return connection;
@@ -26,5 +27,6 @@ namespace Smartflow.Common
             connection.ConnectionString = connectionStringSettings.ConnectionString;
             return connection;
         }
+
     }
 }

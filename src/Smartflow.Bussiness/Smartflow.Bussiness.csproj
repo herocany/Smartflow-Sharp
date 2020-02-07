@@ -59,6 +59,11 @@
     <Compile Include="Queries\RecordQueryService.cs" />
     <Compile Include="Queries\UserByNodeQueryService.cs" />
     <Compile Include="Queries\UserByActorQueryService.cs" />
+    <Compile Include="Scripts\ResourceManage.Category.cs" />
+    <Compile Include="Scripts\ResourceManage.User.cs" />
+    <Compile Include="Scripts\ResourceManage.Pending.cs" />
+    <Compile Include="Scripts\ResourceManage.Bridge.cs" />
+    <Compile Include="Scripts\ResourceManage.Record.cs" />
     <Compile Include="WorkflowService\FormAction.cs" />
     <Compile Include="WorkflowService\PendingAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,5 +91,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
