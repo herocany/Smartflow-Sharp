@@ -60,6 +60,8 @@
             pid: '#workflow_node',
             title: '角色配置',
             type: 'box',
+            width: '750px',
+            height:'560px',
             url: './roleSelect.html',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
@@ -74,8 +76,10 @@
         },
         node_user: {
             pid: '#workflow_node',
-            title: '角色配置',
+            title: '人员配置',
             type: 'box',
+            width: '900px',
+            height: '600px',
             url: './userSelect.html',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
@@ -92,6 +96,8 @@
             pid: '#workflow_node',
             title: '自定义动作配置',
             url: './actionSelect.html',
+            width: '750px',
+            height: '560px',
             type: 'box',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
@@ -154,7 +160,7 @@
         var settings = {
             type: 2,
             title: descriptor.title,
-            area: ['750px', '560px'],
+            area: [descriptor.width, descriptor.height],
             shade: 0.8,
             closeBtn: 1,
             shadeClose: false,
