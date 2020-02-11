@@ -7,10 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Smartflow.Elements;
-using System.Dynamic;
-
 
 namespace Smartflow
 {
@@ -32,6 +29,15 @@ namespace Smartflow
         /// 跳转到节点
         /// </summary>
         public Node To
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 命令方向
+        /// </summary>
+        public WorkflowOpertaion Direction
         {
             get;
             set;

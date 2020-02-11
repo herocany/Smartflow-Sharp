@@ -8,5 +8,7 @@ namespace Smartflow
     public interface IWorkflowProcessService : IWorkflowPersistent<WorkflowProcess, Action<String, object>>, IWorkflowQuery<IList<WorkflowProcess>, Dictionary<string, object>>
     {
         IList<dynamic> Query(string instanceID);
+
+        IList<WorkflowProcess> Get(string instanceID);
     }
 }

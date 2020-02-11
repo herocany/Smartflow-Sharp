@@ -34,7 +34,11 @@ namespace Smartflow.Web.Controllers
 
         public void Post(Bridge model)
         {
-            CommandBus.Dispatch<Bridge>(new CreateBridge(), model);
+            if (queryService.Query(model.InstanceID) == null)
+            {
+                CommandBus.Dispatch<Bridge>(new CreateBridge(), model);
+            }
+
             FormService.Execute(model.CategoryID, model.InstanceID);
         }
     }

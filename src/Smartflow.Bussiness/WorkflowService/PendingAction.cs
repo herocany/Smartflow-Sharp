@@ -14,7 +14,7 @@ namespace Smartflow.Bussiness.WorkflowService
 {
     public class PendingAction : IWorkflowAction
     {
-        private readonly BaseBridgeService baseBridgeService = new BaseBridgeService();
+        private readonly BaseBridgeService bridgeService = new BaseBridgeService();
 
         public void ActionExecute(ExecutingContext executeContext)
         {
@@ -29,8 +29,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 {
                     DecisionJump(executeContext);
                 }
-
-                if (!executeContext.Result&&executeContext.Instance.Current.Cooperation==1)
+                if (!executeContext.Result && executeContext.Instance.Current.Cooperation == 1)
                 {
                     CooperationPending.Execute(executeContext);
                 }
@@ -44,54 +43,20 @@ namespace Smartflow.Bussiness.WorkflowService
                     }
                     else
                     {
-                        List<User> userList = GetUserByGroup(current.Groups, current.Actors);
+                        List<User> userList = bridgeService.GetActorByGroup(current,executeContext.Direction);
                         foreach (User user in userList)
                         {
                             WritePending(user.UniqueId, executeContext);
                         }
-
                         string NID = executeContext.Instance.Current.NID;
-
-                        Dictionary<string, object> deleteArg = new Dictionary<string, object>()
+                        CommandBus.Dispatch<Dictionary<string, Object>>(new DeletePending(), new Dictionary<string, object>()
                         {
                             { "instanceID",instanceID},
                             { "nodeID",NID }
-                        };
-
-                        CommandBus.Dispatch<Dictionary<string, Object>>(new DeletePending(), deleteArg);
+                        });
                     }
                 }
             }
-        }
-
-        protected List<User> GetUserByGroup(List<Elements.Group> items, List<Actor> actors)
-        {
-            List<User> userList = new List<User>();
-            List<string> gList = new List<string>();
-            List<string> ids = new List<string>();
-            foreach (Elements.Group g in items)
-            {
-                gList.Add(g.ID.ToString());
-            }
-            foreach (Actor item in actors)
-            {
-                ids.Add(item.ID);
-            }
-
-            if (ids.Count > 0)
-            {
-                userList.AddRange(new UserByActorQueryService().Query(string.Join(",", ids)));
-            }
-
-            if (gList.Count > 0)
-            {
-                userList.AddRange(new UserByRoleQueryService().Query(string.Join(",", gList)));
-            }
-
-            return userList
-                .ToLookup(p => p.UniqueId)
-                .Select(c => c.First())
-                .ToList();
         }
 
         /// <summary>
@@ -106,7 +71,7 @@ namespace Smartflow.Bussiness.WorkflowService
 
             if (current.NodeType != WorkflowNodeCategory.Decision)
             {
-                List<User> userList = GetUserByGroup(current.Groups, current.Actors);
+                List<User> userList = bridgeService.GetActorByGroup(current,executeContext.Direction);
                 foreach (var user in userList)
                 {
                     WritePending(user.UniqueId, executeContext);

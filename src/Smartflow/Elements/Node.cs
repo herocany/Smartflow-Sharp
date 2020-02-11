@@ -18,6 +18,7 @@ namespace Smartflow.Elements
     {
         protected List<Actor> actors = new List<Actor>();
         protected List<Group> groups = new List<Group>();
+        protected List<Rule> rules = new List<Rule>();
 
         protected Command command;
 
@@ -37,6 +38,13 @@ namespace Smartflow.Elements
         {
             get { return actors; }
             set { actors = value; }
+        }
+
+
+        public List<Rule> Rules
+        {
+            get { return rules; }
+            set { rules = value; }
         }
 
         public Node Previous

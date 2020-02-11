@@ -8,8 +8,17 @@
     <script src="./Content/jquery.min.js"></script>
     <script src="./Content/design/svg.js"></script>
     <script src="./Content/layui/layui.all.js?v=100"></script>
-    <script src="./Content/design/smartflow.js?v=12.1.2.14"></script>
+    <script src="./Content/design/smartflow.js?v=56511"></script>
     <script src="./Content/common.js"></script>
+    <style type="text/css">
+        .container_ctr {
+            overflow: auto;
+        }
+        .container_draw {
+            height: 4000px;
+            width: 4000px;
+        }
+    </style>
 </head>
 <body>
     <div class="container_tools">
@@ -122,6 +131,12 @@
                     </div>
                 </div>
             </fieldset>
+            <fieldset class="layui-elem-field" lay-filter="attributes_strategy" id="attributes_strategy">
+                <legend>规则配置</legend>
+                <div class="layui-field-box">
+                    <div class="layui-form" lay-filter="form_rule" id="form_rule"></div>
+                </div>
+            </fieldset>
         </div>
         <div class="attributes_tab attributes_tab_node hide" id="workflow_transition">
             <fieldset class="layui-elem-field" lay-filter="attributes_line_info">
@@ -160,6 +175,7 @@
         </form>
     </script>
 
+    
     <script type="text/html" id="common_expression">
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">{{name}}</label>
@@ -168,12 +184,9 @@
             </div>
         </div>
     </script>
-
-    <script src="./Content/design/design.js?v=3.01.11.004.25"></script>
-
+    <script src="./Content/design/design.js?v=31.1.2221.1554.25"></script>
     <script type="text/javascript">
         $(function () {
-
             var setting = new design.Configuration({
                 container: 'drawing',
                 categoryUrl: 'api/category/get',
@@ -181,7 +194,9 @@
                 dataSourceUrl: 'api/setting/GetDatabaseSourceList',
                 dataSourceId: 'decision_select',
                 url: 'api/structure/get',
-                save: 'api/structure/post'
+                save: 'api/structure/post',
+                constraintId: 'form_rule',
+                constraintUrl: 'api/setting/GetConstraint'
             });
 
             $("#menus li").click(function () {

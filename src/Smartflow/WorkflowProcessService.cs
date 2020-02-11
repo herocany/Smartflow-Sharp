@@ -8,6 +8,11 @@ namespace Smartflow
 {
     public class WorkflowProcessService : WorkflowInfrastructure, IWorkflowProcessService, IWorkflowPersistent<WorkflowProcess, Action<String, object>>, IWorkflowQuery<IList<WorkflowProcess>, Dictionary<string, object>>
     {
+        public IList<WorkflowProcess> Get(string instanceID)
+        {
+            return base.Connection.Query<WorkflowProcess>(ResourceManage.SQL_WORKFLOW_PROCESS_SELECT, new { InstanceID = instanceID }).ToList();
+        }
+
         public void Persistent(WorkflowProcess process, Action<string, object> callback)
         {
             callback(ResourceManage.SQL_WORKFLOW_PROCESS_INSERT, new
@@ -19,7 +24,8 @@ namespace Smartflow
                 process.InstanceID,
                 NodeType = process.NodeType.ToString(),
                 process.RelationshipID,
-                process.Direction
+                process.Direction,
+                process.ActorID
             });
         }
 

@@ -94,5 +94,11 @@ namespace Smartflow
             get;
             set;
         }
+
+        public string ActorID
+        {
+            get;
+            set;
+        }
     }
 }

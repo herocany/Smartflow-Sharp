@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Smartflow.Bussiness.Models;
+using Smartflow.Bussiness.Queries;
 using Smartflow.Bussiness.WorkflowService;
 using Smartflow.Common;
 
@@ -54,6 +56,11 @@ namespace Smartflow.Web.Controllers
         {
             IList<WorkflowActor> list = baseBridgeService.GetActor(info.Actor);
             return CommonMethods.Success(list, list.Count);
+        }
+
+        public IEnumerable<Constraint> GetConstraint()
+        {
+            return new ConstraintQueryService().Query();
         }
     }
 

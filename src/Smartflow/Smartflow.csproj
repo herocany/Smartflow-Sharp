@@ -43,6 +43,8 @@
     <Compile Include="Components\FirstDiscuss.cs" />
     <Compile Include="Components\LastDiscuss.cs" />
     <Compile Include="Components\DefaultStrategyService.cs" />
+    <Compile Include="Elements\Rule.cs" />
+    <Compile Include="Internals\ResourceManage.Rule.cs" />
     <Compile Include="IStrategyService.cs" />
     <Compile Include="IWorkflowDiscuss.cs" />
     <Compile Include="Internals\ResourceManage.Cooperation.cs" />
@@ -114,6 +116,8 @@
     <Compile Include="WorkflowOpertaion.cs" />
     <Compile Include="WorkflowProcess.cs" />
     <Compile Include="WorkflowProcessService.cs" />
+    <Compile Include="WorkflowRuleService.cs" />
+    <Compile Include="WorkflowRuleType.cs" />
     <Compile Include="WorkflowService.cs" />
     <Compile Include="WorkflowStructure.cs" />
     <Compile Include="WorkflowStructureService.cs" />

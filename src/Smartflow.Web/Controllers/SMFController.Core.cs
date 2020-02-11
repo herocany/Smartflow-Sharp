@@ -91,6 +91,7 @@ namespace Smartflow.Web.Controllers
             WorkflowEngine.Instance.Jump(new WorkflowContext()
             {
                 Instance = WorkflowInstance.GetInstance(context.InstanceID),
+                ActorID=(String)context.Data.UUID,
                 TransitionID = (String)context.Data.Transition,
                 Data = context.Data
             });

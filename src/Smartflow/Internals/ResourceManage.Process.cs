@@ -25,9 +25,15 @@ namespace Smartflow.Internals
         /// <summary>
         /// 审批过程所有记录
         /// </summary>
+        public const string SQL_WORKFLOW_PROCESS_SELECT = "SELECT * FROM T_PROCESS  WHERE InstanceID = @InstanceID  ORDER BY CreateDateTime ASC";
+
+
+        /// <summary>
+        /// 审批过程所有记录(流程图使用)
+        /// </summary>
         public const string SQL_WORKFLOW_PROCESS_RECORD = "SELECT Origin, Destination,(SELECT ID FROM T_TRANSITION T WHERE T.NID = X.TransitionID) ID FROM T_PROCESS X WHERE InstanceID = @InstanceID AND Direction = @Direction ORDER BY CreateDateTime ASC";
 
-        public const string SQL_WORKFLOW_PROCESS_INSERT = "INSERT INTO T_PROCESS(NID,Origin,Destination,TransitionID,InstanceID,NodeType,RelationshipID,Direction) VALUES(@NID,@Origin,@Destination,@TransitionID,@InstanceID,@NodeType,@RelationshipID,@Direction)";
+        public const string SQL_WORKFLOW_PROCESS_INSERT = "INSERT INTO T_PROCESS(NID,Origin,Destination,TransitionID,InstanceID,NodeType,RelationshipID,Direction,ActorID) VALUES(@NID,@Origin,@Destination,@TransitionID,@InstanceID,@NodeType,@RelationshipID,@Direction,@ActorID)";
         #endregion
     }
 }

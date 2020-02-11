@@ -12,6 +12,9 @@ using Dapper;
 using Smartflow;
 using System.Configuration;
 using Smartflow.Common;
+using Smartflow.Bussiness.Models;
+using Smartflow.Bussiness.Queries;
+using Smartflow.Elements;
 
 namespace Smartflow.Bussiness.WorkflowService
 {
@@ -116,6 +119,91 @@ namespace Smartflow.Bussiness.WorkflowService
                 }
                 return actors;
             }
+        }
+
+
+        public List<User> GetActorByGroup(Node node, WorkflowOpertaion direction)
+        {
+            List<User> userList = new List<User>();
+            List<string> gList = new List<string>();
+            List<string> ids = new List<string>();
+            foreach (Group g in node.Groups)
+            {
+                gList.Add(string.Format("'{0}'", g.ID.ToString()));
+            }
+
+            foreach (Actor item in node.Actors)
+            {
+                ids.Add(string.Format("'{0}'", item.ID));
+            }
+
+            if (gList.Count > 0)
+            {
+                if (node.Rules.Count > 0)
+                {
+                    userList.AddRange(QueryActor(string.Join(",", gList), node.Rules));
+                }
+                else
+                {
+                    userList.AddRange(new UserByRoleQueryService().Query(string.Join(",", gList)));
+                }
+            }
+
+            if (ids.Count > 0)
+            {
+                userList.AddRange(new UserByActorQueryService().Query(string.Join(",", ids)));
+            }
+
+            if (direction == WorkflowOpertaion.Back && node.Cooperation == 0)
+            {
+                WorkflowProcess process = base.ProcessService
+                                          .Get(node.InstanceID)
+                                          .Where(n => n.Origin == node.ID)
+                                          .OrderByDescending(e => e.CreateDateTime)
+                                          .FirstOrDefault();
+
+                //return new UserByActorQueryService().Query(process.ActorID).ToList();
+                return userList.Where(e => e.UniqueId == process.ActorID).ToList();
+            }
+            else
+            {
+                return userList
+                    .ToLookup(p => p.UniqueId)
+                    .Select(c => c.First())
+                    .ToList();
+            }
+        }
+
+        private IList<User> QueryActor(string group, IList<Elements.Rule> rules)
+        {
+            IList<User> users = new UserByRoleQueryService().Query(group);
+            List<User> actorList = new List<User>();
+            foreach (Elements.Rule rule in rules)
+            {
+                WorkflowRuleType ruleType = (WorkflowRuleType)Enum.Parse(typeof(WorkflowRuleType), rule.ID,true);
+                if (ruleType == WorkflowRuleType.NODE_SEND_START_USER)
+                {
+                    WorkflowProcess process = base.ProcessService.Get(rule.InstanceID)
+                                                .OrderByDescending(e => e.CreateDateTime)
+                                                .FirstOrDefault(e => e.NodeType == WorkflowNodeCategory.Start);
+
+                    if (process != null)
+                    {
+                        String orgCode = new SingleUserByActorQueryService().Query(process.ActorID);
+                        actorList.AddRange(users.Where(u => u.OrgCode == orgCode).ToList());
+                    }
+                }
+                else
+                {
+                    WorkflowProcess process = base.ProcessService.Get(rule.InstanceID).OrderByDescending(e => e.CreateDateTime).FirstOrDefault();
+                    if (process != null)
+                    {
+                        String orgCode = new SingleUserByActorQueryService().Query(process.ActorID);
+                        actorList.AddRange(users.Where(u => u.OrgCode == orgCode).ToList());
+                    }
+                }
+            }
+            return actorList;
         }
     }
 }

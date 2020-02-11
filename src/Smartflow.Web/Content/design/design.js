@@ -61,7 +61,7 @@
             title: '角色配置',
             type: 'box',
             width: '750px',
-            height:'560px',
+            height: '560px',
             url: './roleSelect.html',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
@@ -200,8 +200,8 @@
 
         var id = util.doQuery('id');
         if (id) {
-           var url = $this.option.url + '/' + id;
-           util.ajaxService({
+            var url = $this.option.url + '/' + id;
+            util.ajaxService({
                 url: url,
                 type: 'Get',
                 success: function (serverData) {
@@ -262,6 +262,7 @@
             }
         }
         this.dynamicControl();
+        this.dynamicConstraint();
     };
 
     Configuration.prototype.selectTab = function (nx) {
@@ -275,13 +276,13 @@
                 decision: ['#workflow_node']
             },
             _sTabs = {
-                node: ['#attributes_node_info', '#attributes_role', '#attributes_config','#attributes_user'],
+                node: ['#attributes_node_info', '#attributes_role', '#attributes_config', '#attributes_user', '#attributes_strategy'],
                 decision: ['#attributes_decision_info', '#attributes_decision_expression', '#attributes_config'],
                 end: ['#attributes_config']
             },
             controlGroup = {
                 line: ['transition_name'],
-                node: ['node_cooperation','node_name', 'node_role', 'node_action','node_user'],
+                node: ['node_cooperation', 'node_name', 'node_role', 'node_action', 'node_user'],
                 decision: ['decision_select', 'decision_script', 'node_action'],
                 end: ['node_action']
             };
@@ -298,6 +299,16 @@
         else if (category === 'decision') {
             $this.dynamic(nx);
         }
+        else if (category === 'node') {
+
+            $this.loadConstraint(function () {
+                $.each(nx.rule, function () {
+                    $('#' + this.id).attr("checked", true);
+                });
+                layui.form.render(null, $this.option.constraintId);
+            });
+        }
+
         if (controlGroup[category]) {
             $.each(controlGroup[category], function (i, propertyName) {
                 Configuration.controlSelectors[propertyName].invoke(nx, $this);
@@ -381,9 +392,9 @@
             layui.form.render(null, 'form_expression');
         }
     }
-   
+
     Configuration.prototype.dynamicControl = function () {
-        
+
         $("#form_expression").on("keyup", "textarea", function () {
             var vid = $('#workflow_node').attr('vid'),
                 nx = $.SMF.getNodeById(vid),
@@ -415,6 +426,45 @@
                 $(id).html(htmlArray.join(''));
 
                 callback && callback();
+            }
+        });
+    }
+
+    Configuration.prototype.loadConstraint = function (callback) {
+        var $this = this,
+            url = $this.option.constraintUrl,
+            id = '#' + $this.option.constraintId;
+        util.ajaxService({
+            url: url,
+            type: 'GET',
+            success: function (serverData) {
+                var htmlArray = [];
+                $.each(serverData, function () {
+                    htmlArray.push("<div class=\"layui-form-item\" style=\"margin-bottom:0\"><input type=\"checkbox\" id=\"" + this.NID + "\" name=\"" + this.NID + "\" title =\"" + this.Name + "\" /></div>");
+                });
+
+                $(id).html(htmlArray.join(''));
+                layui.form.render(null, $this.option.constraintId);
+
+                callback && callback();
+            }
+        });
+    }
+
+    Configuration.prototype.dynamicConstraint = function () {
+        var $this = this;
+        layui.form.on('checkbox', function (data) {
+            var vid = $('#workflow_node').attr('vid'),
+                nx = $.SMF.getNodeById(vid),
+                formData = layui.form.val($this.option.constraintId);
+
+            nx.rule.length = 0;
+            for (var property in formData) {
+                var title = $('#' + property).attr('title');
+                nx.rule.push({
+                    id: property,
+                    name: title
+                });
             }
         });
     }

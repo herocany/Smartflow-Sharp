@@ -37,7 +37,8 @@
         x: 'x',
         y: 'y',
         length: 'length',
-        cooperation:'cooperation'
+        rule:'rule',
+        cooperation: 'cooperation'
     }
 
     Array.prototype.remove = function (dx, to) {
@@ -74,7 +75,7 @@
         this.drawOption = $.extend({
             backgroundColor: '#f06',
             color: 'green',
-            mode:'Transition'
+            mode: 'Transition'
         }, option);
         this.source = undefined;
         this._shared = undefined;
@@ -192,15 +193,20 @@
     }
 
     Draw.getClientX = function (evt) {
-        return evt.clientX - 30;
+        return evt.offsetX;
+    }
+
+
+    Draw.getClientY = function (evt) {
+        return evt.offsetY;
     }
 
     Draw.prototype._drag = function (evt, o) {
         var self = this,
             nx = Draw._proto_NC[self.id()];
         evt.preventDefault();
-        nx.disX = evt.clientX - self.x() - nx.cx;
-        nx.disY = evt.clientY - self.y() - nx.cy;
+        nx.disX = Draw.getClientX(evt) - self.x() - nx.cx;
+        nx.disY = Draw.getClientY(evt) - self.y() - nx.cy;
         o.draw.on('mousemove', function (d) {
             d.preventDefault();
             nx.move(self, d);
@@ -214,7 +220,7 @@
 
         if (nodeName == 'rect' || nodeName == 'use') {
             var instance = Draw._proto_NC[nodeId];
-            var result = instance.bound(Draw.getClientX(evt), evt.clientY);
+            var result = instance.bound(Draw.getClientX(evt), Draw.getClientY(evt));
             if (result) {
 
                 this._shared = new Line();
@@ -240,7 +246,7 @@
     Draw.prototype._join = function (evt) {
         if (this._shared) {
             this._shared.x2 = Draw.getClientX(evt);
-            this._shared.y2 = (this._shared.y1 > evt.clientY) ? evt.clientY + 5 : evt.clientY - 5;
+            this._shared.y2 = (this._shared.y1 > Draw.getClientY(evt)) ? Draw.getClientY(evt) + 5 : Draw.getClientY(evt) - 5;
             this._shared.move();
         }
     }
@@ -300,7 +306,7 @@
                         nf = Draw._proto_NC[self.source.id];
 
                     var x = Draw.getClientX(evt),
-                        y = evt.clientY;
+                        y = Draw.getClientY(evt);
 
                     check = (
                         nodeId !== self.source.id
@@ -453,7 +459,7 @@
         function findRecord(id, destination) {
             for (var i = 0; i < recordArray.length; i++) {
                 var record = recordArray[i];
-                if (record[destination]== id) {
+                if (record[destination] == id) {
                     return true;
                 }
             }
@@ -559,10 +565,10 @@
 
     function Shape(name, category) {
         Shape.base.Constructor.call(this, name, category);
-        this.form = undefined;
         this.group = [];
         this.action = [];
         this.actor = [];
+        this.rule = [];
         this.cooperation = 0;
         this.tickness = 20;
     }
@@ -853,10 +859,16 @@
             build.append(config.afterClose);
         });
 
+        $.each(self.rule, function () {
+            build.append(config.start)
+                .append(config.rule);
+            eachAttributs(build, this);
+            build.append(config.afterClose);
+        });
+
         build.append(config.beforeClose)
             .append(self.category)
             .append(config.end);
-
 
         function eachAttributs(build, reference) {
             $.each(['id', 'name'], function (i, p) {
@@ -880,7 +892,7 @@
         this.cy = 10;
         this.disX = 0;
         this.disY = 0;
-        this.border = 3;
+        this.border = 2;
         //线段长度
         this.length = 0;
         this.line = line;
@@ -904,8 +916,8 @@
         },
         move: function (element, evt) {
             var self = this;
-            self.x = evt.clientX - self.disX - self.cx;
-            self.y = evt.clientY - self.disY - self.cy;
+            self.x = Draw.getClientX(evt)- self.disX - self.cx;
+            self.y = Draw.getClientY(evt) - self.disY - self.cy;
             element.move(self.x, self.y);
             self.line.setPointArray();
         },
@@ -941,7 +953,7 @@
         this.y1 = 0;
         this.x2 = 0;
         this.y2 = 0;
-        this.border = 3;
+        this.border = 2;
         this.expression = '';
         this.points = [];
         Line.base.Constructor.call(this, "line", "line");
@@ -987,7 +999,7 @@
                     instance.remove();
                 } else if (evt.ctrlKey && evt.shiftKey) {
 
-                    var marker = new Marker(Draw.getClientX(evt), evt.clientY, instance);
+                    var marker = new Marker(Draw.getClientX(evt), Draw.getClientY(evt), instance);
                     marker.drawInstance = instance.drawInstance;
                     marker.draw();
 
@@ -1010,7 +1022,7 @@
                 instance = SVG.get(self.$id);
             if (dw.source.to && evt) {
                 var nl = Draw._proto_NC[dw.source.to];
-                var position = nl.bound(Draw.getClientX(evt), evt.clientY);
+                var position = nl.bound(Draw.getClientX(evt), Draw.getClientY(evt));
                 if (position) {
                     self.x2 = position.x;
                     self.y2 = position.y;
@@ -1255,8 +1267,8 @@
         },
         move: function (element, d) {
             var self = this;
-            self.x = d.clientX - self.disX - self.cx;
-            self.y = d.clientY - self.disY - self.cy;
+            self.x = Draw.getClientX(d)- self.disX - self.cx;
+            self.y = Draw.getClientY(d) - self.disY - self.cy;
 
             element.attr({
                 x: self.x,
@@ -1298,8 +1310,8 @@
         },
         move: function (element, d) {
             var self = this;
-            self.x = d.clientX - self.disX - self.cx;
-            self.y = d.clientY - self.disY - self.cy;
+            self.x = Draw.getClientX(d) - self.disX - self.cx;
+            self.y = Draw.getClientY(d) - self.disY - self.cy;
             element.move(self.x, self.y);
             if (self.brush) {
                 self.brush.attr({
@@ -1467,8 +1479,9 @@
         },
         move: function (element, d) {
             var self = this;
-            self.x = d.clientX - self.disX - self.cx;
-            self.y = d.clientY - self.disY - self.cy;
+
+            self.x = Draw.getClientX(d) - self.disX - self.cx;
+            self.y = Draw.getClientY(d)- self.disY - self.cy;
             element.attr({ x: self.x, y: self.y });
             Decision.base.Parent.prototype.move.call(this);
         },
@@ -1707,6 +1720,11 @@
                 id: 'value',
                 name: 'value'
             },
+            rule: {
+                type: 'array',
+                id: 'value',
+                name: 'value'
+            },
             command: {
                 type: 'object',
                 text: 'text',
@@ -1836,4 +1854,3 @@
     }
 
 })(jQuery);
-

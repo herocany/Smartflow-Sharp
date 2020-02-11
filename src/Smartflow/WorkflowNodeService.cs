@@ -61,6 +61,14 @@ namespace Smartflow
             }
         }
 
+        protected WorkflowRuleService RuleService
+        {
+            get
+            {
+                return new WorkflowRuleService();
+            }
+        }
+
         protected IWorkflowProcessService ProcessService
         {
             get { return WorkflowGlobalServiceProvider.Resolve<IWorkflowProcessService>(); }
@@ -100,6 +108,7 @@ namespace Smartflow
                 node.Actions.AddRange(nodes.Where(action => (action is Action)).Cast<Action>());
                 node.Groups.AddRange(nodes.Where(group => (group is Group)).Cast<Group>());
                 node.Actors.AddRange(nodes.Where(actor => (actor is Actor)).Cast<Actor>());
+                node.Rules.AddRange(nodes.Where(rule => (rule is Elements.Rule)).Cast<Elements.Rule>());
                 node.Command = nodes.Where(command => (command is Command)).Cast<Command>().FirstOrDefault();
             }
             return node;
@@ -138,6 +147,13 @@ namespace Smartflow
                 a.RelationshipID = entry.NID;
                 a.InstanceID = entry.InstanceID;
                 ActorService.Persistent(a, execute);
+            }
+
+            foreach (Elements.Rule r in n.Rules)
+            {
+                r.RelationshipID = entry.NID;
+                r.InstanceID = entry.InstanceID;
+                RuleService.Persistent(r, execute);
             }
 
             if (n.Command != null)
@@ -221,6 +237,7 @@ namespace Smartflow
             entry.Actors = ActorService.Query(entry.InstanceID).Where(e => e.RelationshipID == entry.NID).ToList();
             entry.Actions = ActionService.Query(entry.InstanceID).Where(e => e.RelationshipID == entry.NID).ToList();
             entry.Command = CommandService.Query(entry.InstanceID).Where(e => e.RelationshipID == entry.NID).FirstOrDefault();
+            entry.Rules = RuleService.Query(entry.InstanceID).Where(e => e.RelationshipID == entry.NID).ToList();
             entry.Previous = GetPrevious(entry);
             return entry;
         }
@@ -265,10 +282,16 @@ namespace Smartflow
         {
             Transition transition = GetHistoryTransition(entry);
             if (transition == null) return null;
-
-            Node wrapNode = this.FindNodeByID(transition.Origin, entry.InstanceID);
-
-            return this.GetNode(wrapNode);
+            WorkflowMode mode = WorkflowGlobalServiceProvider.Resolve<IWorkflowInstanceService>().GetMode(entry.InstanceID);
+            if (mode == WorkflowMode.Mix)
+            {
+                Node wrapNode = this.FindNodeByID(transition.Origin, entry.InstanceID);
+                return this.GetNode(wrapNode);
+            }
+            else
+            {
+                return base.Connection.Query<Node>(ResourceManage.SQL_WORKFLOW_NODE_SELECT_ID, new {  entry.InstanceID, transition.Origin }).FirstOrDefault();
+            }
         }
 
         /// <summary>
@@ -277,31 +300,24 @@ namespace Smartflow
         /// <returns>路线</returns>
         protected Transition GetHistoryTransition(Node entry)
         {
-            WorkflowMode mode = WorkflowGlobalServiceProvider.Resolve<IWorkflowInstanceService>().GetMode(entry.InstanceID);
+            Transition transition = null;
 
-            if (mode == WorkflowMode.Mix)
-            {
-                Transition transition = null;
-
-                Dictionary<String, Object> queryArg = new Dictionary<string, object>
+            Dictionary<String, Object> queryArg = new Dictionary<string, object>
                 {
                     { "InstanceID", entry.InstanceID },
                     { "Direction",(int)WorkflowOpertaion.Go}
                 };
 
-                WorkflowProcess process = ProcessService
-                                            .Query(queryArg).Where(c => c.Destination == entry.ID)
-                                            .FirstOrDefault();
+            WorkflowProcess process = ProcessService
+                                        .Query(queryArg).Where(c => c.Destination == entry.ID)
+                                        .FirstOrDefault();
 
-                if (process != null && entry.NodeType != WorkflowNodeCategory.Start)
-                {
-                    transition = TransitionService.Query(entry.InstanceID).FirstOrDefault(e => e.NID == process.TransitionID && e.Direction == WorkflowOpertaion.Go);
-                }
-
-                return transition;
+            if (process != null && entry.NodeType != WorkflowNodeCategory.Start)
+            {
+                transition = TransitionService.Query(entry.InstanceID).FirstOrDefault(e => e.NID == process.TransitionID && e.Direction == WorkflowOpertaion.Go);
             }
 
-            return null;
+            return transition;
         }
     }
 }
