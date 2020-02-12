@@ -290,7 +290,7 @@ namespace Smartflow
             }
             else
             {
-                return base.Connection.Query<Node>(ResourceManage.SQL_WORKFLOW_NODE_SELECT_ID, new {  entry.InstanceID, transition.Origin }).FirstOrDefault();
+                return base.Connection.Query<Node>(ResourceManage.SQL_WORKFLOW_NODE_SELECT_ID, new {  entry.InstanceID,ID=transition.Origin }).FirstOrDefault();
             }
         }
 
