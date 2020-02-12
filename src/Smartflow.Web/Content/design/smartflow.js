@@ -1326,7 +1326,8 @@
                 && Draw.findById(this.$id, 'from').length > 0);
         },
         bound: function (mX, mY) {
-            var r = 30,
+            var r = 25,
+                c=5,
                 cx = this.x + r,
                 cy = this.y,
                 z = r * 2;
@@ -1346,8 +1347,8 @@
 
                         /*检测边界*/
                         var center = {
-                            x: cx,
-                            y: cy + r
+                            x: cx + c,
+                            y: cy + r - c
                         };
 
                         return (this.x1 <= moveX &&
@@ -1370,8 +1371,8 @@
 
                         /*检测边界*/
                         var center = {
-                            x: cx,
-                            y: cy - r
+                            x: cx + c,
+                            y: cy - r + c
                         };
 
                         /*检测边界*/
@@ -1394,7 +1395,7 @@
 
                         /*检测边界*/
                         var center = {
-                            x: cx - r,
+                            x: cx - r + c*2,
                             y: cy
                         };
 
@@ -1619,15 +1620,15 @@
     Start.extend(Circle, {
         draw: function () {
             var dw = this.drawInstance.draw;
-            var path = dw.path("M0,0 a30 30 0 1 0 0 -0.1").
+            /*var path = dw.path("M0,0 a30 30 0 1 0 0 -0.1").
                 fill("#eee").
                 stroke({
                     width: 1,
                     color: "#ccc"
-                });
+                });*/
 
             var g = dw.group()
-                .add(path)
+                /*.add(path)*/
                 .add(dw.path("M10,0 a20 20 0 1 0 0 -0.1").fill("green"));
 
             dw.defs().add(g);
@@ -1659,13 +1660,13 @@
     End.extend(Circle, {
         constructor: End,
         draw: function () {
-            var dw = this.drawInstance.draw,
+            var dw = this.drawInstance.draw/*,
                 path = dw.path("M0,0 a30 30 0 1 0 0 -0.1")
                     .stroke({ width: 1, color: "#ccc" })
-                    .fill("#eee");
+                    .fill("#eee")*/;
 
             var group = dw.group()
-                .add(path)
+                //.add(path)
                 .add(dw.path("M10,0 a20 20 0 1 0 0 -0.1")
                     .fill("red"));
 
