@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using Smartflow.Bussiness.Models;
+using Smartflow.Bussiness.Scripts;
 using Smartflow.Common;
 
 namespace Smartflow.Bussiness.Queries
@@ -13,7 +14,7 @@ namespace Smartflow.Bussiness.Queries
         public IList<Constraint> Query()
         {
             return DBUtils.CreateWFConnection()
-               .Query<Constraint>(" SELECT * FROM t_constraint ORDER BY Sort ")
+               .Query<Constraint>(ResourceManage.SQL_CONSTRAINT_SELECT)
                .ToList();
         }
     }

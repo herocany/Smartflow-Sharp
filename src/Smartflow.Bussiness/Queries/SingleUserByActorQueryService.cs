@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using Smartflow.Bussiness.Models;
+using Smartflow.Bussiness.Scripts;
 using Smartflow.Common;
 
 namespace Smartflow.Bussiness.Queries
 {
     public class SingleUserByActorQueryService : IQuery<String, string>
     {
-        private readonly string SQL_COMMAND_SELECT = @"SELECT OrgCode FROM [dbo].[T_USER] WHERE IDENTIFICATION=@ID";
-
         public String Query(string id)
         {
-            return DBUtils.CreateConnection().ExecuteScalar<String>(SQL_COMMAND_SELECT, new { ID = id });
+            return DBUtils.CreateConnection().ExecuteScalar<String>(ResourceManage.SQL_USER_SELECT_3, new { ID = id });
         }
     }
 }
