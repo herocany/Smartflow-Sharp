@@ -8,7 +8,7 @@ namespace Smartflow.Bussiness.Scripts
     public partial class ResourceManage
     {
         #region ConstraintQueryService
-        public const string SQL_CONSTRAINT_SELECT = @"SELECT Identification UniqueId,OrgCode,UserName  FROM T_USER WHERE Identification IN ({0})";
+        public const string SQL_CONSTRAINT_SELECT = @"SELECT * FROM t_constraint ORDER BY Sort";
         #endregion
     }
 }
