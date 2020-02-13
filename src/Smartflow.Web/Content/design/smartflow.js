@@ -1165,7 +1165,7 @@
     }
 
     function Node() {
-        this.w = 100;
+        this.w = 140;
         this.h = 40;
         this.x = 10;
         this.y = 10;
