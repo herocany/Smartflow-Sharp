@@ -170,8 +170,8 @@
         util.ajaxService({
             url: settings.start + '/' + settings.code,
             type: 'post',
-            success: function (result) {
-                settings.instanceID = result.InstanceID;
+            success: function (instanceID) {
+                settings.instanceID = instanceID;
                 $this.openAuditWindow();
             }
         });

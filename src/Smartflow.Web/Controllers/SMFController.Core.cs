@@ -29,7 +29,7 @@ namespace Smartflow.Web.Controllers
         /// 启动
         /// </summary>
         [HttpPost]
-        public dynamic Start(string id)
+        public string Start(string id)
         {
             Category category = new CategoryQueryService().Query()
                                 .FirstOrDefault(cate => cate.NID == id);
@@ -38,16 +38,7 @@ namespace Smartflow.Web.Controllers
                 baseBridgeService.WorkflowStructureService.Query()
                 .FirstOrDefault(e => e.CateCode == category.NID && e.Status == 1);
 
-            string instanceID = WorkflowEngine.Instance.Start(workflowStructure.StructXml);
-
-            Node current = WorkflowInstance.GetInstance(instanceID).Current;
-            string to = current.Transitions.FirstOrDefault().NID;
-
-            return new
-            {
-                InstanceID = instanceID,
-                To = to
-            };
+            return WorkflowEngine.Instance.Start(workflowStructure.StructXml);
         }
 
         /// <summary>
