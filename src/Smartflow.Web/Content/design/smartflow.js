@@ -1289,7 +1289,7 @@
                 && Draw.findById(this.$id, 'from').length > 0);
         },
         vertical: function () {
-            return this.drawInstance.support ? 6 : 0;
+            return (this.drawInstance.support || window.navigator.userAgent.indexOf("Edge") > -1) ? 4 : 0;
         }
     });
 
