@@ -1,5 +1,9 @@
 ﻿@import url('./common.css');
-
+html,body{
+    height:100%;
+    width:100%;
+    overflow:hidden;
+}
 .smartflow_tab {
     position: absolute;
     bottom: 40px;
@@ -96,3 +100,6 @@
 }
 
 .layui-form-select dl {max-height: 120px;}
+.layui-tab-content {padding: 10px;position: absolute;left: 0;bottom: 50px;top: 50px;right: 0;}
+.layui-tab {height: 100%;padding-bottom: 60px;}
+.layui-tab-item{height:100%;}
