@@ -92,19 +92,13 @@
         for (var i = 0; i < elements.length; i++) {
             var element = elements[i];
             if (element) {
-                var l = SVG.get(element.id),
-                    instance = Draw._proto_LC[element.id];
-
-                l.remove();
-                if (instance.brush) {
-                    instance.brush.remove();
-                }
-
+                var instance = Draw._proto_LC[element.id];
                 Draw.removeById(element.id);
-                delete Draw._proto_LC[element.id];
+                instance.remove();
             }
         }
     }
+
     Draw.removeById = function (id) {
         for (var i = 0, len = Draw._proto_RC.length; i < len; i++) {
             if (Draw._proto_RC[i].id == id) {
@@ -582,14 +576,13 @@
         edit: function (evt, el) {
             if (evt.ctrlKey && evt.altKey) {
                 var id = this.id(),
-                    node = Draw._proto_NC[id],
-                    rect = SVG.get(id),
-                    elements = Draw.findById(id);
+                    node = Draw._proto_NC[id];
 
-                Draw.remove(elements);
-
-                rect.remove();
-                node.brush.remove();
+                Draw.remove(Draw.findById(id));
+                if (node.brush) {
+                    node.brush.remove();
+                }
+                SVG.get(id).remove();
                 delete Draw._proto_NC[id];
             } else {
                 var nx = Draw._proto_NC[this.id()];
