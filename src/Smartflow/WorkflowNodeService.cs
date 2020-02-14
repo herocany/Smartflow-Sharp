@@ -253,7 +253,7 @@ namespace Smartflow
                 transitions.AddRange(entry.Transitions.Where(t => t.Destination == previous.ID && t.Direction == WorkflowOpertaion.Back));
                 transitions.Add(Utils.CONST_REJECT_TRANSITION);
             }
-            else if (WorkflowMode.Transition == instance.Mode)
+            else if (WorkflowMode.Transition == instance.Mode&&entry.NodeType!=WorkflowNodeCategory.Start)
             {
                 transitions.Add(Utils.CONST_REJECT_TRANSITION);
             }
