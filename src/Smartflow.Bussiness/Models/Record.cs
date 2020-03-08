@@ -55,5 +55,17 @@ namespace Smartflow.Bussiness.Models
             get;
             set;
         }
+
+        public string NodeName
+        {
+            get;
+            set;
+        }
+
+        public string UserGroup
+        {
+            get;
+            set;
+        }
     }
 }

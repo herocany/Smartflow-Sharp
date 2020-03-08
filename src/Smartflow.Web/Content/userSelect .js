@@ -39,7 +39,7 @@
                 layout: ['prev', 'page', 'next']
             }
             , where: {
-                actor: (nx.actor.length > 0) ? actors.join(',') : ''
+                arg: (nx.actor.length > 0) ? actors.join(',') : ''
             }
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , cols: [[
@@ -60,7 +60,7 @@
             elem: '#table_right'
             , url: 'api/setting/GetAssignActor'
             , where: {
-                actor: (nx.actor.length > 0) ? actors.join(',') : ''
+                arg: (nx.actor.length > 0) ? actors.join(',') : ''
             }
             , height: 449
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
@@ -116,7 +116,7 @@ $(function () {
             page: { curr: 1 },
             where: {
                 key: key,
-                actor: actors.join(',')
+                arg: actors.join(',')
             }
         };
 
@@ -141,7 +141,7 @@ $(function () {
                 page: { curr: 1 },
                 where: {
                     key: key,
-                    actor: actors.join(',')
+                    arg: actors.join(',')
                 }
             };
 
@@ -149,7 +149,7 @@ $(function () {
             layui.table.reload('table_right', {
                 page: false,
                 where: {
-                    actor: actors.join(',')
+                    arg: actors.join(',')
                 }
             });
 
@@ -179,7 +179,7 @@ $(function () {
                     page: { curr: 1 },
                     where: {
                         key: key,
-                        actor: actors.join(',')
+                        arg: actors.join(',')
                     }
                 };
 
@@ -187,7 +187,7 @@ $(function () {
                 layui.table.reload('table_right', {
                     page: false,
                     where: {
-                        actor: actors.join(',')
+                        arg: actors.join(',')
                     }
                 });
             }

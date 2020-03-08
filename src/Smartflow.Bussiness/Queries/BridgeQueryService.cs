@@ -25,7 +25,7 @@ namespace Smartflow.Bussiness.Queries
             return DBUtils.CreateWFConnection()
                   .Query<Bridge>(ResourceManage.SQL_BRIDGE_SELECT, new
                   {
-                      FormID = queryArg["FormID"],
+                      Key = queryArg["Key"],
                       CategoryID = queryArg["CategoryID"]
                   }).FirstOrDefault();
         }

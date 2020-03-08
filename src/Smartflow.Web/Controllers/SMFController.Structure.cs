@@ -50,6 +50,15 @@ namespace Smartflow.Web.Controllers
         {
             workflowStructure.StructXml = Uri.UnescapeDataString(workflowStructure.StructXml);
             workflowStructure.CreateDateTime = DateTime.Now;
+            WorkflowStructure model = this.Get(workflowStructure.NID);
+            if (model != null)
+            {
+                if (workflowStructure.CateCode != model.CateCode)
+                {
+                    workflowStructure.Status = 0;
+                }
+            }
+
             baseBridgeService.WorkflowStructureService.Persistent(workflowStructure);
         }
 

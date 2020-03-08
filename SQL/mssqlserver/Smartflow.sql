@@ -1,4 +1,4 @@
-USE [Smartflow]
+﻿USE [Smartflow]
 GO
 /****** Object:  Table [dbo].[t_action]    Script Date: 2020/2/11 22:17:17 ******/
 SET ANSI_NULLS ON
@@ -44,7 +44,7 @@ GO
 CREATE TABLE [dbo].[t_bridge](
 	[InstanceID] [varchar](50) NOT NULL,
 	[CategoryID] [varchar](50) NULL,
-	[FormID] [varchar](50) NULL,
+	[Key] [varchar](50) NULL,
  CONSTRAINT [PK_t_bridge] PRIMARY KEY CLUSTERED 
 (
 	[InstanceID] ASC

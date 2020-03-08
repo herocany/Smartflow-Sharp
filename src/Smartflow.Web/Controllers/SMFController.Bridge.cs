@@ -26,7 +26,7 @@ namespace Smartflow.Web.Controllers
         {
             Dictionary<string, string> queryArg = new Dictionary<string, string>
             {
-                { "FormID", id },
+                { "Key", id },
                 { "CategoryID", categoryId }
             };
             return service.Query(queryArg);

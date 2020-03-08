@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using Smartflow.Bussiness.Queries;
+using Smartflow.Bussiness.Models;
 
 namespace Smartflow.Bussiness.WorkflowService
 {
@@ -25,7 +26,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 DBUtils.CreateConnection().Execute(model.Script, new
                 {
                     NodeName = instance.State == WorkflowInstanceState.Running ? current.Name : string.Format("{0}({1})", current.Name, "否决"),
-                    NID = cate.FormID
+                    NID = cate.Key
                 });
             }
         }

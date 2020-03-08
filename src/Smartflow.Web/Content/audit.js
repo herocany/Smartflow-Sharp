@@ -117,7 +117,7 @@
 
                 document
                     .getElementById("iframeContent")
-                    .setAttribute('src', Audit.join(url, data&&data['FormID']));
+                    .setAttribute('src', Audit.join(url, data&&data['Key']));
             }
         });
     }
@@ -138,6 +138,8 @@
                         var el = templet;
                         htmlArray.push(
                             el.replace(/{{Name}}/ig, this.Name)
+                                .replace(/{{NodeName}}/ig, this.NodeName)
+                                .replace(/{{UserGroup}}/ig, this.UserGroup)
                                 .replace(/{{Comment}}/ig, this.Comment)
                                 .replace(/{{CreateDateTime}}/ig, this.CreateDateTime ? layui.util.toDateString(this.CreateDateTime, 'yyyy-MM-dd HH:mm') : '')
                                 .replace(/{{Sign}}/ig, util.isEmpty(this.Url) ? '' : "<image src=\"" + this.Url+"\" />")
@@ -177,14 +179,14 @@
         });
     };
 
-    Audit.prototype.bridge = function (instanceID,formID) {
+    Audit.prototype.bridge = function (instanceID,key) {
         var $this = this,
             settings = $this.settings;
 
         var param = JSON.stringify({
             InstanceID:instanceID,
             CategoryID:settings.code,
-            FormID:formID
+            Key: key
         });
 
         util.ajaxService({

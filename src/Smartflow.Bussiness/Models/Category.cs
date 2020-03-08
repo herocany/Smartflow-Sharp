@@ -5,7 +5,7 @@
  */
 using System;
 
-namespace Smartflow
+namespace Smartflow.Bussiness.Models
 {
     public class Category
     {

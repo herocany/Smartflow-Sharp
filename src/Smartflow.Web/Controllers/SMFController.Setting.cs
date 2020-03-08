@@ -48,13 +48,13 @@ namespace Smartflow.Web.Controllers
         {
             return CommonMethods
                 .Success(baseBridgeService
-                .GetActor(info.Page, info.Limit, out int total, info.Actor, info.Key), total);
+                .GetActor(info.Page, info.Limit, out int total, info.Arg, info.Key), total);
         }
 
         [HttpGet]
         public dynamic GetAssignActor([FromUri]PageInfo info)
         {
-            IList<WorkflowActor> list = baseBridgeService.GetActor(info.Actor);
+            IList<WorkflowActor> list = baseBridgeService.GetActor(info.Arg);
             return CommonMethods.Success(list, list.Count);
         }
 
@@ -78,7 +78,7 @@ namespace Smartflow.Web.Controllers
             set;
         }
 
-        public string Actor
+        public string Arg
         {
             get;
             set;
