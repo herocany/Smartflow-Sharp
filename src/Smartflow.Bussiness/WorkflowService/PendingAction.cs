@@ -29,7 +29,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 {
                     DecisionJump(executeContext);
                 }
-                if (!executeContext.Result && executeContext.Instance.Current.Cooperation == 1)
+                else if (!executeContext.Result && executeContext.Instance.Current.Cooperation == 1)
                 {
                     CooperationPending.Execute(executeContext);
                 }
