@@ -48,13 +48,14 @@ namespace Smartflow
             WorkflowInstance instance = context.Instance;
             if (instance.State == WorkflowInstanceState.Running)
             {
+                string instanceID = instance.InstanceID;
+                Node current = instance.Current;
                 if (context.TransitionID == Utils.CONST_REJECT_TRANSITION_ID)
                 {
                     Reject(instance, context);
                     return;
                 }
-                string instanceID = instance.InstanceID;
-                Node current = instance.Current;
+              
                 Transition currentTransition = current.Transitions
                                   .FirstOrDefault(e => e.NID == context.TransitionID);
 
@@ -77,32 +78,12 @@ namespace Smartflow
                 }
                 else
                 {
-                    this.Invoke(instanceID, currentTransition, executeContext, context.ActorID);
-                }
-
-                if (to.NodeType == WorkflowNodeCategory.End)
-                {
-                    workflowService.InstanceService.Transfer(WorkflowInstanceState.End, instanceID);
-                }
-                else if (to.NodeType == WorkflowNodeCategory.Decision)
-                {
-                    Transition transition = (currentTransition.Direction == WorkflowOpertaion.Back) ?
-                        workflowService.NodeService.GetBackTransition(WorkflowInstance.GetInstance(instanceID).Current) :
-                        workflowService.NodeService.GetTransition(to);
-
-                    if (transition == null) return;
-                    Jump(new WorkflowContext()
-                    {
-                        Instance = WorkflowInstance.GetInstance(instanceID),
-                        TransitionID = transition.NID,
-                        Data = context.Data,
-                        ActorID = context.ActorID
-                    });
+                    this.Invoke(to,instanceID, currentTransition, executeContext, context.ActorID,context);
                 }
             }
         }
 
-        protected void Invoke(string instanceID, Transition selectTransition, ExecutingContext executeContext, String actorID)
+        protected void Invoke(Node to, string instanceID, Transition selectTransition, ExecutingContext executeContext, String actorID, WorkflowContext context)
         {
             workflowService.InstanceService.Jump(selectTransition.Destination, instanceID, new WorkflowProcess()
             {
@@ -117,6 +98,26 @@ namespace Smartflow
             }, workflowService.ProcessService);
 
             workflowService.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
+
+            if (to.NodeType == WorkflowNodeCategory.End)
+            {
+                workflowService.InstanceService.Transfer(WorkflowInstanceState.End, instanceID);
+            }
+            else if (to.NodeType == WorkflowNodeCategory.Decision)
+            {
+                Transition transition = (selectTransition.Direction == WorkflowOpertaion.Back) ?
+                    workflowService.NodeService.GetBackTransition(WorkflowInstance.GetInstance(instanceID).Current) :
+                    workflowService.NodeService.GetTransition(to);
+
+                if (transition == null) return;
+                Jump(new WorkflowContext()
+                {
+                    Instance = WorkflowInstance.GetInstance(instanceID),
+                    TransitionID = transition.NID,
+                    Data = context.Data,
+                    ActorID = context.ActorID
+                });
+            }
         }
 
         protected void Discuss(WorkflowContext context, Node current, ExecutingContext executeContext, string actorID)
@@ -147,7 +148,7 @@ namespace Smartflow
                 Node node = workflowService.NodeService.Query(current.InstanceID)
                             .Where(e => e.ID == transition.Destination).FirstOrDefault();
 
-                this.Invoke(instanceID, transition, new ExecutingContext()
+                this.Invoke(node,instanceID, transition, new ExecutingContext()
                 {
                     From = current,
                     To = node,
@@ -156,7 +157,7 @@ namespace Smartflow
                     Result = executeContext.Result,
                     Direction=executeContext.Direction
 
-                }, actorID);
+                }, actorID,context);
             }
             else
             {

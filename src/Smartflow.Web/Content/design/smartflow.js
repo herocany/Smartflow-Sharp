@@ -1742,11 +1742,16 @@
         }
     };
 
+    XML.value = function (n) {
+        return (!!n.textContent) ? n.textContent : n.text;
+    }
+
+
     XML.nodeToObject = function (nodeWrap, propertyName, node) {
         for (var i = 0, c = node.childNodes.length; i < c; i++) {
             var n = node.childNodes[i];
             if (n.nodeName == propertyName) {
-                nodeWrap[propertyName] = n.textContent;
+                nodeWrap[propertyName] = XML.value(n);
             }
         }
     }
@@ -1767,7 +1772,7 @@
                         }
                     }
                 } else {
-                    nodeWrap[propertyName] = node.textContent;
+                    nodeWrap[propertyName] = XML.value(node);
                 }
 
             } else {

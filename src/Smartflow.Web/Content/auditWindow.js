@@ -97,7 +97,6 @@
     };
 
     AuditWindow.prototype.jump = function (message, transition) {
-        var json = this.getForm();
         var result = this.getUserInfo();
         var $this = this,
             settings = this.settings,
@@ -108,8 +107,7 @@
                     Message: message,
                     CateCode: settings.code,
                     UUID: result.IDENTIFICATION,
-                    Name: result.USERNAME,
-                    Json: json
+                    Name: result.USERNAME
                 }
             });
 

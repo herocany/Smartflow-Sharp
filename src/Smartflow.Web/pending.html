@@ -46,7 +46,7 @@
                 success: function (serverData) {
                     var htmlArray = [];
                     $.each(serverData, function () {
-                        htmlArray.push("<li instanceID=" + this.InstanceID + " code=" + this.CateCode + " cateName=" + this.CateName + ">【" + this.CateName + "】<span>" + (this.Title ? this.Title : "新待办任务") + "</span></li>");
+                        htmlArray.push("<li instanceID=" + this.InstanceID + " code=" + this.CateCode + " cateName=" + this.CateName + ">【" + this.CateName + "】<span>待办任务</span></li>");
                     });
                     $("#pending_total").text(serverData.length || 0);
                     $("#pending_items").html(htmlArray.join(''));

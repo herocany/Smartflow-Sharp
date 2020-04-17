@@ -99,8 +99,7 @@ namespace Smartflow.Bussiness.WorkflowService
             string instanceID = (String)executeContext.Instance.InstanceID;
             Category model = new CategoryQueryService().Query()
                  .FirstOrDefault(cate => cate.NID == cateCode);
-            string json = (String)executeContext.Data.Json;
-
+       
             Pending entry = new Pending
             {
                 NID = Guid.NewGuid().ToString(),
@@ -111,33 +110,10 @@ namespace Smartflow.Bussiness.WorkflowService
                 CreateDateTime = DateTime.Now,
                 NodeName = node.Name,
                 CateCode = cateCode,
-                CateName = model.Name,
-                Title = Parse(json, model.Expression)
+                CateName = model.Name
             };
 
             CommandBus.Dispatch<Pending>(new CreatePending(), entry);
-        }
-
-        private string Parse(string json, string expression)
-        {
-            if (String.IsNullOrEmpty(json) || string.IsNullOrEmpty(expression))
-            {
-                return string.Empty;
-            }
-
-            MatchCollection mc = Regex.Matches(expression, @"\{([^\{^\}]*)\}", RegexOptions.IgnoreCase);
-            IList<string> fields = new List<string>();
-            foreach (Match m in mc)
-            {
-                fields.Add(m.Value.Replace("{", "").Replace("}", ""));
-            }
-
-            JObject arg = (JObject)JsonConvert.DeserializeObject(json);
-            foreach (string field in fields)
-            {
-                expression = Regex.Replace(expression, @"\{" + field + @"\}", arg.Value<string>(field));
-            }
-            return expression;
         }
 
         public Node GetCurrentNode(string instanceID)
