@@ -24,22 +24,6 @@ namespace Smartflow.Bussiness.WorkflowService
         private readonly IDbConnection connection = DBUtils.CreateConnection();
         private readonly IActorService _actorService = new ActorService();
 
-        /// <summary>
-        /// 处理依据roleID查询少引号的情况
-        /// </summary>
-        /// <param name="roleIds"></param>
-        /// <returns></returns>
-        public string BindQueryConditionQuot(string roleIds)
-        {
-            string[] RArry = roleIds.Split(',');
-            string[] NRArray = new string[RArry.Length];
-            for (int i = 0; i < RArry.Length; i++)
-            {
-                NRArray[i] = string.Format("'{0}'", RArry[i]);
-            }
-            return string.Join(",", NRArray);
-        }
-
         public override List<WorkflowGroup> GetGroup()
         {
             string query = " SELECT * FROM T_ROLE WHERE 1=1 ";
@@ -63,7 +47,7 @@ namespace Smartflow.Bussiness.WorkflowService
             string conditionStr = string.Empty;
             if (!String.IsNullOrEmpty(actorIDs))
             {
-                conditionStr = string.Format("{0} AND IDENTIFICATION NOT IN ({1})", conditionStr, BindQueryConditionQuot(actorIDs));
+                conditionStr = string.Format("{0} AND IDENTIFICATION NOT IN ({1})", conditionStr,CommonMethods.BindQuot(actorIDs));
             }
             if (!String.IsNullOrEmpty(searchKey))
             {
@@ -100,7 +84,7 @@ namespace Smartflow.Bussiness.WorkflowService
             }
             else
             {
-                string conditionStr = string.Format(" AND IDENTIFICATION IN ({0})", BindQueryConditionQuot(actorIDs));
+                string conditionStr = string.Format(" AND IDENTIFICATION IN ({0})", CommonMethods.BindQuot(actorIDs));
                 string query = String.Format(" SELECT * FROM T_USER WHERE 1=1 {0} ORDER BY IDENTIFICATION ASC ", conditionStr);
                 List<WorkflowActor> actors = new List<WorkflowActor>();
                 using (var dr = connection.ExecuteReader(query))
