@@ -85,7 +85,7 @@
     <Content Include="auditFrame.html" />
     <Content Include="auditWindow.html" />
     <Content Include="Content\userSelect.css" />
-    <Content Include="Content\userSelect .js" />
+    <Content Include="Content\userSelect.js" />
     <Content Include="Content\audit.css" />
     <Content Include="Content\audit.js" />
     <Content Include="Content\auditWindow.js" />
