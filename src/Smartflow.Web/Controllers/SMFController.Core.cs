@@ -18,11 +18,14 @@ namespace Smartflow.Web.Controllers
         private readonly AbstractBridgeService _abstractBridgeService;
         private readonly IPendingService _pendingService;
         private readonly IActorService _actorService;
-        public SMFController(AbstractBridgeService abstractBridgeService, IPendingService pendingService, IActorService actorService)
+        private readonly IQuery<IList<Category>> _categoryService;
+
+        public SMFController(AbstractBridgeService abstractBridgeService, IPendingService pendingService, IActorService actorService, IQuery<IList<Category>> categoryService)
         {
             _abstractBridgeService = abstractBridgeService;
             _pendingService = pendingService;
             _actorService = actorService;
+            _categoryService = categoryService;
         }
 
         protected IWorkflowNodeService NodeService
@@ -39,9 +42,7 @@ namespace Smartflow.Web.Controllers
         [HttpPost]
         public string Start(string id)
         {
-            Category category = new CategoryService().Query()
-                                .FirstOrDefault(cate => cate.NID == id);
-
+            Category category = _categoryService.Query().FirstOrDefault(cate => cate.NID == id);
             WorkflowStructure workflowStructure =
                 _abstractBridgeService.WorkflowStructureService.Query()
                 .FirstOrDefault(e => e.CateCode == category.NID && e.Status == 1);
