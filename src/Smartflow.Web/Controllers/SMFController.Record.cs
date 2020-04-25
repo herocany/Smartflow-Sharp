@@ -13,11 +13,15 @@ namespace Smartflow.Web.Controllers
 {
     public  class RecordController:ApiController
     {
-        private readonly IQuery<IList<Record>,string> queryService = new RecordQueryService();
+        private readonly IQuery<IList<Record>, string> _recordService;
+        public RecordController(IQuery<IList<Record>, string> recordService)
+        {
+            _recordService = recordService;
+        }
 
         public IEnumerable<Record> Get(string id)
         {
-            return queryService.Query(id);
+            return _recordService.Query(id);
         }
     }
 }

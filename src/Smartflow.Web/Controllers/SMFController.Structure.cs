@@ -11,18 +11,24 @@ namespace Smartflow.Web.Controllers
 {
     public  class StructureController : ApiController
     {
-        private readonly BaseBridgeService baseBridgeService = new BaseBridgeService();
+        private readonly AbstractBridgeService _abstractBridgeService;
+
+        public StructureController(AbstractBridgeService abstractBridgeService)
+        {
+            _abstractBridgeService = abstractBridgeService;
+        }
+
 
         public dynamic Get()
         {
-            IList<WorkflowStructure> structs = baseBridgeService.WorkflowStructureService.Query();
+            IList<WorkflowStructure> structs = _abstractBridgeService.WorkflowStructureService.Query();
 
             return CommonMethods.Success(structs, structs.Count);
         }
 
         public WorkflowStructure Get(string id)
         {
-            return baseBridgeService.WorkflowStructureService.Query(id).FirstOrDefault();
+            return _abstractBridgeService.WorkflowStructureService.Query(id).FirstOrDefault();
         }
      
         public void Put([FromBody]WorkflowStructure workflowStructure)
@@ -33,17 +39,17 @@ namespace Smartflow.Web.Controllers
 
             if (model.Status == 1)
             {
-                IList<WorkflowStructure> wfList = baseBridgeService
+                IList<WorkflowStructure> wfList = _abstractBridgeService
                     .WorkflowStructureService.Query().Where(e => e.CateCode == model.CateCode && e.NID != model.NID && e.Status == 1)
                     .ToList<WorkflowStructure>();
 
                 foreach (WorkflowStructure entry in wfList)
                 {
                     entry.Status = 0;
-                    baseBridgeService.WorkflowStructureService.Persistent(entry);
+                    _abstractBridgeService.WorkflowStructureService.Persistent(entry);
                 }
             }
-            baseBridgeService.WorkflowStructureService.Persistent(model);
+            _abstractBridgeService.WorkflowStructureService.Persistent(model);
         }
 
         public void Post([FromBody]WorkflowStructure workflowStructure)
@@ -59,12 +65,12 @@ namespace Smartflow.Web.Controllers
                 }
             }
 
-            baseBridgeService.WorkflowStructureService.Persistent(workflowStructure);
+            _abstractBridgeService.WorkflowStructureService.Persistent(workflowStructure);
         }
 
         public void Delete(string id)
         {
-           baseBridgeService.WorkflowStructureService.Delete(id);
+            _abstractBridgeService.WorkflowStructureService.Delete(id);
         }
     }
 }

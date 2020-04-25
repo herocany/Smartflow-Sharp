@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using Smartflow.Bussiness.Scripts;
+using Smartflow.Bussiness.Interfaces;
 
 namespace Smartflow.Bussiness.Queries
 {
-    public class PendingQueryService : IQuery<IList<Pending>, string>, IQuery<IList<Pending>, Dictionary<string, object>>
+    public class PendingService : IPendingService
     {
         private IDbConnection Connection
         {

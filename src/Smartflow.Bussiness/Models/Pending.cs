@@ -61,11 +61,5 @@ namespace Smartflow.Bussiness.Models
             get;
             set;
         }
-
-        public string Title
-        {
-            get;
-            set;
-        }
     }
 }

@@ -13,7 +13,7 @@ namespace Smartflow.Bussiness.WorkflowService
     {
         public static void Execute(string cateCode, string instanceID)
         {
-            Category model = new CategoryQueryService().Query()
+            Category model = new CategoryService().Query()
               .FirstOrDefault(cate => cate.NID == cateCode);
 
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
@@ -21,7 +21,7 @@ namespace Smartflow.Bussiness.WorkflowService
 
             if (!String.IsNullOrEmpty(model.Script) && current.NodeType != WorkflowNodeCategory.Start)
             {
-                var cate = new BridgeQueryService().Query(instanceID);
+                var cate = new BridgeService().Query(instanceID);
                 if (cate == null) return;
                 DBUtils.CreateConnection().Execute(model.Script, new
                 {

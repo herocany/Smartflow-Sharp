@@ -49,19 +49,20 @@
     <Compile Include="Commands\DeletePending.cs" />
     <Compile Include="Commands\CreatePending.cs" />
     <Compile Include="Commands\DeletePendingByActor.cs" />
+    <Compile Include="Interfaces\IActorService.cs" />
+    <Compile Include="Interfaces\IBridgeService.cs" />
+    <Compile Include="Interfaces\IPendingService.cs" />
     <Compile Include="Models\Bridge.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Constraint.cs" />
     <Compile Include="Models\Pending.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Queries\BridgeQueryService.cs" />
-    <Compile Include="Queries\ConstraintQueryService.cs" />
-    <Compile Include="Queries\PendingQueryService.cs" />
-    <Compile Include="Queries\RecordQueryService.cs" />
-    <Compile Include="Queries\SingleUserByActorQueryService.cs" />
-    <Compile Include="Queries\UserByNodeQueryService.cs" />
-    <Compile Include="Queries\UserByActorQueryService.cs" />
+    <Compile Include="Queries\BridgeService.cs" />
+    <Compile Include="Queries\ConstraintService.cs" />
+    <Compile Include="Queries\PendingService.cs" />
+    <Compile Include="Queries\RecordService.cs" />
+    <Compile Include="Queries\ActorService.cs" />
     <Compile Include="Scripts\ResourceManage.Category.cs" />
     <Compile Include="Scripts\ResourceManage.Constraint.cs" />
     <Compile Include="Scripts\ResourceManage.User.cs" />
@@ -73,10 +74,9 @@
     <Compile Include="WorkflowService\PendingAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkflowService\RecordAction.cs" />
-    <Compile Include="Queries\UserByRoleQueryService.cs" />
     <Compile Include="WorkflowService\BaseBridgeService.cs" />
-    <Compile Include="WorkflowService\TestAction.cs" />
-    <Compile Include="Queries\CategoryQueryService.cs" />
+    <Compile Include="WorkflowService\EmptyAction.cs" />
+    <Compile Include="Queries\CategoryService.cs" />
     <Compile Include="WorkflowService\CooperationPending.cs" />
   </ItemGroup>
   <ItemGroup>

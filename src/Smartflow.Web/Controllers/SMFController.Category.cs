@@ -13,16 +13,20 @@ namespace Smartflow.Web.Controllers
 {
     public class CategoryController : ApiController
     {
-        private readonly IQuery<IList<Category>> queryService = new CategoryQueryService();
+        private readonly IQuery<IList<Category>> _categoryService;
+        public CategoryController(IQuery<IList<Category>> categoryService)
+        {
+            _categoryService = categoryService;
+        }
 
         public IEnumerable<Category> Get()
         {
-            return queryService.Query();
+            return _categoryService.Query();
         }
 
         public Category Get(string id)
         {
-            return queryService.Query().FirstOrDefault(cate => cate.NID == id);
+            return _categoryService.Query().FirstOrDefault(cate => cate.NID == id);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Smartflow.Bussiness.WorkflowService
 {
-    public class TestAction : IWorkflowAction
+    public class EmptyAction : IWorkflowAction
     {
         public void ActionExecute(ExecutingContext executingContext)
         {

@@ -9,7 +9,7 @@ using Smartflow.Common;
 
 namespace Smartflow.Bussiness.Queries
 {
-    public class CategoryQueryService:IQuery<IList<Category>>
+    public class CategoryService:IQuery<IList<Category>>
     {
         public IList<Category> Query()
         {

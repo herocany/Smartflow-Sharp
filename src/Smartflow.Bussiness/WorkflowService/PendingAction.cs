@@ -97,7 +97,7 @@ namespace Smartflow.Bussiness.WorkflowService
             var node = GetCurrentNode(executeContext.Instance.InstanceID);
             string cateCode = (String)executeContext.Data.CateCode;
             string instanceID = (String)executeContext.Instance.InstanceID;
-            Category model = new CategoryQueryService().Query()
+            Category model = new CategoryService().Query()
                  .FirstOrDefault(cate => cate.NID == cateCode);
        
             Pending entry = new Pending

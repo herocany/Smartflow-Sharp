@@ -13,12 +13,20 @@ namespace Smartflow.Web.Controllers
 {
     public class SettingController : ApiController
     {
-        public readonly BaseBridgeService baseBridgeService = new BaseBridgeService();
+        private readonly AbstractBridgeService _abstractBridgeService;
+        private readonly IQuery<IList<Constraint>> _constraintService;
+
+
+        public SettingController(AbstractBridgeService abstractBridgeService, IQuery<IList<Constraint>> constraintService)
+        {
+            _abstractBridgeService = abstractBridgeService;
+            _constraintService = constraintService;
+        }
 
         [HttpGet]
         public IEnumerable<WorkflowGroup> GetGroup()
         {
-            return baseBridgeService.GetGroup();
+            return _abstractBridgeService.GetGroup();
         }
 
         [HttpGet]
@@ -40,27 +48,27 @@ namespace Smartflow.Web.Controllers
         [HttpGet]
         public IEnumerable<WorkflowConfiguration> GetDatabaseSourceList()
         {
-            return baseBridgeService.GetDatabaseSourceList();
+            return _abstractBridgeService.GetDatabaseSourceList();
         }
 
         [HttpGet]
         public dynamic GetActor([FromUri]PageInfo info)
         {
             return CommonMethods
-                .Success(baseBridgeService
+                .Success(_abstractBridgeService
                 .GetActor(info.Page, info.Limit, out int total, info.Arg, info.Key), total);
         }
 
         [HttpGet]
         public dynamic GetAssignActor([FromUri]PageInfo info)
         {
-            IList<WorkflowActor> list = baseBridgeService.GetActor(info.Arg);
+            IList<WorkflowActor> list = _abstractBridgeService.GetActor(info.Arg);
             return CommonMethods.Success(list, list.Count);
         }
 
         public IEnumerable<Constraint> GetConstraint()
         {
-            return new ConstraintQueryService().Query();
+            return _constraintService.Query();
         }
     }
 

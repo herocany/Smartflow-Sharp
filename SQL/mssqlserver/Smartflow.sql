@@ -215,7 +215,7 @@ CREATE TABLE [dbo].[t_pending](
 	[CateName] [varchar](50) NULL,
 	[Url] [varchar](512) NULL,
 	[CreateDateTime] [datetime] NULL,
-	[Title] [varchar](512) NULL,
+	
  CONSTRAINT [PK_t_pending] PRIMARY KEY CLUSTERED 
 (
 	[NID] ASC

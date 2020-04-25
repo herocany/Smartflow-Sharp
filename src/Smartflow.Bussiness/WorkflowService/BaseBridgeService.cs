@@ -15,12 +15,14 @@ using Smartflow.Common;
 using Smartflow.Bussiness.Models;
 using Smartflow.Bussiness.Queries;
 using Smartflow.Elements;
+using Smartflow.Bussiness.Interfaces;
 
 namespace Smartflow.Bussiness.WorkflowService
 {
     public class BaseBridgeService : AbstractBridgeService
     {
         private readonly IDbConnection connection = DBUtils.CreateConnection();
+        private readonly IActorService _actorService = new ActorService();
 
         /// <summary>
         /// 处理依据roleID查询少引号的情况
@@ -145,13 +147,13 @@ namespace Smartflow.Bussiness.WorkflowService
                 }
                 else
                 {
-                    userList.AddRange(new UserByRoleQueryService().Query(string.Join(",", gList)));
+                    userList.AddRange(_actorService.GetActorByRole(string.Join(",", gList)));
                 }
             }
 
             if (ids.Count > 0)
             {
-                userList.AddRange(new UserByActorQueryService().Query(string.Join(",", ids)));
+                userList.AddRange(_actorService.Query(string.Join(",", ids)));
             }
 
             if (direction == WorkflowOpertaion.Back && node.Cooperation == 0)
@@ -176,7 +178,7 @@ namespace Smartflow.Bussiness.WorkflowService
 
         private IList<User> QueryActor(string group, IList<Elements.Rule> rules)
         {
-            IList<User> users = new UserByRoleQueryService().Query(group);
+            IList<User> users = _actorService.GetActorByRole(group);
             List<User> actorList = new List<User>();
             foreach (Elements.Rule rule in rules)
             {
@@ -189,7 +191,7 @@ namespace Smartflow.Bussiness.WorkflowService
 
                     if (process != null)
                     {
-                        String orgCode = new SingleUserByActorQueryService().Query(process.ActorID);
+                        String orgCode = _actorService.GetOrganizationCode(process.ActorID);
                         actorList.AddRange(users.Where(u => u.OrgCode == orgCode).ToList());
                     }
                 }
@@ -198,7 +200,7 @@ namespace Smartflow.Bussiness.WorkflowService
                     WorkflowProcess process = base.ProcessService.Get(rule.InstanceID).OrderByDescending(e => e.CreateDateTime).FirstOrDefault();
                     if (process != null)
                     {
-                        String orgCode = new SingleUserByActorQueryService().Query(process.ActorID);
+                        String orgCode = _actorService.GetOrganizationCode(process.ActorID);
                         actorList.AddRange(users.Where(u => u.OrgCode == orgCode).ToList());
                     }
                 }

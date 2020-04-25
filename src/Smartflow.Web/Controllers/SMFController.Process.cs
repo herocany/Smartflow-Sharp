@@ -1,4 +1,5 @@
-﻿using Smartflow.Bussiness.WorkflowService;
+﻿using Smartflow.Bussiness.Interfaces;
+using Smartflow.Bussiness.WorkflowService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,16 @@ namespace Smartflow.Web.Controllers
 {
     public class ProcessController : ApiController
     {
-        public readonly BaseBridgeService baseBridgeService = new BaseBridgeService();
+        private readonly AbstractBridgeService _abstractBridgeService;
+        public ProcessController(AbstractBridgeService abstractBridgeService)
+        {
+            _abstractBridgeService = abstractBridgeService;
+        }
+
 
         public dynamic Get(string id)
         {
-            return baseBridgeService.GetJumpProcess(id);
+            return _abstractBridgeService.GetJumpProcess(id);
         }
     }
 }

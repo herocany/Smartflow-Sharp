@@ -9,11 +9,13 @@ using Smartflow.Common;
 
 namespace Smartflow.Bussiness.Queries
 {
-    public class SingleUserByActorQueryService : IQuery<String, string>
+    public class ConstraintService : IQuery<IList<Constraint>>
     {
-        public String Query(string id)
+        public IList<Constraint> Query()
         {
-            return DBUtils.CreateConnection().ExecuteScalar<String>(ResourceManage.SQL_USER_SELECT_3, new { ID = id });
+            return DBUtils.CreateWFConnection()
+               .Query<Constraint>(ResourceManage.SQL_CONSTRAINT_SELECT)
+               .ToList();
         }
     }
 }

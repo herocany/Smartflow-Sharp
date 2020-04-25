@@ -9,7 +9,7 @@ using Smartflow.Bussiness.Scripts;
 
 namespace Smartflow.Bussiness.Queries
 {
-    public class RecordQueryService : IQuery<IList<Record>, string>
+    public class RecordService : IQuery<IList<Record>, string>
     {
         public IList<Record> Query(string instanceID)
         {
