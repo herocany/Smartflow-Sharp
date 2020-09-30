@@ -44,6 +44,7 @@ GO
 CREATE TABLE [dbo].[t_bridge](
 	[InstanceID] [varchar](50) NOT NULL,
 	[CategoryID] [varchar](50) NULL,
+	[Comment]    [varchar](1024) NULL,
 	[Key] [varchar](50) NULL,
  CONSTRAINT [PK_t_bridge] PRIMARY KEY CLUSTERED 
 (
