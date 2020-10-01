@@ -1,5 +1,11 @@
 USE [Smartflow]
 GO
+INSERT [dbo].[t_category] ([NID], [Name], [Url], [ParentID]) VALUES (N'001', N'Smartflow-Sharp', NULL, N'00')
+GO
+INSERT [dbo].[t_category] ([NID], [Name], [Url], [ParentID]) VALUES (N'001001', N'请假流程', N'./vacation/detail.html', N'001')
+GO
+INSERT [dbo].[t_config] ([ID], [Name], [ConnectionString], [ProviderName]) VALUES (1, N'业务库', N'server=127.0.0.1;database=Demo;uid=chengderen;pwd=123456', N'System.Data.SqlClient')
+GO
 INSERT [dbo].[t_constraint] ([NID], [Name], [Sort]) VALUES (N'node_send_latest_user', N'按上节点的审批人部门筛选', 2)
 GO
 INSERT [dbo].[t_constraint] ([NID], [Name], [Sort]) VALUES (N'node_send_start_user', N'按发起人部门筛选', 1)
