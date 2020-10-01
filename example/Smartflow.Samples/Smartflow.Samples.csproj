@@ -387,6 +387,7 @@
     <Content Include="Content\design\layui\font\iconfont.woff2" />
     <Content Include="Content\layui\font\iconfont.woff2" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Smartflow.Samples.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

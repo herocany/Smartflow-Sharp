@@ -1,0 +1,881 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Publish\Smartflow\Smartflow.Samples</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/Dapper.dll">
+      <publishTime>10/01/2020 08:48:07</publishTime>
+    </File>
+    <File Include="bin/Dapper.pdb">
+      <publishTime>10/01/2020 08:48:07</publishTime>
+    </File>
+    <File Include="bin/EmitMapper.dll">
+      <publishTime>05/10/2011 13:28:12</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>07/25/2012 11:48:56</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>11/20/2012 22:45:56</publishTime>
+    </File>
+    <File Include="bin/Smartflow.BussinessService.dll">
+      <publishTime>10/01/2020 08:49:21</publishTime>
+    </File>
+    <File Include="bin/Smartflow.BussinessService.pdb">
+      <publishTime>10/01/2020 08:49:21</publishTime>
+    </File>
+    <File Include="bin/Smartflow.Common.dll">
+      <publishTime>10/01/2020 08:48:07</publishTime>
+    </File>
+    <File Include="bin/Smartflow.Common.pdb">
+      <publishTime>10/01/2020 08:48:07</publishTime>
+    </File>
+    <File Include="bin/Smartflow.dll">
+      <publishTime>10/01/2020 08:48:07</publishTime>
+    </File>
+    <File Include="bin/Smartflow.pdb">
+      <publishTime>10/01/2020 08:48:07</publishTime>
+    </File>
+    <File Include="bin/Smartflow.Samples.dll">
+      <publishTime>10/01/2020 08:49:21</publishTime>
+    </File>
+    <File Include="bin/Smartflow.Samples.pdb">
+      <publishTime>10/01/2020 08:49:21</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.dll">
+      <publishTime>08/08/2012 17:58:44</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>05/07/2013 13:09:16</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.WebRequest.dll">
+      <publishTime>08/08/2012 17:58:44</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>05/07/2013 13:09:16</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>05/07/2013 13:09:18</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Net.Http.Formatting.resources.dll">
+      <publishTime>05/10/2013 14:59:26</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Net.Http.resources.dll">
+      <publishTime>08/08/2012 17:54:44</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Net.Http.WebRequest.resources.dll">
+      <publishTime>08/08/2012 17:54:44</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Http.resources.dll">
+      <publishTime>05/10/2013 14:59:26</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Http.WebHost.resources.dll">
+      <publishTime>05/10/2013 14:59:28</publishTime>
+    </File>
+    <File Include="Content/base64.min.js">
+      <publishTime>05/29/2020 22:33:41</publishTime>
+    </File>
+    <File Include="Content/common.css">
+      <publishTime>09/26/2020 12:15:06</publishTime>
+    </File>
+    <File Include="Content/common.js">
+      <publishTime>09/30/2020 21:50:14</publishTime>
+    </File>
+    <File Include="Content/design/design.js">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/decision.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/grid16.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/grid_12.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/grid_15.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/grid_23.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/help.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/left.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/line.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/node.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/save.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/images/select.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/jquery.min.js">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/layui.css">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/layui.mobile.css">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/modules/code.css">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/modules/laydate/default/laydate.css">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/modules/layer/default/icon-ext.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/modules/layer/default/icon.png">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/modules/layer/default/layer.css">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/modules/layer/default/loading-0.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/modules/layer/default/loading-1.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/css/modules/layer/default/loading-2.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/font/iconfont.eot">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/font/iconfont.svg">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/font/iconfont.ttf">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/font/iconfont.woff">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/font/iconfont.woff2">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/0.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/1.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/10.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/11.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/12.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/13.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/14.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/15.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/16.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/17.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/18.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/19.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/2.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/20.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/21.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/22.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/23.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/24.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/25.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/26.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/27.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/28.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/29.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/3.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/30.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/31.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/32.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/33.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/34.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/35.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/36.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/37.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/38.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/39.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/4.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/40.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/41.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/42.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/43.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/44.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/45.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/46.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/47.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/48.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/49.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/5.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/50.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/51.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/52.gif">
+      <publishTime>05/25/2020 19:13:43</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/53.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/54.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/55.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/56.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/57.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/58.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/59.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/6.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/60.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/61.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/62.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/63.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/64.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/65.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/66.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/67.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/68.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/69.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/7.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/70.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/71.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/8.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/images/face/9.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/carousel.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/code.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/colorpicker.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/element.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/flow.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/form.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/jquery.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/laydate.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/layedit.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/layer.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/laypage.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/laytpl.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/mobile.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/rate.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/slider.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/table.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/transfer.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/tree.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/upload.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/lay/modules/util.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/layui.all.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/layui/layui.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/settings.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/smartflow.css">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/smartflow.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/design/svg.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/images/aiwrap.png">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/images/message.png">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/images/off.png">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/images/user.png">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/images/web_login_bg.jpg">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/images/zj.png">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/jquery.min.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/layui.css">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/layui.mobile.css">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/modules/code.css">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/modules/laydate/default/laydate.css">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/modules/layer/default/icon-ext.png">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/modules/layer/default/icon.png">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/modules/layer/default/layer.css">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/modules/layer/default/loading-0.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/modules/layer/default/loading-1.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/css/modules/layer/default/loading-2.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/font/iconfont.eot">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/font/iconfont.svg">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/font/iconfont.ttf">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/font/iconfont.woff">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/font/iconfont.woff2">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/0.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/1.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/10.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/11.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/12.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/13.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/14.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/15.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/16.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/17.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/18.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/19.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/2.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/20.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/21.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/22.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/23.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/24.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/25.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/26.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/27.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/28.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/29.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/3.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/30.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/31.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/32.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/33.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/34.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/35.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/36.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/37.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/38.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/39.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/4.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/40.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/41.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/42.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/43.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/44.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/45.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/46.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/47.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/48.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/49.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/5.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/50.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/51.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/52.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/53.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/54.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/55.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/56.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/57.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/58.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/59.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/6.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/60.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/61.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/62.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/63.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/64.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/65.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/66.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/67.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/68.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/69.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/7.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/70.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/71.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/8.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/images/face/9.gif">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/carousel.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/code.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/colorpicker.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/element.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/flow.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/form.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/jquery.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/laydate.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/layedit.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/layer.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/laypage.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/laytpl.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/mobile.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/rate.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/slider.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/table.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/transfer.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/tree.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/upload.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/lay/modules/util.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/layui.all.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/layui/layui.js">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/login.css">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/main.css">
+      <publishTime>05/25/2020 19:13:44</publishTime>
+    </File>
+    <File Include="Content/main.js">
+      <publishTime>09/26/2020 09:27:34</publishTime>
+    </File>
+    <File Include="Content/wf/audit.css">
+      <publishTime>09/26/2020 17:23:58</publishTime>
+    </File>
+    <File Include="Content/wf/audit.js">
+      <publishTime>09/26/2020 12:34:37</publishTime>
+    </File>
+    <File Include="Content/wf/auditWindow.js">
+      <publishTime>09/28/2020 21:42:43</publishTime>
+    </File>
+    <File Include="Content/wf/next.js">
+      <publishTime>09/26/2020 10:13:08</publishTime>
+    </File>
+    <File Include="Content/wf/pending.js">
+      <publishTime>09/28/2020 21:43:52</publishTime>
+    </File>
+    <File Include="Content/wf/record.js">
+      <publishTime>09/26/2020 10:13:26</publishTime>
+    </File>
+    <File Include="Content/wf/supervise.js">
+      <publishTime>09/26/2020 18:01:39</publishTime>
+    </File>
+    <File Include="Content/wf/uc.js">
+      <publishTime>09/26/2020 18:04:01</publishTime>
+    </File>
+    <File Include="Content/wf/userSelect.css">
+      <publishTime>09/26/2020 18:04:50</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>09/26/2020 11:07:16</publishTime>
+    </File>
+    <File Include="login.html">
+      <publishTime>09/30/2020 21:56:38</publishTime>
+    </File>
+    <File Include="main.html">
+      <publishTime>09/30/2020 21:40:48</publishTime>
+    </File>
+    <File Include="Vacation/detail.html">
+      <publishTime>09/26/2020 20:35:10</publishTime>
+    </File>
+    <File Include="Vacation/edit.html">
+      <publishTime>09/26/2020 20:35:16</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>10/01/2020 08:49:21</publishTime>
+    </File>
+    <File Include="WF/auditWindow.html">
+      <publishTime>09/26/2020 17:16:28</publishTime>
+    </File>
+    <File Include="WF/pending.html">
+      <publishTime>09/26/2020 17:16:37</publishTime>
+    </File>
+    <File Include="WF/supervise.html">
+      <publishTime>09/26/2020 18:02:38</publishTime>
+    </File>
+    <File Include="WF/uc.html">
+      <publishTime>09/26/2020 18:05:35</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

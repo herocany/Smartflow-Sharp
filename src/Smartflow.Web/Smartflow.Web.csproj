@@ -140,6 +140,7 @@
     <Content Include="userSelect.html" />
     <Content Include="list.html" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Smartflow.Web.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
