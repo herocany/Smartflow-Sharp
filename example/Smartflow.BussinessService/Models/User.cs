@@ -8,31 +8,25 @@ namespace Smartflow.BussinessService.Models
 {
     public class User
     {
-        public string IDENTIFICATION
+        public string ID
         {
             get;
             set;
         }
 
-        public string USERNAME
+        public string Name
         {
             get;
             set;
         }
 
-        public string USERPWD
-        {
-            get;
-            set;
-        }
-    
-        public string ORGCODE
+        public string OrganizationCode
         {
             get;
             set;
         }
 
-        public string ORGNAME
+        public string OrganizationName
         {
             get;
             set;

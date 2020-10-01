@@ -10,8 +10,13 @@ using System.Data;
 
 namespace Smartflow
 {
-    public class WorkflowTransitionService : WorkflowInfrastructure, IWorkflowPersistent<Transition, Action<string, object>>, IWorkflowQuery<IList<Transition>, string>, IWorkflowParse
+    public class WorkflowTransitionService : WorkflowInfrastructure, IWorkflowPersistent<Transition, Action<string, object>>, IWorkflowTransitionService, IWorkflowParse
     {
+        public Transition GetTransition(string id)
+        {
+            return base.Connection.Query<Transition>(ResourceManage.SQL_WORKFLOW_TRANSITION_SELECT_ID, new { NID = id }).FirstOrDefault();
+        }
+
         public Element Parse(XElement element)
         {
             Transition entry = new Transition
@@ -21,10 +26,7 @@ namespace Smartflow
                 ID = element.Attribute("id").Value
             };
 
-            entry.Direction = element.Attribute("direction") == null ?
-                WorkflowOpertaion.Go :
-                (WorkflowOpertaion)Enum.Parse(typeof(WorkflowOpertaion), element.Attribute("direction").Value, true);
-
+           
             if (element.HasElements)
             {
                 XElement expression = element.Elements("expression").FirstOrDefault();
@@ -37,9 +39,9 @@ namespace Smartflow
             return entry;
         }
 
-        public void Persistent(Transition entry,Action<string,object> execute)
+        public void Persistent(Transition entry,Action<string,object> callback)
         {
-            execute(ResourceManage.SQL_WORKFLOW_TRANSITION_INSERT, new
+            callback(ResourceManage.SQL_WORKFLOW_TRANSITION_INSERT, new
             {
                 NID = Guid.NewGuid().ToString(),
                 entry.RelationshipID,
@@ -48,8 +50,7 @@ namespace Smartflow
                 entry.Origin,
                 entry.InstanceID,
                 entry.Expression,
-                entry.ID,
-                entry.Direction
+                entry.ID
             });
         }
 

@@ -13,6 +13,7 @@ namespace Smartflow.BussinessService.Models
             set;
         }
 
+        public string UID { get; set; }
         public string Name
         {
             get;
@@ -30,30 +31,7 @@ namespace Smartflow.BussinessService.Models
             get;
             set;
         }
-     
-        public string CateCode
-        {
-            get;
-            set;
-        }
 
-        public DateTime CreateDateTime
-        {
-            get;
-            set;
-        }
-
-        public DateTime EndDate
-        {
-            get;
-            set;
-        }
-
-        public DateTime StartDate
-        {
-            get;
-            set;
-        }
 
         public string VacationType
         {
@@ -61,10 +39,12 @@ namespace Smartflow.BussinessService.Models
             set;
         }
 
-        public String NodeName
+
+        public DateTime CreateTime
         {
             get;
             set;
         }
+
     }
 }

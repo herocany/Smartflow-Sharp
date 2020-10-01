@@ -8,19 +8,25 @@ namespace Smartflow.Bussiness.Models
 {
     public class User
     {
-        public string UniqueId
+        public string ID
         {
             get;
             set;
         }
 
-        public string UserName
+        public string Name
         {
             get;
             set;
         }
 
-        public string OrgCode
+        public string OrganizationCode
+        {
+            get;
+            set;
+        }
+
+        public string OrganizationName
         {
             get;
             set;

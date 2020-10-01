@@ -33,5 +33,15 @@ namespace Smartflow.Bussiness.Queries
                 .Query<Pending>(ResourceManage.SQL_PENDING_SELECT_1, new { InstanceID = queryArg["instanceID"], ActorID = queryArg["actorID"], NodeID = queryArg["nodeID"] })
                 .ToList();
         }
+
+        public IList<Pending> GetPending(string instanceID, string actorID)
+        {
+            return Connection
+                .Query<Pending>(ResourceManage.SQL_PENDING_SELECT_2, new {
+                    InstanceID = instanceID,
+                    ActorID = actorID
+                })
+                .ToList();
+        }
     }
 }

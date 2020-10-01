@@ -19,6 +19,9 @@ namespace Smartflow.Elements
         protected List<Actor> actors = new List<Actor>();
         protected List<Group> groups = new List<Group>();
         protected List<Rule> rules = new List<Rule>();
+        protected List<Organization> organizations = new List<Organization>();
+        protected List<Carbon> carbons = new List<Carbon>();
+        
 
         protected Command command;
 
@@ -40,6 +43,17 @@ namespace Smartflow.Elements
             set { actors = value; }
         }
 
+        public List<Organization> Organizations
+        {
+            get { return organizations; }
+            set { organizations = value; }
+        }
+
+        public List<Carbon> Carbons
+        {
+            get { return carbons; }
+            set { carbons = value; }
+        }
 
         public List<Rule> Rules
         {
@@ -48,6 +62,24 @@ namespace Smartflow.Elements
         }
 
         public Node Previous
+        {
+            get;
+            set;
+        }
+
+        public string Veto
+        {
+            get;
+            set;
+        }
+
+        public string Back
+        {
+            get;
+            set;
+        }
+
+        public string Url
         {
             get;
             set;

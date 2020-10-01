@@ -39,6 +39,26 @@ namespace Smartflow
         /// <summary>
         /// 跳转节点
         /// </summary>
-        Transition
+        Transition,
+
+        /// <summary>
+        /// 分叉
+        /// </summary>
+        Fork,
+
+        /// <summary>
+        /// 合并
+        /// </summary>
+        Merge,
+
+        /// <summary>
+        /// 业务节点
+        /// </summary>
+        Form,
+
+        /// <summary>
+        /// 动态节点
+        /// </summary>
+        Dynamic
     }
 }

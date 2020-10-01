@@ -1,4 +1,5 @@
-﻿using Smartflow.Internals;
+﻿using Smartflow.Elements;
+using Smartflow.Internals;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,18 +49,35 @@ namespace Smartflow
         /// <param name="pageIndex">页索引</param>
         /// <param name="pageSize"></param>
         /// <param name="total"></param>
-        /// <param name="actorIds"></param>
-        /// <param name="searchKey"></param>
         /// <returns></returns>
-        public abstract List<WorkflowActor> GetActor(int pageIndex, int pageSize, out int total, string actorIDs, string searchKey);
+        public abstract List<WorkflowActor> GetActor(int pageIndex, int pageSize, out int total, Dictionary<string, string> queryArg);
 
 
         /// <summary>
         /// 获取参与者列表
         /// </summary>
-        /// <param name="actorIds"></param>
+        /// <param name="queryArg">查询条件</param>
         /// <returns></returns>
-        public abstract List<WorkflowActor> GetActor(string actorIDs);
+        public abstract List<WorkflowActor> GetActor(Dictionary<string, string> queryArg);
+
+
+        /// <summary>
+        /// 获取抄送列表
+        /// </summary>
+        /// <param name="pageIndex">页索引</param>
+        /// <param name="pageSize"></param>
+        /// <param name="total"></param>
+        /// <returns></returns>
+        public abstract List<WorkflowCarbon> GetCarbon(int pageIndex, int pageSize, out int total, Dictionary<string, string> queryArg);
+
+
+        /// <summary>
+        /// 获取抄送列表
+        /// </summary>
+        /// <param name="queryArg">查询条件</param>
+        /// <returns></returns>
+        public abstract List<WorkflowCarbon> GetCarbon(Dictionary<string, string> queryArg);
+
 
 
         /// <summary>
@@ -71,6 +89,7 @@ namespace Smartflow
             return ConfigurationService.Query().ToList();
         }
 
+
         /// <summary>
         /// 获取当前执行节点的记录
         /// </summary>
@@ -80,11 +99,15 @@ namespace Smartflow
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
             IList<dynamic> records = ProcessService.Query(instanceID);
-
+            List<string> runNodes = new List<string>();
+            foreach (Node n in instance.Current)
+            {
+                runNodes.Add(n.ID);
+            }
             return new
             {
                 structure = instance.Resource,
-                id = instance.Current.ID,
+                link = runNodes,
                 record = records
             };
         }

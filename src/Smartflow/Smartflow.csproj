@@ -11,6 +11,7 @@
     <AssemblyName>Smartflow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -39,16 +42,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\DemocraticDiscuss.cs" />
-    <Compile Include="Components\FirstDiscuss.cs" />
-    <Compile Include="Components\LastDiscuss.cs" />
+    <Compile Include="Components\BackSenderService.cs" />
+    <Compile Include="Components\BackService.cs" />
+    <Compile Include="Components\CooperationJumpService.cs" />
+    <Compile Include="Components\DemocraticDecision.cs" />
+    <Compile Include="Components\FirstDecision.cs" />
+    <Compile Include="Components\IJump.cs" />
+    <Compile Include="Components\JumpService.cs" />
+    <Compile Include="Components\LastDecision.cs" />
     <Compile Include="Components\DefaultStrategyService.cs" />
+    <Compile Include="Components\RequiredStrategyService.cs" />
+    <Compile Include="Components\ScriptActionService.cs" />
+    <Compile Include="Components\VetoService.cs" />
+    <Compile Include="Elements\Carbon.cs" />
+    <Compile Include="Elements\Organization.cs" />
     <Compile Include="Elements\Rule.cs" />
+    <Compile Include="Internals\ResourceManage.Assistant.cs" />
+    <Compile Include="Internals\ResourceManage.Carbon.cs" />
+    <Compile Include="Internals\ResourceManage.Link.cs" />
+    <Compile Include="Internals\ResourceManage.Organization.cs" />
     <Compile Include="Internals\ResourceManage.Rule.cs" />
     <Compile Include="IStrategyService.cs" />
-    <Compile Include="IWorkflowDiscuss.cs" />
+    <Compile Include="IWorkflowAssistantService.cs" />
+    <Compile Include="IWorkflowCooperationDecision.cs" />
     <Compile Include="Internals\ResourceManage.Cooperation.cs" />
     <Compile Include="IWorkflowCooperationService.cs" />
+    <Compile Include="IWorkflowLinkService.cs" />
+    <Compile Include="IWorkflowTransitionService.cs" />
+    <Compile Include="JumpFactory.cs" />
+    <Compile Include="WorkflowAssistantService.cs" />
+    <Compile Include="WorkflowCarbon.cs" />
+    <Compile Include="WorkflowCarbonService.cs" />
     <Compile Include="WorkflowCooperation.cs" />
     <Compile Include="Internals\ResourceManage.Action.cs" />
     <Compile Include="Internals\ResourceManage.Structure.cs" />
@@ -77,9 +101,7 @@
     <Compile Include="Elements\Element.cs" />
     <Compile Include="AbstractBridgeService.cs" />
     <Compile Include="IMailService.cs" />
-    <Compile Include="Internals\IResolution.cs" />
     <Compile Include="Internals\ManualResolution.cs" />
-    <Compile Include="Internals\ResolutionContext.cs" />
     <Compile Include="Internals\Utils.cs" />
     <Compile Include="Internals\XMLServiceFactory.cs" />
     <Compile Include="Elements\Node.cs" />
@@ -93,11 +115,13 @@
     <Compile Include="WorkflowCommandService.cs" />
     <Compile Include="WorkflowConfigurationService.cs" />
     <Compile Include="WorkflowCooperationService.cs" />
+    <Compile Include="WorkflowLinkService.cs" />
+    <Compile Include="WorkflowOrganization.cs" />
     <Compile Include="WorkflowGroup.cs" />
+    <Compile Include="WorkflowOrganizationService.cs" />
     <Compile Include="WorkflowGroupService.cs" />
     <Compile Include="WorkflowInstanceService.cs" />
     <Compile Include="WorkflowInstanceState.cs" />
-    <Compile Include="WorkflowMode.cs" />
     <Compile Include="WorkflowNodeCategory.cs" />
     <Compile Include="ExecutingContext.cs" />
     <Compile Include="Components\MailConfiguration.cs" />
@@ -129,7 +153,7 @@
       <Name>Dapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Smartflow.Common\Smartflow.Common.csproj">
-      <Project>{6c42e2eb-99c5-44d8-afe3-2593321e01f1}</Project>
+      <Project>{6C42E2EB-99C5-44D8-AFE3-2593321E01F1}</Project>
       <Name>Smartflow.Common</Name>
     </ProjectReference>
   </ItemGroup>

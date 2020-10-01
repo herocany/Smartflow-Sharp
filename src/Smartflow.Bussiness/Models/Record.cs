@@ -62,7 +62,7 @@ namespace Smartflow.Bussiness.Models
             set;
         }
 
-        public string UserGroup
+        public string NodeID
         {
             get;
             set;

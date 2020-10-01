@@ -9,6 +9,7 @@ using Smartflow.Bussiness.Queries;
 using Smartflow.Common;
 using Smartflow.Elements;
 using System.Text.RegularExpressions;
+using ZTT.MES.WF.Commands;
 
 namespace Smartflow.Bussiness.WorkflowService
 {
@@ -18,46 +19,65 @@ namespace Smartflow.Bussiness.WorkflowService
 
         public void ActionExecute(ExecutingContext executeContext)
         {
-            if (executeContext.Instance.State == WorkflowInstanceState.Reject)
+            if (executeContext.Instance.State == WorkflowInstanceState.Reject || executeContext.Instance.State == WorkflowInstanceState.Kill)
             {
                 CommandBus.Dispatch<string>(new DeletePending(),
                     executeContext.Instance.InstanceID);
             }
             else
             {
-                if (executeContext.Instance.Current.NodeType == WorkflowNodeCategory.Decision)
+                var current = executeContext.To;
+                if (current.NodeType == WorkflowNodeCategory.Decision)
                 {
                     DecisionJump(executeContext);
                 }
-                else if (!executeContext.Result && executeContext.Instance.Current.Cooperation == 1)
-                {
-                    CooperationPending.Execute(executeContext);
-                }
                 else
                 {
-                    string instanceID = executeContext.Instance.InstanceID;
-                    var current = GetCurrentNode(instanceID);
-                    if (current.NodeType == WorkflowNodeCategory.End)
+                    if (!executeContext.Result && !String.IsNullOrEmpty(executeContext.From.Cooperation))
                     {
-                        CommandBus.Dispatch<string>(new DeletePending(), instanceID);
+                        CooperationPending.Execute(executeContext);
                     }
                     else
                     {
-                        List<User> userList = bridgeService.GetActorByGroup(current,executeContext.Direction);
-                        foreach (User user in userList)
+                        string instanceID = executeContext.Instance.InstanceID;
+                        if (current.NodeType == WorkflowNodeCategory.End)
                         {
-                            WritePending(user.UniqueId, executeContext);
+                            CommandBus.Dispatch<string>(new DeletePending(), instanceID);
                         }
-                        string NID = executeContext.Instance.Current.NID;
-                        CommandBus.Dispatch<Dictionary<string, Object>>(new DeletePending(), new Dictionary<string, object>()
+                        else
                         {
-                            { "instanceID",instanceID},
-                            { "nodeID",NID }
-                        });
+                            AssignToPendingUser(executeContext, current);
+                        }
                     }
                 }
             }
         }
+
+        /// <summary>
+        /// 分派到人
+        /// </summary>
+        private void AssignToPendingUser(ExecutingContext executeContext,Node current)
+        {
+            string instanceID = executeContext.Instance.InstanceID;
+            //会签或分支节点取默认参与人者；非会签取用户选择的参与者
+            bool result = (!String.IsNullOrEmpty(executeContext.From.Cooperation) || executeContext.From.NodeType == WorkflowNodeCategory.Decision || executeContext.From.NodeType == WorkflowNodeCategory.Fork || executeContext.From.NodeType == WorkflowNodeCategory.Merge);
+            List<User> userList = result ?
+                bridgeService.GetActorByGroup(current, executeContext.Direction) :
+                bridgeService.GetActorByGroup((String)executeContext.Data.Actor, (String)executeContext.Data.Group, (String)executeContext.Data.Organization, current, executeContext.Direction);
+
+            CommandBus.Dispatch<Dictionary<string, Object>>(new DeletePending(), new Dictionary<string, object>(){
+                { "instanceID",instanceID},
+                { "nodeID", executeContext.From.NID }
+            });
+
+            foreach (User user in userList)
+            {
+                WritePending(user.ID, executeContext);
+            }
+
+            CommandBus.Dispatch(new CreateAssistant(), instanceID);
+        }
+
 
         /// <summary>
         /// 多条件跳转
@@ -66,24 +86,12 @@ namespace Smartflow.Bussiness.WorkflowService
         private void DecisionJump(ExecutingContext executeContext)
         {
             string instanceID = executeContext.Instance.InstanceID;
-            string NID = executeContext.Instance.Current.NID;
-            var current = GetCurrentNode(executeContext.Instance.InstanceID);
-
-            if (current.NodeType != WorkflowNodeCategory.Decision)
-            {
-                List<User> userList = bridgeService.GetActorByGroup(current,executeContext.Direction);
-                foreach (var user in userList)
-                {
-                    WritePending(user.UniqueId, executeContext);
-                }
-            }
-
+            string NID = executeContext.From.NID;
             Dictionary<string, object> deleteArg = new Dictionary<string, object>()
             {
                 { "instanceID",instanceID},
                 { "nodeID",NID }
             };
-
             CommandBus.Dispatch<Dictionary<string, Object>>(new DeletePending(), deleteArg);
         }
 
@@ -91,15 +99,15 @@ namespace Smartflow.Bussiness.WorkflowService
         /// 写待办信息
         /// </summary>
         /// <param name="actorID">参与者</param>
-        /// <param name="executeContext"></param>
+        /// <param name="executeContext">执行上下文</param>
         public void WritePending(string actorID, ExecutingContext executeContext)
         {
-            var node = GetCurrentNode(executeContext.Instance.InstanceID);
+            var node = executeContext.To;
             string cateCode = (String)executeContext.Data.CateCode;
             string instanceID = (String)executeContext.Instance.InstanceID;
             Category model = new CategoryService().Query()
                  .FirstOrDefault(cate => cate.NID == cateCode);
-       
+
             Pending entry = new Pending
             {
                 NID = Guid.NewGuid().ToString(),
@@ -114,11 +122,6 @@ namespace Smartflow.Bussiness.WorkflowService
             };
 
             CommandBus.Dispatch<Pending>(new CreatePending(), entry);
-        }
-
-        public Node GetCurrentNode(string instanceID)
-        {
-            return WorkflowInstance.GetInstance(instanceID).Current;
         }
     }
 }

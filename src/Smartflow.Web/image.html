@@ -4,33 +4,68 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="viewport" content="width=device-width" />
     <title>Smartflow 业务流程图</title>
+    <link href="./Content/layui/css/layui.css" rel="stylesheet" />
     <link href="./Content/design/smartflow.css" rel="stylesheet" />
     <script src="./Content/jquery.min.js"></script>
+    <script src="./Content/layui/layui.all.js"></script>
     <script src="./Content/design/svg.js"></script>
-    <script src="./Content/design/smartflow.js?v=15.5.55.5.11"></script>
+    <script src="./Content/design/smartflow.js"></script>
     <script src="./Content/common.js"></script>
     <script type="text/javascript">
         $(function () {
             var id = util.doQuery('id');
             $("#drawing").SMF({
                 container: 'drawing',
-                color: '#009688'
-            });
-            util.ajaxService({
-                type: 'get',
-                url: 'api/process/get/' + id,
-                success: function (serverData) {
-                    var instance = $.SMF.getComponentById('drawing');
-                    instance.import(serverData.structure,
-                        true,
-                        serverData.id, serverData.record);
+                color: '#009688',
+                executeColor: 'blue',
+                mouseout: function (node, evt) {
+                    layer.closeAll();
+                },
+                mouseover: function (node, evt) {
+                    showTip(node,evt);
                 }
             });
+
+            loadFlow();
+
+            function loadFlow() {
+                util.ajaxService({
+                    type: 'get',
+                    url: 'api/process/get/' + id,
+                    success: function (serverData) {
+                        var instance = $.SMF.getComponentById('drawing');
+                        instance.import(serverData.structure, serverData.link, serverData.record);
+                    }
+                });
+            }
+            function showTip(node,evt) {
+                var url = 'api/actor/get';
+                util.ajaxService({
+                    url: url,
+                    data: JSON.stringify({
+                        ID: id,
+                        Destination: node.id
+                    }),
+                    type: 'post',
+                    success: function (d) {
+                        var actor = [];
+                        $.each(d.Data, function () {
+                            actor.push(this.Name);
+                        });
+                        if (actor.length > 0) {
+                            layer.tips("<div style=\"word-break:break-all;\">本节点审批人：<br/>" + actor.join(',')+"</div>", (evt.target || evt.currentTarget), {
+                                tips: [1, '#3595CC'],
+                                time: 0
+                            });
+                        }
+                    }
+                });
+            }
         });
     </script>
 </head>
 <body>
-    <div class="container_process">
+    <div class="container_process" >
         <div class="container_draw" id="drawing"></div>
     </div>
 </body>

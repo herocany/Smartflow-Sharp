@@ -31,15 +31,17 @@
             actors.push(this.id);
         });
 
-        table.render({
+        util.table({
             elem: '#table_left'
             , url: 'api/setting/GetActor'
-            , height: 449
+            , method: 'post'
+            , contentType: 'application/x-www-form-urlencoded'
+            , height: 489
             , page: {
-                layout: ['prev', 'page', 'next']
+                layout: ['prev', 'page', 'next', 'count']
             }
             , where: {
-                arg: (nx.actor.length > 0) ? actors.join(',') : ''
+                arg: JSON.stringify({ actor: actors.join(',')})
             }
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , cols: [[
@@ -54,15 +56,15 @@
             ]]
         });
 
-       
-
-        table.render({
+        util.table({
             elem: '#table_right'
             , url: 'api/setting/GetAssignActor'
+            , method: 'post'
+            , contentType: 'application/x-www-form-urlencoded'
             , where: {
-                arg: (nx.actor.length > 0) ? actors.join(',') : ''
+                arg: JSON.stringify({ actor: actors.join(',') })
             }
-            , height: 449
+            , height: 489
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , page: false
             , cols: [[
@@ -92,7 +94,7 @@
             $('#left_table_1')[methodName]('layui-btn-disabled');
         });
     }
-
+   
     window.setting = {
         load: load,
         set: set
@@ -103,6 +105,20 @@
 
 $(function () {
 
+    loadTree();
+    $("#tree").click(function () {
+        var display = $("#zc").is(":hidden");
+        if (display) {
+            $("#zc").show();
+        } else {
+            $("#zc").hide();
+        }
+    });
+
+    $("#zc").hover(function () { }, function () {
+        $("#zc").hide();
+    });
+
     $('#reload').on('click', function () {
         var key = $('#title').val();
 
@@ -112,11 +128,18 @@ $(function () {
             actors.push(this.ID);
         });
 
+        var orgCode = $("#node-value").val();
+
+        var searchCondition = {
+            searchKey: key,
+            orgCode: orgCode,
+            actor: actors.join(',')
+        };
+
         var config = {
             page: { curr: 1 },
             where: {
-                key: key,
-                arg: actors.join(',')
+                arg: JSON.stringify(searchCondition)
             }
         };
 
@@ -140,8 +163,10 @@ $(function () {
             var config = {
                 page: { curr: 1 },
                 where: {
-                    key: key,
-                    arg: actors.join(',')
+                    arg: JSON.stringify({
+                        searchKey: key,
+                        actor: actors.join(',')
+                    })
                 }
             };
 
@@ -149,7 +174,9 @@ $(function () {
             layui.table.reload('table_right', {
                 page: false,
                 where: {
-                    arg: actors.join(',')
+                    arg: JSON.stringify({
+                        actor: actors.join(',')
+                    })
                 }
             });
 
@@ -168,7 +195,6 @@ $(function () {
                 $.each(cacheData, function () {
                     actors.push(this.ID);
                 });
-
                 if (checkStatus.data.length > 0) {
                     $.each(checkStatus.data, function () {
                         actors.push(this.ID);
@@ -178,8 +204,10 @@ $(function () {
                 var config = {
                     page: { curr: 1 },
                     where: {
-                        key: key,
-                        arg: actors.join(',')
+                        arg: JSON.stringify({
+                            searchKey: key,
+                            actor: actors.join(',')
+                        })
                     }
                 };
 
@@ -187,7 +215,9 @@ $(function () {
                 layui.table.reload('table_right', {
                     page: false,
                     where: {
-                        arg: actors.join(',')
+                        arg: JSON.stringify({
+                            actor: actors.join(',')
+                        })
                     }
                 });
             }
@@ -205,6 +235,35 @@ $(function () {
                     cacheData.splice(i, 1);
                     break;
                 }
+            }
+        });
+    } 
+
+    function loadTree() {
+        util.ajaxService({
+            type: 'get',
+            url: 'api/setting/getorgs',
+            success: function (serverData) {
+                $.fn.zTree.init($("#ztree"), {
+                    callback: {
+                        onClick: function (event, treeId,node) {
+                           // alert(node.ID);
+                            $("#tree").val(node.Name);
+                            $("#node-value").val(node.ID);
+                        }
+                    },
+                    data: {
+                        key: {
+                            name:'Name'
+                        },
+                        simpleData: {
+                            enable: true,
+                            idKey: 'ID',
+                            pIdKey: 'ParentID',
+                            rootPId: 0
+                        }
+                    }
+                }, serverData);
             }
         });
     }

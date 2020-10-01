@@ -9,5 +9,6 @@ namespace Smartflow.Bussiness.Interfaces
 {
     public interface IPendingService : IQuery<IList<Pending>, string>, IQuery<IList<Pending>, Dictionary<string, object>>
     {
+        IList<Pending> GetPending(string instanceID, string actorID);
     }
 }

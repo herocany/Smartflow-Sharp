@@ -6,112 +6,78 @@
 (function () {
 
     Configuration.controlSelectors = {
-        node_cooperation: {
-            pid: '#workflow_node',
+        node_veto: {
             type: 'checkbox',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
             },
             invoke: function (nx) {
-                $('#node_cooperation').prop('checked', parseInt(nx.cooperation, 10) === 1);
+                var veto = parseInt(nx.veto, 10);
+                $('#node_veto').prop('checked', veto === 1);
             }
         },
-        decision_select: {
-            pid: '#workflow_node',
+        node_cooperation_select: {
             type: 'select',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
             },
-            invoke: function (nx, $this) {
-                //$('#node_cooperation').prop('checked', parseInt(nx.cooperation, 10) === 1);
-                $this.loadDropdown(function () {
-
-                    if (nx.command) {
-                        $("#decision_select").val(nx.command.id);
-                    }
-
-                    layui.form.render(null, 'form_decision');
-                });
-            }
-        },
-        decision_script: {
-            pid: '#workflow_node',
-            parse: function (id) {
-                return $.SMF.getNodeById(id);
-            },
-            invoke: function (nx, $this) {
-                if (nx.command) {
-                    $("#decision_script").val(nx.command.text);
-                } else {
-                    $("#decision_script").val('');
-                }
-            }
-        },
-        transition_name: {
-            pid: '#workflow_transition',
-            parse: function (id) {
-                return $.SMF.getLineById(id);
-            },
             invoke: function (nx) {
-                $('#transition_name').val(nx.name);
+                $("#node_cooperation_select").val(nx.cooperation);
+                layui.form.render('select', 'form_cooperation');
             }
         },
-        node_role: {
-            pid: '#workflow_node',
-            title: '角色配置',
-            type: 'box',
-            width: '750px',
-            height: '560px',
-            url: './roleSelect.html',
+        node_assistant_select: {
+            type: 'select',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
             },
             invoke: function (nx) {
-                var role = [];
-                $.each(nx.group, function () {
-                    role.push(this.name);
-                });
-                $('#node_role').html(role.join(","));
+                $("#node_assistant_select").val(nx.assistant);
+                layui.form.render('select', 'form_cooperation');
             }
         },
-        node_user: {
-            pid: '#workflow_node',
-            title: '人员配置',
-            type: 'box',
-            width: '900px',
-            height: '600px',
-            url: './userSelect.html',
+        node_back_select: {
+            type: 'select',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
             },
             invoke: function (nx) {
-                var actor = [];
-                $.each(nx.actor, function () {
-                    actor.push(this.name);
-                });
-                $('#node_user').html(actor.join(","));
+                $("#node_back_select").val(nx.back);
+                layui.form.render('select', 'form_node');
             }
         },
         node_action: {
-            pid: '#workflow_node',
-            title: '自定义动作配置',
-            url: './actionSelect.html',
-            width: '750px',
-            height: '560px',
+            title: '自定义动作',
             type: 'box',
+            width: '900px',
+            height: '680px',
+            url: './actionSelect.html',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
-            },
-            invoke: function (nx) {
-                var action = [];
-                $.each(nx.action, function () {
-                    action.push(this.name);
-                });
-                $('#node_action').html(action.join(","));
+            }
+        },
+        node_carbon: {
+            title: '抄送',
+            type: 'box',
+            width: '900px',
+            height: '680px',
+            url: './carbonSelect.html',
+            parse: function (id) {
+                return $.SMF.getNodeById(id);
+            }
+        },
+        node_actor: {
+            title: '参与者',
+            type: 'box',
+            width: '900px',
+            height: '680px',
+            url: './actorSelect.html',
+            parse: function (id) {
+                return $.SMF.getNodeById(id);
             }
         },
         node_name: {
-            pid: '#workflow_node',
+            field: 'name',
             parse: function (id) {
                 return $.SMF.getNodeById(id);
             },
@@ -124,31 +90,20 @@
     Configuration.findElementById = function (o) {
         var id = $(o).attr('id');
         var controlSelector = Configuration.controlSelectors[id];
-        var vid = $(controlSelector.pid).attr('vid');
         return {
-            element: controlSelector.parse(vid),
+            element: this.element,
             descriptor: controlSelector
         };
     };
 
-    Configuration.select = function (settings) {
-        $.each(settings, function (i, selector) {
+    Configuration.show = function (settings) {
+        $.each(settings, function (i, propertyName) {
+            var selector = '#' + propertyName;
             $(selector).show();
             $(selector).siblings().each(function () {
                 $(this).hide();
             });
         });
-    };
-
-    Configuration.show = function (settings) {
-        $.each(settings, function (i, selector) {
-            $(selector).show();
-        });
-    };
-
-    Configuration.set = function (id) {
-        $('#workflow_node').attr('vid', id);
-        $('#workflow_node fieldset').hide();
     };
 
     Configuration.getDOMFrame = function (dom) {
@@ -167,10 +122,22 @@
             content: [descriptor.url, 'no']
         };
 
+        if (!!descriptor.btn) {
+            settings.btn = descriptor.btn;
+        }
+
+        if (!!descriptor.yes) {
+            settings.yes = function (index,dom) {
+                descriptor.yes.call(this, nx, index, dom);
+            }
+        }
+
         settings.cancel = function (index, dom) {
             var frameContent = Configuration.getDOMFrame(dom);
             frameContent.setting.set(nx);
-            descriptor.invoke(nx);
+            if (descriptor.invoke) {
+                descriptor.invoke(nx);
+            }
         };
 
         settings.success = function (dom, index) {
@@ -182,30 +149,30 @@
     };
 
     function Configuration(option) {
-        this.option = $.extend({ success: '操作成功' }, option);
-
+        this.option = $.extend({}, option);
         this.init();
         this.bind();
     }
 
     Configuration.prototype.init = function () {
-
         var $this = this;
+        var id = util.doQuery('id');
         $("#drawing").SMF({
             container: this.option.container,
             dblClick: function (nx) {
+                $this.element = nx;
                 $this.selectTab.call($this, nx);
             }
         });
 
-        var id = util.doQuery('id');
         if (id) {
             var url = $this.option.url + '/' + id;
             util.ajaxService({
                 url: url,
                 type: 'Get',
                 success: function (serverData) {
-                    $.SMF.getComponentById($this.option.container).import(serverData.StructXml);
+                    $.SMF.getComponentById($this.option.container)
+                        .import(serverData.StructXml);
                 }
             });
         } else {
@@ -215,104 +182,131 @@
                     .create(value, false);
             });
         }
+
+        //渲染所有表单
+        layui.form.render();
     };
 
     Configuration.prototype.bind = function () {
+        var $this = this;
         for (var propertyName in Configuration.controlSelectors) {
-
             var selector = '#' + propertyName,
                 sel = Configuration.controlSelectors[propertyName];
-
             if (sel.type === 'checkbox') {
                 $(selector).click(function () {
-                    var result = Configuration.findElementById(this);
-                    result.element.cooperation = $(this).is(':checked') ? 1 : 0;
+                    var result = Configuration.findElementById.call($this, this);
+                    result.element.veto = $(this).is(':checked') ? 1 : 0;
                 });
             } else if (sel.type === 'box') {
                 $(selector).click(function () {
-                    var result = Configuration.findElementById(this);
+                    var result = Configuration.findElementById.call($this, this);
                     Configuration.open(result.element, result.descriptor);
                 });
-            } else if (sel.type === 'select') {
-                layui.form.on('select(decision_select)', function (data) {
-                    //alert(JSON.stringify(data));
-                    if (data.value) {
-                        var result = Configuration.findElementById($("#decision_select"));
-                        result.element.command = $.extend(result.element.command || {}, {
-                            id: data.value
-                        });
-                    }
+            }
+            else if (propertyName == 'node_cooperation_select') {
+                layui.form.on('select(node_cooperation_select)', function (data) {
+                  //  if (data.value) {
+                        var result = Configuration.findElementById.call($this, $("#node_cooperation_select"));
+                        result.element.cooperation = (!!data.value) ? data.value : '';
+                   // }
+                });
+            }
+            else if (propertyName == 'node_assistant_select') {
+                layui.form.on('select(node_assistant_select)', function (data) {
+                   // if (data.value) {
+                        var result = Configuration.findElementById.call($this, $("#node_assistant_select"));
+                        result.element.assistant= (!!data.value) ? data.value : '';
+                    //}
+                });
+            }
+            else if (propertyName == 'node_back_select') {
+                layui.form.on('select(node_back_select)', function (data) {
+                   // if (data.value) {
+                        var result = Configuration.findElementById.call($this, $("#node_back_select"));
+                        result.element.back = data.value;
+                   // }
                 });
             }
             else {
                 $(selector).keyup(function () {
-                    var result = Configuration.findElementById(this);
+                    var result = Configuration.findElementById.call($this, this);
                     var text = $(this).val();
-                    if (result.element.category.toLowerCase() === 'decision') {
-                        result.element.command = $.extend(result.element.command || {}, {
-                            text: text
-                        });
-                    } else {
-                        result.element.name = text;
-                        if (result.element.brush) {
-                            result.element.brush.text(text);
-                        }
+                    result.element.name = text;
+                    if (result.element.brush) {
+                        result.element.brush.text(text);
                     }
                 });
             }
         }
-        this.dynamicControl();
-        this.dynamicConstraint();
+        this.bindConstraint();
     };
 
     Configuration.prototype.selectTab = function (nx) {
         var $this = this,
-            category = nx.category.toLowerCase(),
-            _tabs = {
-                start: ['#workflow_help'],
-                end: ['#workflow_node'],
-                line: ['#workflow_transition'],
-                node: ['#workflow_node'],
-                decision: ['#workflow_node']
-            },
-            _sTabs = {
-                node: ['#attributes_node_info', '#attributes_role', '#attributes_config', '#attributes_user', '#attributes_strategy'],
-                decision: ['#attributes_decision_info', '#attributes_decision_expression', '#attributes_config'],
-                end: ['#attributes_config']
-            },
-            controlGroup = {
-                line: ['transition_name'],
-                node: ['node_cooperation', 'node_name', 'node_role', 'node_action', 'node_user'],
-                decision: ['decision_select', 'decision_script', 'node_action'],
-                end: ['node_action']
-            };
-
-        Configuration.select(_tabs[category]);
-        if (_sTabs[category]) {
-            Configuration.set(nx.$id);
-            Configuration.show(_sTabs[category]);
-        }
-
-        if (category === 'line') {
-            $('#workflow_transition').attr('vid', nx.$id);
-        }
-        else if (category === 'decision') {
-            $this.dynamic(nx);
-        }
-        else if (category === 'node') {
-
+            category = nx.category.toLowerCase();
+        if (category === 'node') {
+            Configuration.show([$this.option.node]);
             $this.loadConstraint(function () {
-                $.each(nx.rule, function () {
-                    $('#' + this.id).attr("checked", true);
+                $.each(nx.rule, function () { $('#' + this.id).attr("checked", true); });
+                layui.form.render(null, $this.option.constraintID);
+            });
+            var controls = ['node_veto', 'node_name', 'node_carbon', 'node_cooperation_select','node_assistant_select', 'node_back_select'];
+            $.each(controls, function (i, propertyName) {
+                if (Configuration.controlSelectors[propertyName].invoke) {
+                    Configuration.controlSelectors[propertyName].invoke(nx, $this);
+                }
+            });
+        } else {
+            Configuration.show([$this.option.help]);
+            if (category === 'line') {
+                layer.prompt({
+                    formType: 0,
+                    value: nx.name,
+                    title: '跳转',
+                    btn: ['确定']
+                }, function (value, index, elem) {
+                    nx.name = value;
+                    layer.close(index);
                 });
-                layui.form.render(null, $this.option.constraintId);
-            });
-        }
-
-        if (controlGroup[category]) {
-            $.each(controlGroup[category], function (i, propertyName) {
-                Configuration.controlSelectors[propertyName].invoke(nx, $this);
-            });
+            }
+            else if (category === 'form') {
+                Configuration.open(nx, {
+                    title: '属性',
+                    width: '400px',
+                    height: '220px',
+                    url: './form.html',
+                    btn: ['确定'],
+                    yes: function (nx, index, dom) {
+                        var frameContent = Configuration.getDOMFrame(dom);
+                        frameContent.setting.set(nx);
+                        layer.close(index);
+                    }
+                });
+            }
+            else if (category === 'end') {
+                Configuration.open(nx, {
+                    title: '自定义动作',
+                    width: '900px',
+                    height: '680px',
+                    url: './actionSelect.html'
+                });
+            }
+            else if (category === 'dynamic') {
+                Configuration.open(nx, {
+                    title: '自定义动作',
+                    width: '900px',
+                    height: '680px',
+                    url: './actionSelect.html'
+                });
+            }
+            else if (category === 'decision') {
+                Configuration.open(nx, {
+                    title: '属性',
+                    width: '900px',
+                    height: '680px',
+                    url: './decision.html'
+                });
+            }
         }
     };
 
@@ -324,9 +318,9 @@
             title: '流程信息',
             type: 1,
             closeBtn: 1,
-            area: ['520px', '350px'], //宽高
+            area: ['520px', '350px'],
             anim: 2,
-            shadeClose: false, //开启遮罩关闭
+            shadeClose: false,
             content: ht,
             btnAlign: 'c',
             btn: ['确定'],
@@ -348,14 +342,13 @@
                     formData.NID = id;
                 }
                 formData.StructXml = instance.export();
-                formData.CateName = $("#category_select :selected").text();
                 util.ajaxService({
                     url: $this.option.save,
-                    data: formData,
+                    data: JSON.stringify(formData),
                     success: function () {
                         layer.closeAll();
-                        if (window.opener && window.opener.doGridFresh) {
-                            window.opener.doGridFresh();
+                        if (window.opener && window.opener.invoke) {
+                            window.opener.invoke();
                         }
                         window.close();
                     }
@@ -366,65 +359,66 @@
 
     Configuration.prototype.set = function (id) {
         var url = this.option.url + '/' + id;
+        var $this = this;
         util.ajaxService({
             url: url,
             type: 'Get',
             success: function (serverData) {
                 var form = layui.form;
+                $this.select(serverData.CateCode, 'ztree');
                 form.val('layui_flow_info', serverData);
             }
         });
     }
 
-    Configuration.prototype.dynamic = function (nx) {
-        var LC = nx.getTransitions();
-        if (LC.length > 0) {
-            var template = document.getElementById("common_expression").innerHTML,
-                ele = [];
-
-            $.each(LC, function (i) {
-                ele.push(template.replace(/{{name}}/, this.name)
-                    .replace(/{{expression}}/, this.expression)
-                    .replace(/{{id}}/, this.$id)
-                );
-            });
-            $("#form_expression").html(ele.join(''));
-            layui.form.render(null, 'form_expression');
+    Configuration.prototype.select = function (id, treeId) {
+        var treeObj = $.fn.zTree.getZTreeObj(treeId);
+        var nodes = treeObj.getNodesByParam("NID", id, null);
+        if (nodes.length > 0) {
+            var n = nodes[0];
+            treeObj.selectNode(n);
+            $('#txtCateName').val(n.Name);
         }
-    }
-
-    Configuration.prototype.dynamicControl = function () {
-
-        $("#form_expression").on("keyup", "textarea", function () {
-            var vid = $('#workflow_node').attr('vid'),
-                nx = $.SMF.getNodeById(vid),
-                input = $(this);
-
-            nx.set({
-                id: input.attr("name"),
-                expression: input.val()
-                    .replace(/\r\n/g, ' ')
-                    .replace(/\n/g, ' ')
-                    .replace(/\s/g, ' ')
-            });
-
-        });
     }
 
     Configuration.prototype.loadCategory = function (callback) {
         var url = this.option.categoryUrl,
             id = '#' + this.option.categoryId;
-
         util.ajaxService({
             url: url,
             type: 'GET',
             success: function (serverData) {
-                var htmlArray = [];
-                $.each(serverData, function () {
-                    htmlArray.push("<option value='" + this.NID + "'>" + this.Name + "</option>");
-                });
-                $(id).html(htmlArray.join(''));
-
+                var treeObj = $.fn.zTree.init($(id), {
+                    beforeClick: function (id, node) {
+                        return !node.isParent;
+                    },
+                    callback: {
+                        onClick: function (event, id, node) {
+                            $("#hidCateCode").val(node.NID);
+                            $("#txtCateName").val(node.Name);
+                        },
+                        onDblClick: function () {
+                            $("#hidCateCode").val(node.NID);
+                            $("#txtCateName").val(node.Name);
+                            $("#zc").hide();
+                        }
+                    },
+                    data: {
+                        key: {
+                            name: 'Name'
+                        },
+                        simpleData: {
+                            enable: true,
+                            idKey: 'NID',
+                            pIdKey: 'ParentID',
+                            rootPId: 0
+                        }
+                    }
+                }, serverData);
+                var nodes = treeObj.getNodesByFilter(function (node) { return node.level == 0; });
+                if (nodes.length > 0) {
+                    treeObj.expandNode(nodes[0]);
+                }
                 callback && callback();
             }
         });
@@ -433,7 +427,7 @@
     Configuration.prototype.loadConstraint = function (callback) {
         var $this = this,
             url = $this.option.constraintUrl,
-            id = '#' + $this.option.constraintId;
+            id = '#' + $this.option.constraintID;
         util.ajaxService({
             url: url,
             type: 'GET',
@@ -444,20 +438,17 @@
                 });
 
                 $(id).html(htmlArray.join(''));
-                layui.form.render(null, $this.option.constraintId);
-
+                layui.form.render(null, $this.option.constraintID);
                 callback && callback();
             }
         });
     }
 
-    Configuration.prototype.dynamicConstraint = function () {
+    Configuration.prototype.bindConstraint = function () {
         var $this = this;
         layui.form.on('checkbox', function (data) {
-            var vid = $('#workflow_node').attr('vid'),
-                nx = $.SMF.getNodeById(vid),
-                formData = layui.form.val($this.option.constraintId);
-
+            var nx = $this.element,
+                formData = layui.form.val($this.option.constraintID);
             nx.rule.length = 0;
             for (var property in formData) {
                 var title = $('#' + property).attr('title');
@@ -465,26 +456,6 @@
                     id: property,
                     name: title
                 });
-            }
-        });
-    }
-
-    Configuration.prototype.loadDropdown = function (callback) {
-        var url = this.option.dataSourceUrl,
-            id = '#' + this.option.dataSourceId;
-        util.ajaxService({
-            url: url,
-            type: 'GET',
-            success: function (serverData) {
-                var htmlArray = [];
-
-                htmlArray.push("<option value=\"\"></option>");
-                $.each(serverData, function () {
-                    htmlArray.push("<option value='" + this.ID + "'>" + this.Name + "</option>");
-                });
-                $(id).html(htmlArray.join(''));
-
-                callback && callback();
             }
         });
     }

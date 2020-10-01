@@ -1,5 +1,4 @@
-﻿@import url('../common.css');
-html,body{height:100%;width:100%;overflow:hidden;}
+﻿html,body{height:100%;width:100%;overflow:hidden;}
 .container_ctr {
     margin-left: 30px;
     margin-right: 300px;
@@ -34,21 +33,17 @@ html,body{height:100%;width:100%;overflow:hidden;}
     border-collapse: collapse;
     font-size: 14px;
 }
-
 .smartflow-list {
     font-size: 14px;
     color: #666666;
 }
-
 .smartflow-list li {
         line-height: 25px;
         cursor: pointer;
     }
-
 .smartflow-table td input[type='text'] {
     padding-left: 2px;
 }
-
 .layui-elem-field legend {
     margin-left: 8px;
     font-size: 16px;
@@ -168,3 +163,30 @@ svg, text,path {-moz-user-select: none; -webkit-user-select: none; -ms-user-sele
 circle { opacity: 0.4;}
 text {font-size: 12px;text-anchor: middle;dominant-baseline: middle;pointer-events: none;fill:#FFF;font-weight: 600;letter-spacing: 1px;}
 .layui-form-select dl {max-height: 80px;}
+.ztree-container {
+    left: 0;
+    right: 0;
+    top: 38px;
+    height: 130px;
+    position: absolute;
+    background-color: #F0F0F0;
+    z-index: 888;
+    overflow: auto;
+    display: none;
+}
+.container_ctr {
+    overflow: auto;
+}
+
+.container_draw {
+    height: 4000px;
+    width: 4000px;
+}
+
+.tools_menu img:hover {
+    border: solid 1px #ad9d9d;
+}
+
+.hide{
+    display:none;
+}

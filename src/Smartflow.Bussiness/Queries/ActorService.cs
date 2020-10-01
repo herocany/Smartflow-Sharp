@@ -32,7 +32,13 @@ namespace Smartflow.Bussiness.Queries
                     NodeID = queryArg["nodeID"]
                 }).ToList();
         }
-     
+
+        public IList<User> GetActorByOrganization(string organizationCodes)
+        {
+            return DBUtils.CreateConnection()
+                .Query<User>(string.Format(ResourceManage.SQL_USER_SELECT_4, organizationCodes)).ToList();
+        }
+
         public IList<User> GetActorByRole(string id)
         {
             return DBUtils.CreateConnection()

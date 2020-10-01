@@ -20,9 +20,9 @@ namespace Smartflow
             };
         }
 
-        public void Persistent(Rule entry, Action<string, object> execute)
+        public void Persistent(Rule entry, Action<string, object> callback)
         {
-            execute(ResourceManage.SQL_WORKFLOW_NODE_RULE_INSERT, new
+            callback(ResourceManage.SQL_WORKFLOW_NODE_RULE_INSERT, new
             {
                 NID = Guid.NewGuid().ToString(),
                 entry.ID,

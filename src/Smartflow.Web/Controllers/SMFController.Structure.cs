@@ -6,53 +6,54 @@ using System.Net.Http;
 using System.Web.Http;
 using Smartflow.Bussiness.WorkflowService;
 using Smartflow.Common;
+using Smartflow.Web.Code;
 
 namespace Smartflow.Web.Controllers
 {
-    public  class StructureController : ApiController
+    public class StructureController : ApiController
     {
-        private readonly AbstractBridgeService _abstractBridgeService;
-
-        public StructureController(AbstractBridgeService abstractBridgeService)
+        private readonly AbstractBridgeService _abstractService;
+        public StructureController(AbstractBridgeService abstractService)
         {
-            _abstractBridgeService = abstractBridgeService;
+            _abstractService = abstractService;
         }
 
-
-        public dynamic Get()
+        [HttpPost]
+        public dynamic Query(Paging paging)
         {
-            IList<WorkflowStructure> structs = _abstractBridgeService.WorkflowStructureService.Query();
+            IList<WorkflowStructure> structs =
+                _abstractService.WorkflowStructureService.Query(paging.Page, paging.Limit, out int total, paging.Get());
 
-            return CommonMethods.Success(structs, structs.Count);
+            return CommonMethods.Response(structs, total);
         }
 
         public WorkflowStructure Get(string id)
         {
-            return _abstractBridgeService.WorkflowStructureService.Query(id).FirstOrDefault();
+            return _abstractService.WorkflowStructureService.Query(id).FirstOrDefault();
         }
-     
-        public void Put([FromBody]WorkflowStructure workflowStructure)
+
+        public void Put(WorkflowStructure workflowStructure)
         {
             WorkflowStructure model = this.Get(workflowStructure.NID);
-          
+
             model.Status = workflowStructure.Status;
 
             if (model.Status == 1)
             {
-                IList<WorkflowStructure> wfList = _abstractBridgeService
+                IList<WorkflowStructure> wfList = _abstractService
                     .WorkflowStructureService.Query().Where(e => e.CateCode == model.CateCode && e.NID != model.NID && e.Status == 1)
                     .ToList<WorkflowStructure>();
 
                 foreach (WorkflowStructure entry in wfList)
                 {
                     entry.Status = 0;
-                    _abstractBridgeService.WorkflowStructureService.Persistent(entry);
+                    _abstractService.WorkflowStructureService.Persistent(entry);
                 }
             }
-            _abstractBridgeService.WorkflowStructureService.Persistent(model);
+            _abstractService.WorkflowStructureService.Persistent(model);
         }
 
-        public void Post([FromBody]WorkflowStructure workflowStructure)
+        public void Post(WorkflowStructure workflowStructure)
         {
             workflowStructure.StructXml = Uri.UnescapeDataString(workflowStructure.StructXml);
             workflowStructure.CreateDateTime = DateTime.Now;
@@ -65,12 +66,12 @@ namespace Smartflow.Web.Controllers
                 }
             }
 
-            _abstractBridgeService.WorkflowStructureService.Persistent(workflowStructure);
+            _abstractService.WorkflowStructureService.Persistent(workflowStructure);
         }
 
         public void Delete(string id)
         {
-            _abstractBridgeService.WorkflowStructureService.Delete(id);
+            _abstractService.WorkflowStructureService.Delete(id);
         }
     }
 }

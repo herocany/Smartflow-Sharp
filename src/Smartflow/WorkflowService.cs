@@ -24,7 +24,7 @@ namespace Smartflow
             var start = workflow.Nodes.Where(n => n.NodeType == WorkflowNodeCategory.Start).FirstOrDefault();
 
             IList<Action<IDbConnection, IDbTransaction, string>> commands = new List<Action<IDbConnection, IDbTransaction, string>>();
-            Func<IDbConnection, IDbTransaction, string> callback = (connection, transaction) => InstanceService.CreateInstance(start.ID, resourceXml, workflow.Mode, (command, entry) => connection.Execute(command, entry, transaction));
+            string callback(IDbConnection connection, IDbTransaction transaction) => InstanceService.CreateInstance(start.ID, resourceXml, (command, entry) => connection.Execute(command, entry, transaction));
 
             foreach (Node node in workflow.Nodes)
             {

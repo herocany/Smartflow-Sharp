@@ -34,8 +34,8 @@
                 , title: ['待选择', '已选择']
                 , data: leftDataSource
                 , value: rightDataSource
-                , height: 495
-                , width: 322
+                , height: 530
+                , width: 391
                 , id: 'rightGroup'
             });
         };
@@ -60,6 +60,8 @@
 
         nx.group = roleArray;
     }
+
+
 
     window.setting = {
         load: loadGroup,

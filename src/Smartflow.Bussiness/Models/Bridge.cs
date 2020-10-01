@@ -29,5 +29,23 @@ namespace Smartflow.Bussiness.Models
         {
             get; set;
         }
+
+        public string Creator
+        {
+            get;
+            set;
+        }
+
+        public DateTime CreateDateTime
+        {
+            get;
+            set;
+        }
+
+        public string Name
+        {
+            get;
+            set;
+        }
     }
 }

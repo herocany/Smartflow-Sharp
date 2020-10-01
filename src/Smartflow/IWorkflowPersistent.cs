@@ -13,7 +13,7 @@ namespace Smartflow
 
     public interface IWorkflowPersistent<T,S> where T : class
     {
-        void Persistent(T entry,S execute);
+        void Persistent(T entry,S callback);
     }
 
 }

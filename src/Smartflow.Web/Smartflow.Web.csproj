@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EmitMapper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -82,22 +85,58 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="auditFrame.html" />
-    <Content Include="auditWindow.html" />
+    <Content Include="codeAction.html" />
+    <Content Include="actorSelect.html" />
+    <Content Include="condition.html" />
+    <Content Include="Content\decision.js" />
+    <Content Include="Content\actionSelect.js" />
+    <Content Include="Content\actorSelect.js" />
+    <Content Include="Content\design\images\fork-1.png" />
+    <Content Include="Content\design\images\fork.png" />
+    <Content Include="Content\design\images\form.png" />
+    <Content Include="Content\design\images\merge.png" />
+    <Content Include="Content\condition.js" />
+    <Content Include="Content\easyAction.js" />
+    <Content Include="Content\form.js" />
+    <Content Include="Content\layui.extension.css" />
+    <Content Include="Content\list.js" />
+    <Content Include="Content\organizationSelect.js" />
+    <Content Include="Content\tab.css" />
+    <Content Include="Content\uc.js" />
+    <Content Include="Content\carbonSelect.css" />
+    <Content Include="Content\carbonSelect.js" />
     <Content Include="Content\userSelect.css" />
-    <Content Include="Content\userSelect.js" />
-    <Content Include="Content\audit.css" />
-    <Content Include="Content\audit.js" />
-    <Content Include="Content\auditWindow.js" />
     <Content Include="Content\common.css" />
     <Content Include="Content\common.js" />
-    <Content Include="Content\actionSelect.js" />
+    <Content Include="Content\codeAction.js" />
     <Content Include="Content\roleSelect.js" />
     <Content Include="Content\layui\font\iconfont.eot" />
     <Content Include="Content\layui\font\iconfont.ttf" />
     <Content Include="Content\layui\font\iconfont.woff" />
     <Content Include="Content\layui\font\iconfont.woff2" />
     <Content Include="Content\jquery.min.js" />
+    <Content Include="Content\userSelect.js" />
+    <Content Include="Content\ztree\jquery.ztree.all.min.js" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\1_close.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\1_open.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\2.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\3.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\4.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\5.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\6.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\7.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\8.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\9.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\line_conn.gif" />
+    <Content Include="Content\ztree\zTreeStyle\img\loading.gif" />
+    <Content Include="Content\ztree\zTreeStyle\img\zTreeStandard.gif" />
+    <Content Include="Content\ztree\zTreeStyle\img\zTreeStandard.png" />
+    <Content Include="Content\ztree\zTreeStyle\zTreeStyle.css" />
+    <Content Include="decision.html" />
+    <Content Include="easyAction.html" />
+    <Content Include="form.html" />
+    <Content Include="organizationSelect.html" />
+    <Content Include="carbonSelect.html" />
     <Content Include="userSelect.html" />
     <Content Include="list.html" />
     <None Include="packages.config" />
@@ -234,13 +273,18 @@
     <Content Include="design.html" />
     <Content Include="Global.asax" />
     <Content Include="actionSelect.html" />
-    <Content Include="pending.html" />
     <Content Include="roleSelect.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\CommonMethods.cs" />
+    <Compile Include="Code\EmitCore.cs" />
+    <Compile Include="Code\IgnoreCaseRule.cs" />
     <Compile Include="Code\NinjectDependencyResolver.cs" />
+    <Compile Include="Code\ResultData.cs" />
     <Compile Include="Controllers\SMFController.Bridge.cs" />
+    <Compile Include="Controllers\SMFController.Summary.cs" />
+    <Compile Include="Controllers\SMFController.Actor.cs" />
     <Compile Include="Controllers\SMFController.Category.cs" />
     <Compile Include="Controllers\SMFController.Pending.cs" />
     <Compile Include="Controllers\SMFController.Process.cs" />
@@ -251,6 +295,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ActorDto.cs" />
+    <Compile Include="Models\BridgeDto.cs" />
+    <Compile Include="Models\PendingDeleteDto.cs" />
+    <Compile Include="Models\PendingDto.cs" />
+    <Compile Include="Models\PostLostContextDto.cs" />
+    <Compile Include="Models\PostContextDto.cs" />
+    <Compile Include="Models\RequestInstanceDto.cs" />
+    <Compile Include="Models\Summary.DeleteDto.cs" />
+    <Compile Include="Models\Summary.Dto.cs" />
+    <Compile Include="Models\Summary.StatDto.cs" />
+    <Compile Include="Models\WorkflowDeleteDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -267,7 +322,6 @@
       <Name>Smartflow</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -283,7 +337,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55215</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Smartflow.Web</IISUrl>
+          <IISUrl>http://localhost/SMF.Core</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

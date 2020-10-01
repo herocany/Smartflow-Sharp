@@ -14,13 +14,13 @@ using Smartflow.Internals;
 
 namespace Smartflow
 {
-    public class WorkflowEngine
+    public sealed class WorkflowEngine
     {
         private readonly static WorkflowEngine singleton = new WorkflowEngine();
 
         private readonly AbstractWorkflow workflowService = WorkflowGlobalServiceProvider.Resolve<AbstractWorkflow>();
 
-        protected WorkflowEngine()
+        private WorkflowEngine()
         {
         }
 
@@ -48,139 +48,39 @@ namespace Smartflow
             WorkflowInstance instance = context.Instance;
             if (instance.State == WorkflowInstanceState.Running)
             {
-                string instanceID = instance.InstanceID;
-                Node current = instance.Current;
-                if (context.TransitionID == Utils.CONST_REJECT_TRANSITION_ID)
+                var current = context.Current;
+                if (!String.IsNullOrEmpty(context.Current.Cooperation))
                 {
-                    Reject(instance, context);
-                    return;
+                    context.TransitionID = CooperationJumpService.Cooperation(context, new ExecutingContext
+                    {
+                        From = current,
+                        To = current,
+                        Direction = context.TransitionID == Utils.CONST_BACK_TRANSITION_ID ? WorkflowOpertaion.Back : WorkflowOpertaion.Go,
+                        Instance = context.Instance,
+                        Data = context.Data,
+                        Message = context.Message,
+                        Result = context.Result
+                    });
                 }
-              
-                Transition currentTransition = current.Transitions
-                                  .FirstOrDefault(e => e.NID == context.TransitionID);
 
-                Node to = workflowService.NodeService.Query(instanceID)
-                            .Where(e => e.ID == currentTransition.Destination).FirstOrDefault();
-
-                var executeContext = new ExecutingContext()
+                if (!String.IsNullOrWhiteSpace(context.TransitionID))
                 {
-                    From = current,
-                    To = to,
-                    Direction= currentTransition.Direction,
-                    Instance = context.Instance,
-                    Data = context.Data,
-                    Result = false
-                };
-
-                if (current.Cooperation == 1)
-                {
-                    this.Discuss(context, current, executeContext, context.ActorID);
-                }
-                else
-                {
-                    this.Invoke(to,instanceID, currentTransition, executeContext, context.ActorID,context);
+                    context.Result = true;
+                    JumpFactory.Create(context.TransitionID).Jump(context);
                 }
             }
         }
 
-        protected void Invoke(Node to, string instanceID, Transition selectTransition, ExecutingContext executeContext, String actorID, WorkflowContext context)
-        {
-            workflowService.InstanceService.Jump(selectTransition.Destination, instanceID, new WorkflowProcess()
-            {
-                RelationshipID = executeContext.From.NID,
-                ActorID = actorID,
-                Origin = executeContext.From.ID,
-                Destination = executeContext.To.ID,
-                TransitionID = selectTransition.NID,
-                InstanceID = executeContext.Instance.InstanceID,
-                NodeType = executeContext.From.NodeType,
-                Direction = selectTransition.Direction
-            }, workflowService.ProcessService);
-
-            workflowService.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
-
-            if (to.NodeType == WorkflowNodeCategory.End)
-            {
-                workflowService.InstanceService.Transfer(WorkflowInstanceState.End, instanceID);
-            }
-            else if (to.NodeType == WorkflowNodeCategory.Decision)
-            {
-                Transition transition = (selectTransition.Direction == WorkflowOpertaion.Back) ?
-                    workflowService.NodeService.GetBackTransition(WorkflowInstance.GetInstance(instanceID).Current) :
-                    workflowService.NodeService.GetTransition(to);
-
-                if (transition == null) return;
-                Jump(new WorkflowContext()
-                {
-                    Instance = WorkflowInstance.GetInstance(instanceID),
-                    TransitionID = transition.NID,
-                    Data = context.Data,
-                    ActorID = context.ActorID
-                });
-            }
-        }
-
-        protected void Discuss(WorkflowContext context, Node current, ExecutingContext executeContext, string actorID)
-        {
-            string instanceID = context.Instance.InstanceID;
-
-            IWorkflowCooperationService workflowCooperationService = workflowService.NodeService.WorkflowCooperationService;
-            IStrategyService strategyService = workflowService.StrategyService;
-
-            workflowService.NodeService.WorkflowCooperationService.Persistent(new WorkflowCooperation
-            {
-                NID = Guid.NewGuid().ToString(),
-                NodeID = current.NID,
-                InstanceID = context.Instance.InstanceID,
-                TransitionID = context.TransitionID,
-                CreateDateTime = DateTime.Now
-            });
-
-            IList<WorkflowCooperation> records = workflowCooperationService.Query(instanceID)
-                                                .Where(e => e.NodeID == current.NID)
-                                                .ToList();
-
-            executeContext.Result = strategyService.Check(records);
-            if (executeContext.Result)
-            {
-                string to = strategyService.Use().Execute(records);
-                Transition transition = current.Transitions.FirstOrDefault(e => e.NID == to);
-                Node node = workflowService.NodeService.Query(current.InstanceID)
-                            .Where(e => e.ID == transition.Destination).FirstOrDefault();
-
-                this.Invoke(node,instanceID, transition, new ExecutingContext()
-                {
-                    From = current,
-                    To = node,
-                    Instance = context.Instance,
-                    Data = context.Data,
-                    Result = executeContext.Result,
-                    Direction=executeContext.Direction
-
-                }, actorID,context);
-            }
-            else
-            {
-                workflowService.Actions.ForEach(pluin => pluin.ActionExecute(executeContext));
-            }
-        }
-
-        /// <summary>
-        /// 流程被驳回
-        /// </summary>
-        /// <param name="instance">实例</param>
-        protected void Reject(WorkflowInstance instance, WorkflowContext context)
+        public void Kill(WorkflowInstance instance, WorkflowContext context)
         {
             if (instance.State == WorkflowInstanceState.Running)
             {
-                workflowService.InstanceService.Transfer(WorkflowInstanceState.Reject, instance.InstanceID);
-                WorkflowInstance newInstance = WorkflowInstance.GetInstance(instance.InstanceID);
-
+                workflowService.InstanceService.Transfer(WorkflowInstanceState.Kill, instance.InstanceID);
                 workflowService.Actions.ForEach(pluin => pluin.ActionExecute(new ExecutingContext()
                 {
-                    From = newInstance.Current,
-                    To = newInstance.Current,
-                    Instance = newInstance,
+                    From = context.Current,
+                    To = context.Current,
+                    Instance = WorkflowInstance.GetInstance(instance.InstanceID),
                     Data = context.Data
                 }));
             }

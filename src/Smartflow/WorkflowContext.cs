@@ -3,6 +3,8 @@
  Home page: https://www.smartflow-sharp.com
  ********************************************************************
  */
+using Smartflow.Components;
+using Smartflow.Elements;
 using System;
 
 
@@ -16,7 +18,19 @@ namespace Smartflow
             set;
         }
 
+        public string NodeID
+        {
+            get;
+            set;
+        }
+
         public string ActorID
+        {
+            get;
+            set;
+        }
+
+        public string Message
         {
             get;
             set;
@@ -33,6 +47,20 @@ namespace Smartflow
         {
             get;
             set;
+        }
+
+        public Node Current
+        {
+            get;
+            set;
+        }
+
+        private bool result = false;
+
+        internal bool Result
+        {
+            get { return result; }
+            set { result = value; }
         }
     }
 }

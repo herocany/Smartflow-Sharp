@@ -19,12 +19,25 @@ namespace Smartflow
             get;
         }
 
-        Transition GetTransition(ASTNode n);
+         WorkflowTransitionService TransitionService
+        {
+            get;
+            
+        }
 
-        Transition GetBackTransition(Node current);
+        Transition GetTransition(ASTNode n);
 
         Node GetNode(Node entry);
 
-        List<Transition> GetExecuteTransition(WorkflowInstance instance);
+        IEnumerable<Node> GetNode(string instanceID);
+
+        void Execute(Node entry);
+
+        Node FindNodeByID(string id, string instanceID);
+
+        List<Transition> GetExecuteTransition(Node entry);
+
+
+        Transition GetNextTransition(string id, string instanceID);
     }
 }

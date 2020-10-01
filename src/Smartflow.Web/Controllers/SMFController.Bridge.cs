@@ -1,50 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Http;
-using Smartflow.Bussiness.Commands;
 using Smartflow.Bussiness.Interfaces;
 using Smartflow.Bussiness.Models;
-using Smartflow.Bussiness.Queries;
-using Smartflow.Bussiness.WorkflowService;
-using Smartflow.Common;
+using Smartflow.Web.Code;
+using Smartflow.Web.Models;
 
 namespace Smartflow.Web.Controllers
 {
     public class BridgeController : ApiController
     {
         private readonly IBridgeService _bridgeService;
+
         public BridgeController(IBridgeService bridgeService)
         {
             _bridgeService = bridgeService;
         }
 
-
-        public Bridge Get(string id)
+        public BridgeDto Get(string id)
         {
-            return _bridgeService.Query(id);
+            return EmitCore.Convert<Bridge, BridgeDto>(_bridgeService.Query(id));
         }
 
-        public Bridge Get(string id, string categoryId)
+        [HttpGet]
+        public BridgeDto GetBridge(string id)
+        {
+            return EmitCore.Convert<Bridge, BridgeDto>(_bridgeService.GetBridge(id));
+        }
+
+        public ResultData Get([Required]string id, string categoryId)
         {
             Dictionary<string, string> queryArg = new Dictionary<string, string>
             {
                 { "Key", id },
                 { "CategoryID", categoryId }
             };
-            return _bridgeService.Query(queryArg);
-        }
-
-        public void Post(Bridge model)
-        {
-            if (_bridgeService.Query(model.InstanceID) == null)
-            {
-                CommandBus.Dispatch<Bridge>(new CreateBridge(), model);
-            }
-
-            FormService.Execute(model.CategoryID, model.InstanceID);
+            return CommonMethods.Response(data: _bridgeService.Query(queryArg));
         }
     }
 }

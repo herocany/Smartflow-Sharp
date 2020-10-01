@@ -15,16 +15,16 @@ namespace Smartflow.Bussiness.WorkflowService
         public static void Execute(ExecutingContext executeContext)
         {
             string instanceID = executeContext.Instance.InstanceID;
-            string nodeID = executeContext.Instance.Current.NID;
-            string actorID = (String)executeContext.Data.UUID;
+            string nodeID = executeContext.Direction == WorkflowOpertaion.Back ? executeContext.From.NID
+                : executeContext.To.NID;
 
+            string actorID = (String)executeContext.Data.UUID;
             Dictionary<string, object> deleteArg = new Dictionary<string, object>()
             {
                 { "instanceID",instanceID},
                 { "nodeID",nodeID },
                 { "actorID",actorID }
             };
-
             CommandBus.Dispatch<Dictionary<string, Object>>(new DeletePendingByActor(), deleteArg);
         }
     }

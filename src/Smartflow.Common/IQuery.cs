@@ -15,6 +15,13 @@ namespace Smartflow.Common
         T Query(S queryArg);
     }
 
+
+    public interface IPagingQuery<out T, in S> where T : class
+    {
+        T Query(S queryArg, out int total);
+    }
+
+
     public interface IQuery
     {
         IList<T> Query<T>(String instanceID);

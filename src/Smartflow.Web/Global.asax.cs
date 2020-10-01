@@ -19,31 +19,38 @@ namespace Smartflow.Web
     {
         protected void Application_Start(object sender, EventArgs e)
         {
-            
-            //注册全局的动作 即每跳转一个节点，都会执行动作。
-            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(PendingAction));
-            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(RecordAction));
-            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(FormAction));
-
-            //注册局部动作即跳转到特定节点中执行的动作
-            WorkflowGlobalServiceProvider.RegisterPartService(new EmptyAction());
-
-
+            var config = GlobalConfiguration.Configuration;
 
             NinjectDependencyResolver dependencyResolver = new NinjectDependencyResolver();
 
-
+            dependencyResolver.Register<ISummaryService, SummaryService>();
             dependencyResolver.Register<IBridgeService, BridgeService>();
             dependencyResolver.Register<IQuery<IList<Category>>, CategoryService>();
             dependencyResolver.Register<IPendingService, PendingService>();
             dependencyResolver.Register<IQuery<IList<Record>, string>, RecordService>();
             dependencyResolver.Register<IQuery<IList<Constraint>>, ConstraintService>();
             dependencyResolver.Register<AbstractBridgeService, BaseBridgeService>();
+            dependencyResolver.Register<IOrganizationService, OrganizationService>();
             dependencyResolver.Register<IActorService, ActorService>();
 
             GlobalConfiguration.Configuration.DependencyResolver = dependencyResolver;
 
-            GlobalConfiguration.Configuration.Routes.MapHttpRoute(
+            //注册全局的动作 即每跳转一个节点，都会执行动作。
+            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(PendingAction));
+            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(RecordAction));
+         
+            //抄送动作
+            WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(CarbonCopyAction));
+
+            //注册局部动作 即跳转到特定节点中执行的动作
+            WorkflowGlobalServiceProvider.RegisterPartService(new EmptyAction());
+
+            //config.Routes.MapHttpRoute(
+            //       name: "DefaultApi",
+            //       routeTemplate: "api/{controller}/{id}",
+            //       defaults: new { id = RouteParameter.Optional });
+
+            config.Routes.MapHttpRoute(
                    name: "ActionApi",
                    routeTemplate: "api/{controller}/{action}/{id}",
                    defaults: new { id = RouteParameter.Optional });

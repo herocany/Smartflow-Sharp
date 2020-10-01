@@ -11,6 +11,8 @@ namespace Smartflow.Bussiness.Interfaces
     {
         string GetOrganizationCode(string id);
 
+        IList<User> GetActorByOrganization(string organizationCodes);
+
         IList<User> GetActorByRole(string id);
     }
 }

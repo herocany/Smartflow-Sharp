@@ -34,6 +34,13 @@ namespace Smartflow
             set;
         }
 
+        public string Message
+        {
+            get;
+            set;
+        }
+
+
         /// <summary>
         /// 命令方向
         /// </summary>

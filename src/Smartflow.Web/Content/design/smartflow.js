@@ -1,45 +1,34 @@
 ﻿/********************************************************************
  *License:   https://github.com/chengderen/Smartflow/blob/master/LICENSE 
  *Home page: https://www.smartflow-sharp.com
- *Version:   3.0
+ *Version:   4.0
  ********************************************************************
  */
 (function ($) {
 
     var config = {
-        rootStart: '<workflow',
-        rootEnd: '</workflow>',
-        start: '<',
-        end: '>',
-        lQuotation: '"',
-        rQuotation: '"',
-        beforeClose: '</',
-        afterClose: '/>',
-        equal: '=',
-        space: ' ',
-        group: 'group',
+        root: 'workflow',
         form: 'form',
         from: 'from',
-        actor: 'actor',
         transition: 'transition',
-        br: 'br',
         id: 'id',
         name: 'name',
         to: 'destination',
         expression: 'expression',
         marker: 'marker',
         layout: 'layout',
-        action: 'action',
         category: 'category',
-        mode: 'mode',
-        direction: 'direction',
-        back: '\u539f\u8def\u56de\u9000',
         x: 'x',
         y: 'y',
         length: 'length',
-        rule:'rule',
-        cooperation: 'cooperation'
-    }
+        command: 'command',
+        cooperation: 'cooperation',
+        veto: 'veto',
+        back: 'back',
+        url: 'url',
+        assistant:'assistant',
+        dynamic:'dynamic'
+    };
 
     Array.prototype.remove = function (dx, to) {
         this.splice(dx, (to || 1));
@@ -58,24 +47,13 @@
         }
     }
 
-    function StringBuilder() {
-        var elements = [];
-        this.append = function (text) {
-            elements.push(text);
-            return this;
-        };
-        this.toString = function () {
-            return elements.join('');
-        };
-    }
-
     function Draw(option) {
         this.draw = SVG(option.container);
         this.support = (!!window.ActiveXObject || "ActiveXObject" in window);
         this.drawOption = $.extend({
             backgroundColor: '#f06',
             color: 'green',
-            mode: 'Transition'
+            executeColor: 'blue'
         }, option);
         this.source = undefined;
         this._shared = undefined;
@@ -156,7 +134,6 @@
             disY: Number(pos[3])
         };
     }
-
     Draw.prototype._init = function () {
         var self = this,
             dw = self.draw;
@@ -170,7 +147,6 @@
             .add(dw.path("M0 0 50 -25 100 0 50 25z").fill("#f06"));
         dw.defs().add(self._decision);
     }
-
     Draw.prototype._initEvent = function () {
         var self = this;
         self.draw.each(function () {
@@ -189,8 +165,6 @@
     Draw.getClientX = function (evt) {
         return evt.offsetX;
     }
-
-
     Draw.getClientY = function (evt) {
         return evt.offsetY;
     }
@@ -206,7 +180,6 @@
             nx.move(self, d);
         });
     }
-
     Draw.prototype._start = function (node, evt) {
 
         var nodeName = node.nodeName,
@@ -244,7 +217,6 @@
             this._shared.move();
         }
     }
-
     Draw.prototype._end = function (node, evt) {
         var self = this,
             nodeId = node.id;
@@ -271,7 +243,6 @@
     }
 
     Draw.prototype.join = function () {
-        //线连接
         var self = this;
         this._initEvent();
         this.draw.off('mousedown').on('mousedown', function (evt) {
@@ -289,11 +260,8 @@
             var node = Draw.getEvent(evt),
                 check = (node != null);
             if (check) {
-
                 var nodeName = node.nodeName,
                     nodeId = node.id;
-
-
                 if ((nodeName == 'rect' || nodeName == 'use') && self.source) {
 
                     var nt = Draw._proto_NC[nodeId],
@@ -302,31 +270,35 @@
                     var x = Draw.getClientX(evt),
                         y = Draw.getClientY(evt);
 
-                    check = (
-                        nodeId !== self.source.id
-                        && !nt.check(nf)
-                        && !Draw.duplicateCheck(self.source.id, nodeId)
-                        && nt.bound(x, y)
-                    );
+                    if (nf.id === nt.id && nf.category ===config.dynamic) {
+                        check = (
+                           // nodeId !== self.source.id
+                            !nt.check(nf)
+                            && nt.bound(x, y)
+                        );
+                    } else {
+                        check = (
+                            nodeId !== self.source.id
+                            && !nt.check(nf)
+                            && !Draw.duplicateCheck(self.source.id, nodeId)
+                            && nt.bound(x, y)
+                        );
+                    }
                     if (check) {
                         self._end.call(self, node, evt);
                     }
                 }
             }
-
             if (!check) {
                 if (self._shared) {
                     self._shared.remove();
                 }
             }
-
             self._shared = undefined;
             self.source = undefined;
         });
     }
-
     Draw.prototype.select = function () {
-        //选择元素
         this._initEvent();
         this.draw.off('mousedown');
         var self = this;
@@ -345,18 +317,29 @@
             }
         });
     }
-
     Draw.prototype.create = function (category, after) {
         var instance;
         switch (category) {
             case "start":
                 instance = new Start();
                 break;
+            case "dynamic":
+                instance = new Dynamic();
+                break;
             case "end":
                 instance = new End();
                 break;
             case "decision":
                 instance = new Decision();
+                break;
+            case "fork":
+                instance = new Fork();
+                break;
+            case "merge":
+                instance = new Merge();
+                break;
+            case "form":
+                instance = new Form();
                 break;
             default:
                 instance = new Node();
@@ -371,47 +354,50 @@
         return instance;
     }
 
+    Draw.prototype.createXmlDocument = function () {
+        var docXml;
+        if (this.support) {
+            docXml = new ActiveXObject("Microsoft.XMLDOM");
+        }
+        else if (document.implementation && document.implementation.createDocument) {
+            docXml = document.implementation.createDocument('', '', null);
+        }
+        if (docXml) {
+            docXml.async = false;
+        }
+        return docXml;
+    };
+
+    Draw.prototype.serialize = function (doc) {
+        return this.support ? doc.xml : new XMLSerializer().serializeToString(doc);
+    }
+
     Draw.prototype.export = function () {
         var unique = 31,
             nodeCollection = [],
-            pathCollection = [],
-            build = new StringBuilder();
+            pathCollection = [];
 
         if (!this.validate()) return;
 
+        var doc = this.createXmlDocument();
+        var root = doc.createElement(config.root);
+        doc.appendChild(root);
         function generatorId() {
             unique++;
             return unique;
         }
-
         for (var propertyName in Draw._proto_NC) {
             Draw._proto_NC[propertyName].id = generatorId();
         }
-
         for (var prop in Draw._proto_LC) {
             Draw._proto_LC[prop].id = generatorId();
         }
-
-
-        build.append(config.rootStart)
-            .append(config.space)
-            .append(config.mode)
-            .append(config.equal)
-            .append(config.lQuotation)
-            .append(this.drawOption.mode)
-            .append(config.rQuotation)
-            .append(config.end);
-
         $.each(Draw._proto_NC, function () {
             if (this.category !== 'marker') {
-                build.append(this.export());
+                this.export(doc, root);
             }
         });
-
-
-        build.append(config.rootEnd);
-
-        return encodeURI(build.toString());
+        return encodeURI(this.serialize(doc));
     }
 
     Draw.prototype.validate = function () {
@@ -427,14 +413,14 @@
         return !(validateCollection.length > 0 || Draw._proto_RC.length === 0);
     }
 
-    Draw.prototype.import = function (structure, disable, executeNodeID, record) {
+    Draw.prototype.import = function (structure, links, record) {
         var dwInstance = this,
             root = new XML(structure, dwInstance.support).root;
 
         var data = root.workflow.nodes;
         var r = root.workflow;
 
-        dwInstance.drawOption.mode = (r.mode || dwInstance.drawOption.mode);
+
 
         var recordArray = record || [];
 
@@ -449,12 +435,22 @@
             }
             return id;
         }
-
         function findRecord(id, destination) {
             for (var i = 0; i < recordArray.length; i++) {
                 var record = recordArray[i];
                 if (record[destination] == id) {
                     return true;
+                }
+            }
+            return false;
+        }
+
+        function findCurrentNode(id) {
+            if (!!links) {
+                for (var i = 0, len = links.length; i < len; i++) {
+                    if (links[i] == id) {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -466,9 +462,10 @@
 
             var instance = dwInstance.create(node.category, true);
             $.extend(instance, node, Draw.getPosition(node.layout));
-            instance.disable = (disable || false);
+            //instance.disable = (disable || false);
             instance.isSelect = findRecord(node.id, 'Destination');
-            instance.draw(executeNodeID);
+            instance.isCurrent = findCurrentNode(instance.id);
+            instance.draw();
             node.$id = instance.$id;
         });
         $.each(data, function () {
@@ -476,65 +473,58 @@
 
             self.transition = (self.transition || []);
             $.each(self.transition, function () {
-                if (this.direction !== 'back') {
-                    var transition = new Line();
-                    transition.drawInstance = dwInstance;
 
-                    var markerArray = (this.marker || []);
-                    if (!!this.marker) {
-                        delete this.marker;
-                    }
+                var transition = new Line();
+                transition.drawInstance = dwInstance;
 
-                    $.extend(transition, this);
-
-                    transition.isSelect = findRecord(transition.id, 'ID');
-
-                    transition.disable = (disable || false);
-                    transition.draw(this.layout);
-
-                    var destinationId = findUID(transition.destination),
-                        destination = SVG.get(destinationId),
-                        from = SVG.get(self.$id);
-
-                    var last = transition.last(),
-                        first = transition.first();
-
-                    $.each(markerArray, function () {
-                        var marker = new Marker(parseFloat(this.x), parseFloat(this.y), transition);
-                        marker.length = this.length;
-                        marker.drawInstance = transition.drawInstance;
-                        marker.draw();
-                        transition.markerArray.push(marker);
-                    });
-
-                    Draw._proto_RC.push({
-                        id: transition.$id,
-                        from: self.$id,
-                        to: destinationId,
-                        ox2: last.x - destination.x(),
-                        oy2: last.y - destination.y(),
-                        ox1: first.x - from.x(),
-                        oy1: first.y - from.y()
-                    });
+                var markerArray = (this.marker || []);
+                if (!!this.marker) {
+                    delete this.marker;
                 }
+
+                $.extend(transition, this);
+
+                transition.isSelect = findRecord(transition.id, 'ID');
+
+                // transition.disable = (disable || false);
+                transition.draw(this.layout);
+
+                var destinationId = findUID(transition.destination),
+                    destination = SVG.get(destinationId),
+                    from = SVG.get(self.$id);
+
+                var last = transition.last(),
+                    first = transition.first();
+
+                $.each(markerArray, function () {
+                    var marker = new Marker(parseFloat(this.x), parseFloat(this.y), transition);
+                    marker.length = this.length;
+                    marker.drawInstance = transition.drawInstance;
+                    marker.draw();
+                    transition.markerArray.push(marker);
+                });
+
+                Draw._proto_RC.push({
+                    id: transition.$id,
+                    from: self.$id,
+                    to: destinationId,
+                    ox2: last.x - destination.x(),
+                    oy2: last.y - destination.y(),
+                    ox1: first.x - from.x(),
+                    oy1: first.y - from.y()
+                });
+
             });
         });
     }
 
     function Element(name, category) {
-        //节点ID
         this.$id = undefined;
-        //标识ID
         this.id = undefined;
-        //文本画笔
         this.brush = undefined;
-        //节点中文名称
         this.name = name;
-        //节点类别（LINE、NODE、START、END,DECISION）
+        //节点类别（LINE、NODE、START、END,DECISION\FORK\MERGE\DYNAMIC）
         this.category = category;
-        //禁用事件
-        this.disable = false;
-        //背景颜色
         this.isSelect = false;
         this.drawInstance = undefined;
     }
@@ -542,10 +532,8 @@
     Element.prototype = {
         constructor: Element,
         draw: function () {
-            if (!this.disable) {
-                var el = SVG.get(this.$id);
-                this.bindEvent.call(el, this);
-            }
+            var el = SVG.get(this.$id);
+            this.bindEvent.call(el, this);
         },
         bindEvent: function (el) {
             this.dblclick(function (evt) {
@@ -554,24 +542,58 @@
                 node.edit.call(this, evt, el);
                 return false;
             });
+            this.mouseover(function (evt) {
+                evt.preventDefault();
+                if (el.drawInstance.drawOption['mouseover']) {
+                    var node = Draw._proto_NC[this.id()];
+                    if (node.isCurrent) {
+                        el.drawInstance.drawOption['mouseover']
+                            && el.drawInstance.
+                                drawOption['mouseover'].call(this, node, evt);
+                    }
+                }
+                return false;
+            });
+            this.mouseout(function (evt) {
+                evt.preventDefault();
+                if (el.drawInstance.drawOption['mouseout']) {
+                    var node = Draw._proto_NC[this.id()];
+                    if (node.isCurrent) {
+                        el.drawInstance.drawOption['mouseout']
+                            && el.drawInstance.
+                                drawOption['mouseout'].call(this, node, evt);
+                    }
+                }
+                return false;
+            });
         }
     }
 
     function Shape(name, category) {
         Shape.base.Constructor.call(this, name, category);
         this.group = [];
+        this.organization = [];
         this.action = [];
         this.actor = [];
+        this.carbon = [];
+        this.command = undefined;
         this.rule = [];
-        this.cooperation = 0;
         this.tickness = 20;
+        this.isCurrent = false;
+
+        this.veto = 0;
+        this.cooperation = '';
+        this.assistant = '';
+
+        this.back = '';
+        this.url = '';
     }
 
     Shape.extend(Element, {
         constructor: Shape,
         check: function (nf) {
-            return ((nf.category === 'end' || this.category === 'start')
-                || (nf.category === 'start' && this.category === 'end'));
+            return (nf.category === 'end' || this.category === 'start')
+                || (nf.category === 'start' && this.category === 'end');
         },
         edit: function (evt, el) {
             if (evt.ctrlKey && evt.altKey) {
@@ -604,63 +626,48 @@
         }
     });
 
-    Shape.prototype.export = function () {
-        var
-            self = this,
-            build = new StringBuilder();
+    Shape.prototype.export = function (doc, root) {
+        var self = this;
 
-        build.append(config.start)
-            .append(self.category)
-            .append(config.space)
-            .append(config.id)
-            .append(config.equal)
-            .append(config.lQuotation)
-            .append(self[config.id])
-            .append(config.rQuotation)
-            .append(config.space)
-            .append(config.name)
-            .append(config.equal)
-            .append(config.lQuotation)
-            .append(self[config.name])
-            .append(config.rQuotation)
-            .append(config.space)
-            .append(config.layout)
-            .append(config.equal)
-            .append(config.lQuotation)
-            .append(self.x + ' ' + self.disX + ' ' + self.y + ' ' + self.disY)
-            .append(config.rQuotation)
-            .append(config.space)
-            .append(config.category)
-            .append(config.equal)
-            .append(config.lQuotation)
-            .append(self.category)
-            .append(config.rQuotation)
+        var node = doc.createElement(self.category);
+        node.setAttribute(config.id, self[config.id]);
+        node.setAttribute(config.name, self[config.name]);
+        node.setAttribute(config.layout, self.x + ' ' + self.disX + ' ' + self.y + ' ' + self.disY);
+        node.setAttribute(config.cooperation, self.cooperation == '0' ? '' : self.cooperation);
+        node.setAttribute(config.assistant, self.assistant);
+        node.setAttribute(config.category, self.category);
+        node.setAttribute(config.veto, self.veto);
+        node.setAttribute(config.back, self.back);
+        node.setAttribute(config.url, self.url);
 
-            .append(config.space)
-            .append(config.cooperation)
-            .append(config.equal)
-            .append(config.lQuotation)
-            .append(self.cooperation)
-            .append(config.rQuotation)
-            .append(config.end);
+        var attrObject = {
+            group: self.group,
+            organization: self.organization,
+            action: self.action,
+            carbon: self.carbon,
+            actor: self.actor,
+            rule: self.rule
+        };
 
-        $.each(self.group, function () {
-            build.append(config.start)
-                .append(config.group);
-            eachAttributs(build, this);
-            build.append(config.afterClose);
-        });
+        for (var propertyName in attrObject) {
+            var attrs = attrObject[propertyName];
+            $.each(attrs, function () {
+                var attr = doc.createElement(propertyName);
+                attr.setAttribute(config.id, this.id);
+                attr.setAttribute(config.name, this.name);
+                node.appendChild(attr);
+            });
+        }
 
-
-        $.each(self.action, function () {
-            build.append(config.start)
-                .append(config.action);
-            eachAttributs(build, this);
-            build.append(config.afterClose);
-        });
-
-        if (self.exportDecision) {
-            self.exportDecision(build);
+        if (self.command && self.command['id'] && self.command['text']) {
+            var command = doc.createElement(config.command);
+            for (var p in self.command) {
+                var commandNode = doc.createElement(p);
+                var section = doc.createCDATASection(self.command[p]);
+                commandNode.appendChild(section);
+                command.appendChild(commandNode);
+            }
+            node.appendChild(command);
         }
 
         var elements = Draw.findById(self.$id, config.from);
@@ -670,211 +677,30 @@
                     L = Draw._proto_LC[this.id],
                     N = Draw._proto_NC[this.to];
 
-                build.append(config.start)
-                    .append(config.transition)
-                    .append(config.space)
-                    .append(config.name)
-                    .append(config.equal)
-                    .append(config.lQuotation)
-                    .append(L.name)
-                    .append(config.rQuotation)
-                    .append(config.space)
-                    .append(config.to)
-                    .append(config.equal)
-                    .append(config.lQuotation)
-                    .append(N.id)
-                    .append(config.rQuotation)
-                    .append(config.space)
-                    .append(config.layout)
-                    .append(config.equal)
-                    .append(config.lQuotation)
-                    .append(L.getPoints().join(" "))
-                    .append(config.rQuotation)
-
-                    .append(config.space)
-                    .append(config.id)
-                    .append(config.equal)
-                    .append(config.lQuotation)
-                    .append(L.id)
-                    .append(config.rQuotation)
-
-
-                    .append(config.space)
-                    .append(config.direction)
-                    .append(config.equal)
-                    .append(config.lQuotation)
-                    .append('go')
-                    .append(config.rQuotation)
-
-
-                    .append(config.end);
+                var transition = doc.createElement(config.transition);
+                transition.setAttribute(config.name, L.name);
+                transition.setAttribute(config.to, N.id);
+                transition.setAttribute(config.layout, L.getPoints().join(" "));
+                transition.setAttribute(config.id, L.id);
 
                 if (self.category === 'decision') {
-
-                    build.append(config.start)
-                        .append(config.expression)
-                        .append(config.end)
-                        .append("<![CDATA[")
-                        .append(L.expression)
-                        .append("]]>")
-                        .append(config.beforeClose)
-                        .append(config.expression)
-                        .append(config.end);
+                    var expression = doc.createElement(config.expression);
+                    expression.appendChild(doc.createCDATASection(L.expression));
+                    transition.appendChild(expression);
                 }
 
                 $.each(L.markerArray, function () {
-                    var marker = this;
-
-                    build.append(config.start)
-                        .append(config.marker)
-                        .append(config.space)
-                        .append("x")
-                        .append(config.equal)
-                        .append(config.lQuotation)
-                        .append(marker.x)
-                        .append(config.rQuotation)
-                        .append(config.space)
-                        .append("y")
-                        .append(config.equal)
-                        .append(config.lQuotation)
-                        .append(marker.y)
-                        .append(config.rQuotation)
-                        .append(config.space)
-                        .append("length")
-                        .append(config.equal)
-                        .append(config.lQuotation)
-                        .append(marker.length)
-                        .append(config.rQuotation)
-                        .append(config.afterClose);
-
+                    var marker = doc.createElement(config.marker);
+                    marker.setAttribute(config.x, this.x);
+                    marker.setAttribute(config.y, this.y);
+                    marker.setAttribute(config.length, this.length);
+                    transition.appendChild(marker);
                 });
-
-                build.append(config.beforeClose)
-                    .append(config.transition)
-                    .append(config.end);
+                node.appendChild(transition);
             }
         });
 
-        var mode = self.drawInstance.drawOption.mode.toLowerCase();
-        if (self.category.toLowerCase() !== 'end' && mode == 'mix') {
-            $.each(Draw.findById(self.$id, 'to'), function () {
-                if (this.to === self.$id) {
-                    var
-                        L = Draw._proto_LC[this.id],
-                        N = Draw._proto_NC[this.from];
-
-                    build.append(config.start)
-                        .append(config.transition)
-                        .append(config.space)
-                        .append(config.name)
-                        .append(config.equal)
-                        .append(config.lQuotation)
-                        .append(config.back)
-                        .append(config.rQuotation)
-                        .append(config.space)
-                        .append(config.to)
-                        .append(config.equal)
-                        .append(config.lQuotation)
-                        .append(N.id)
-                        .append(config.rQuotation)
-                        .append(config.space)
-                        .append(config.layout)
-                        .append(config.equal)
-                        .append(config.lQuotation)
-                        .append(L.getPoints().join(" "))
-                        .append(config.rQuotation)
-
-                        .append(config.space)
-                        .append(config.id)
-                        .append(config.equal)
-                        .append(config.lQuotation)
-                        .append(L.id)
-                        .append(config.rQuotation)
-                        .append(config.space)
-                        .append(config.direction)
-                        .append(config.equal)
-                        .append(config.lQuotation)
-                        .append('back')
-                        .append(config.rQuotation)
-                        .append(config.end);
-
-                    if (self.category === 'decision') {
-
-                        build.append(config.start)
-                            .append(config.expression)
-                            .append(config.end)
-                            .append("<![CDATA[")
-                            .append(L.expression)
-                            .append("]]>")
-                            .append(config.beforeClose)
-                            .append(config.expression)
-                            .append(config.end);
-                    }
-
-                    $.each(L.markerArray, function () {
-                        var marker = this;
-
-                        build.append(config.start)
-                            .append(config.marker)
-                            .append(config.space)
-                            .append(config.x)
-                            .append(config.equal)
-                            .append(config.lQuotation)
-                            .append(marker.x)
-                            .append(config.rQuotation)
-                            .append(config.space)
-                            .append(config.y)
-                            .append(config.equal)
-                            .append(config.lQuotation)
-                            .append(marker.y)
-                            .append(config.rQuotation)
-                            .append(config.space)
-                            .append(config.length)
-                            .append(config.equal)
-                            .append(config.lQuotation)
-                            .append(marker.length)
-                            .append(config.rQuotation)
-                            .append(config.afterClose);
-
-                    });
-
-                    build.append(config.beforeClose)
-                        .append(config.transition)
-                        .append(config.end);
-                }
-            });
-        }
-
-        $.each(self.actor, function () {
-            build.append(config.start)
-                .append(config.actor);
-            eachAttributs(build, this);
-            build.append(config.afterClose);
-        });
-
-        $.each(self.rule, function () {
-            build.append(config.start)
-                .append(config.rule);
-            eachAttributs(build, this);
-            build.append(config.afterClose);
-        });
-
-        build.append(config.beforeClose)
-            .append(self.category)
-            .append(config.end);
-
-        function eachAttributs(build, reference) {
-            $.each(['id', 'name'], function (i, p) {
-                build.append(config.space)
-                    .append(config[p])
-                    .append(config.equal)
-                    .append(config.lQuotation)
-                    .append(reference[p])
-                    .append(config.rQuotation);
-            });
-        }
-
-        return build.toString();
+        root.appendChild(node);
     }
 
     function Marker(x, y, line) {
@@ -889,7 +715,7 @@
         //线段长度
         this.length = 0;
         this.line = line;
-        Marker.base.Constructor.call(this, "标记位", "marker");
+        Marker.base.Constructor.call(this, "标记位", config.marker);
         this.isSelect = this.line.isSelect;
     }
 
@@ -909,7 +735,7 @@
         },
         move: function (element, evt) {
             var self = this;
-            self.x = Draw.getClientX(evt)- self.disX - self.cx;
+            self.x = Draw.getClientX(evt) - self.disX - self.cx;
             self.y = Draw.getClientY(evt) - self.disY - self.cy;
             element.move(self.x, self.y);
             self.line.setPointArray();
@@ -930,7 +756,6 @@
             };
         },
         math: function (sx, sy) {
-
             var x = this.x,
                 y = this.y,
                 zx = sx,
@@ -958,25 +783,23 @@
         draw: function (points) {
             var self = this,
                 dw = self.drawInstance;
-            var mode = dw.drawOption.mode.toLowerCase();
+
             var L = (!!points) ? dw.draw.polyline(points) :
                 dw.draw.polyline([[self.x1, self.y1], [self.x2, self.y2]]);
 
             var color = self.isSelect ? dw.drawOption.color : dw.drawOption.backgroundColor;
             L.fill("none").stroke({ width: self.border, color: color });
 
-            if (mode !== 'mix') {
-                L.marker('end', 10, 10, function (add) {
-                    add.path('M0,0 L0,6 L6,3 z').fill(color);
-                    this.attr({
-                        refX: 5,
-                        refY: 2.9,
-                        orient: 'auto',
-                        stroke: 'none',
-                        markerUNits: 'strokeWidth'
-                    });
+            L.marker('end', 10, 10, function (add) {
+                add.path('M0,0 L0,6 L6,3 z').fill(color);
+                this.attr({
+                    refX: 5,
+                    refY: 2.9,
+                    orient: 'auto',
+                    stroke: 'none',
+                    markerUNits: 'strokeWidth'
                 });
-            }
+            });
 
             self.$id = L.id();
             Draw._proto_LC[self.$id] = this;
@@ -1025,15 +848,11 @@
         },
         remove: function () {
             var $this = this,
-                L = SVG.get($this.$id),
-                mode = $this.drawInstance.drawOption.mode.toLowerCase();
+                L = SVG.get($this.$id);
 
-            if (mode !== 'mix') {
-                var marker = L.attr('marker-end'),
-                    arrowId = /#[a-zA-Z0-9]+/.exec(marker)[0];
-                SVG.get(arrowId).remove();
-            }
-
+            var marker = L.attr('marker-end'),
+                arrowId = /#[a-zA-Z0-9]+/.exec(marker)[0];
+            SVG.get(arrowId).remove();
             SVG.get($this.$id).remove();
             $.each($this.markerArray, function () {
                 SVG.get(this.$id).remove();
@@ -1176,6 +995,8 @@
                 dw = n.drawInstance;
 
             var color = n.isSelect ? dw.drawOption.color : dw.drawOption.backgroundColor;
+            color = n.isCurrent ? dw.drawOption.executeColor : color;
+
             var rect = dw.draw.rect(n.w, n.h)
                 .attr({ fill: color, x: n.x, y: n.y });
 
@@ -1260,7 +1081,7 @@
         },
         move: function (element, d) {
             var self = this;
-            self.x = Draw.getClientX(d)- self.disX - self.cx;
+            self.x = Draw.getClientX(d) - self.disX - self.cx;
             self.y = Draw.getClientY(d) - self.disY - self.cy;
 
             element.attr({
@@ -1278,8 +1099,8 @@
             Node.base.Parent.prototype.move.call(this);
         },
         validate: function () {
-            return (Draw.findById(this.$id, 'to').length > 0
-                && Draw.findById(this.$id, 'from').length > 0);
+            return Draw.findById(this.$id, 'to').length > 0
+                && Draw.findById(this.$id, 'from').length > 0;
         },
         vertical: function () {
             return (this.drawInstance.support || window.navigator.userAgent.indexOf("Edge") > -1) ? 4 : 0;
@@ -1294,7 +1115,6 @@
         this.disX = 0;
         this.disY = 0;
         Circle.base.Constructor.call(this, name, category);
-        this.cooperation = 0;
     }
 
     Circle.extend(Shape, {
@@ -1308,8 +1128,8 @@
             element.move(self.x, self.y);
             if (self.brush) {
                 self.brush.attr({
-                    x: (element.x() + (element.width() / 2)),
-                    y: element.y() + (element.height() / 2)
+                    x: element.x() + element.width() / 2,
+                    y: element.y() + element.height() / 2
                 });
             }
             Circle.base.Parent.prototype.move.call(self);
@@ -1320,7 +1140,7 @@
         },
         bound: function (mX, mY) {
             var r = 25,
-                c=5,
+                c = 5,
                 cx = this.x + r,
                 cy = this.y,
                 z = r * 2;
@@ -1337,17 +1157,15 @@
                     x4: cx - r + z,
                     y4: cy + r,
                     check: function (moveX, moveY) {
-
-                        /*检测边界*/
                         var center = {
                             x: cx + c,
                             y: cy + r - c
                         };
 
-                        return (this.x1 <= moveX &&
+                        return this.x1 <= moveX &&
                             this.x3 >= moveX &&
                             this.y1 >= moveY &&
-                            this.y2 <= moveY) ? center : false;
+                            this.y2 <= moveY ? center : false;
                     }
 
                 },
@@ -1362,17 +1180,15 @@
                     y4: cy - r + tickness,
                     check: function (moveX, moveY) {
 
-                        /*检测边界*/
                         var center = {
                             x: cx + c,
                             y: cy - r + c
                         };
 
-                        /*检测边界*/
-                        return (this.x1 <= moveX &&
+                        return this.x1 <= moveX &&
                             this.x3 >= moveX &&
                             this.y1 <= moveY &&
-                            this.y2 >= moveY) ? center : false;
+                            this.y2 >= moveY ? center : false;
                     }
                 },
                 left: {
@@ -1386,19 +1202,16 @@
                     y4: cy + r - tickness,
                     check: function (moveX, moveY) {
 
-                        /*检测边界*/
                         var center = {
-                            x: cx - r + c*2,
+                            x: cx - r + c * 2,
                             y: cy
                         };
 
-                        /*检测边界*/
-                        return (this.x1 <= moveX &&
+                        return this.x1 <= moveX &&
                             this.x3 >= moveX &&
                             this.y1 <= moveY &&
-                            this.y2 >= moveY) ? center : false;
+                            this.y2 >= moveY ? center : false;
 
-                        //上下上下
                     }
                 },
                 right: {
@@ -1412,17 +1225,15 @@
                     y4: cy + r - tickness,
                     check: function (moveX, moveY) {
 
-                        /*检测边界*/
                         var center = {
                             x: cx + r,
                             y: cy
                         };
 
-                        /*检测边界*/
-                        return (this.x1 >= moveX &&
+                        return this.x1 >= moveX &&
                             this.x3 <= moveX &&
                             this.y1 <= moveY &&
-                            this.y2 >= moveY) ? center : false;
+                            this.y2 >= moveY ? center : false;
                     }
                 }
             }
@@ -1441,14 +1252,13 @@
         Decision.base.Constructor.call(this);
         this.name = '分支节点';
         this.category = 'decision';
-        this.command = undefined;
+
         this.x = 10;
         this.y = 10;
         this.cx = 40;
         this.cy = 10;
         this.disX = 0;
         this.disY = 0;
-        this.cooperation = 0;
     }
 
     Decision.extend(Shape, {
@@ -1475,7 +1285,7 @@
             var self = this;
 
             self.x = Draw.getClientX(d) - self.disX - self.cx;
-            self.y = Draw.getClientY(d)- self.disY - self.cy;
+            self.y = Draw.getClientY(d) - self.disY - self.cy;
             element.attr({ x: self.x, y: self.y });
             Decision.base.Parent.prototype.move.call(this);
         },
@@ -1545,9 +1355,9 @@
                         y: BY
                     };
 
-                    return (BX <= moveX && AX >= moveX
+                    return BX <= moveX && AX >= moveX
                         && moveY >= AY
-                        && moveY <= CY) ? center : false;
+                        && moveY <= CY ? center : false;
                 },
                 right: function (moveX, moveY) {
 
@@ -1578,31 +1388,6 @@
                 }
             }
             return false;
-        },
-        exportDecision: function (build) {
-            var self = this;
-            if (self.command) {
-
-                build.append(config.start)
-                    .append('command')
-                    .append(config.end);
-
-                $.each(self.command, function (propertyName, value) {
-                    build.append(config.start)
-                        .append(propertyName)
-                        .append(config.end)
-                        .append("<![CDATA[")
-                        .append(value)
-                        .append("]]>")
-                        .append(config.beforeClose)
-                        .append(propertyName)
-                        .append(config.end);
-                });
-
-                build.append(config.beforeClose)
-                    .append('command')
-                    .append(config.end);
-            }
         }
     });
 
@@ -1680,6 +1465,540 @@
         }
     });
 
+    function Merge() {
+        Merge.base.Constructor.call(this, "聚合", "merge");
+        this.tickness = 10;
+    }
+
+    Merge.extend(Circle, {
+        draw: function () {
+            var dw = this.drawInstance.draw;
+            var g = dw.group()
+                /*.add(path)*/
+                .add(dw.path("M10,0 a10 10 0 1 0 0 -0.1").fill(this.drawInstance.drawOption.backgroundColor));
+
+            dw.defs().add(g);
+            var start = dw
+                .use(g)
+                .move(this.x, this.y);
+
+
+            this.$id = start.id();
+            Draw._proto_NC[this.$id] = this;
+            Merge.base.Parent.prototype.draw.call(this);
+        },
+        bindEvent: function (n) {
+            Merge.base.Parent.prototype.bindEvent.call(this, n);
+            //  this.off('dblclick');
+        },
+        validate: function () {
+            return Draw.findById(this.$id, 'from').length > 0
+                && Draw.findById(this.$id, 'to').length > 1;
+        },
+        move: function (element, d) {
+            var self = this;
+            self.x = Draw.getClientX(d) - self.disX - self.cx;
+            self.y = Draw.getClientY(d) - self.disY - self.cy;
+            element.move(self.x, self.y);
+            if (self.brush) {
+                self.brush.attr({
+                    x: element.x() + element.width() / 2,
+                    y: element.y() + element.height() / 2
+                });
+            }
+            Circle.base.Parent.prototype.move.call(self);
+        },
+        bound: function (mX, mY) {
+            var r = 15,
+                c = 5,
+                cx = this.x + r,
+                cy = this.y,
+                z = r * 2;
+            var tickness = this.tickness;
+            var direction = {
+                bottom: {
+                    x1: cx - r,
+                    y1: cy + r,
+                    x2: cx - r,
+                    y2: cy + r - tickness,
+                    x3: cx + z - r,
+                    y3: cy + r - tickness,
+                    x4: cx - r + z,
+                    y4: cy + r,
+                    check: function (moveX, moveY) {
+                        var center = {
+                            x: cx + c,
+                            y: cy + r - c
+                        };
+
+                        return (this.x1 <= moveX &&
+                            this.x3 >= moveX &&
+                            this.y1 >= moveY &&
+                            this.y2 <= moveY) ? center : false;
+                    }
+
+                },
+                top: {
+                    x1: cx - r,
+                    y1: cy - r,
+                    x2: cx - r,
+                    y2: cy - r + tickness,
+                    x3: cx + z - r,
+                    y3: cy - r,
+                    x4: cx + z - r,
+                    y4: cy - r + tickness,
+                    check: function (moveX, moveY) {
+
+                        var center = {
+                            x: cx + c,
+                            y: cy - r + c
+                        };
+
+                        return (this.x1 <= moveX &&
+                            this.x3 >= moveX &&
+                            this.y1 <= moveY &&
+                            this.y2 >= moveY) ? center : false;
+                    }
+                },
+                left: {
+                    x1: cx - r,
+                    y1: cy - r + tickness,
+                    x2: cx - r,
+                    y2: cy + r - tickness,
+                    x3: cx - r + tickness + 10,
+                    y3: cy - r + tickness,
+                    x4: cx - r + tickness,
+                    y4: cy + r - tickness,
+                    check: function (moveX, moveY) {
+
+                        var center = {
+                            x: cx - r + c * 2,
+                            y: cy
+                        };
+
+                        return this.x1 <= moveX &&
+                            this.x3 >= moveX &&
+                            this.y1 <= moveY &&
+                            this.y2 >= moveY ? center : false;
+
+                    }
+                },
+                right: {
+                    x1: cx + r,
+                    y1: cy - r + tickness,
+                    x2: cx + r,
+                    y2: cy + r - tickness,
+                    x3: cx + r - tickness,
+                    y3: cy - r + tickness,
+                    x4: cx + r - tickness,
+                    y4: cy + r - tickness,
+                    check: function (moveX, moveY) {
+
+                        var center = {
+                            x: cx + r,
+                            y: cy
+                        };
+
+                        return (this.x1 >= moveX &&
+                            this.x3 <= moveX &&
+                            this.y1 <= moveY &&
+                            this.y2 >= moveY) ? center : false;
+                    }
+                }
+            }
+            for (var propertName in direction) {
+                var _o = direction[propertName],
+                    check = _o.check(mX, mY);
+                if (check) {
+                    return check;
+                }
+            }
+            return false;
+        }
+    });
+
+    function Fork() {
+        Fork.base.Constructor.call(this, "分叉", "fork");
+        this.name = "分叉";
+        this.w = 80;
+        this.h = 20;
+        this.x = 10;
+        this.y = 10;
+        this.cx = 40;
+        this.cy = 10;
+    }
+
+    Fork.extend(Shape, {
+        draw: function () {
+            var n = this,
+                dw = n.drawInstance;
+            var color = n.isSelect ? dw.drawOption.color : dw.drawOption.backgroundColor;
+            color = n.isCurrent ? dw.drawOption.executeColor : color;
+            var rect = dw.draw.rect(n.w, n.h)
+                .attr({ fill: color, x: n.x, y: n.y });
+            n.$id = rect.id();
+            Draw._proto_NC[n.$id] = n;
+            return Fork.base.Parent.prototype.draw.call(this);
+        },
+        bound: function (moveX, moveY) {
+            var x = this.x,
+                y = this.y,
+                w = this.w,
+                h = this.h,
+                tickness = this.tickness - 10,
+                xt = x + w,
+                yt = y + h;
+
+            var direction = {
+                bottom: function (moveX, moveY) {
+                    var center = {
+                        x: x + w / 2,
+                        y: yt
+                    };
+                    return (x + tickness <= moveX
+                        && xt - tickness >= moveX
+                        && moveY >= yt - tickness
+                        && moveY <= yt) ? center : false;
+                },
+                top: function (moveX, moveY) {
+                    var center = {
+                        x: x + w / 2,
+                        y: y
+                    };
+                    return (x + tickness <= moveX && xt - tickness >= moveX
+                        && moveY >= y
+                        && moveY <= y + tickness) ? center : false;
+                },
+                left: function (moveX, moveY) {
+                    var center = {
+                        x: x,
+                        y: y + h / 2
+                    };
+
+                    return (
+                        x <= moveX
+                        && x + tickness >= moveX
+                        && moveY >= y
+                        && moveY <= yt
+                    ) ? center : false;
+
+                },
+                right: function (moveX, moveY) {
+
+                    var center = {
+                        x: xt,
+                        y: y + h / 2
+                    };
+
+                    return (
+                        xt - tickness <= moveX
+                        && xt >= moveX
+                        && moveY >= y
+                        && moveY <= yt
+                    ) ? center : false;
+                }
+            };
+
+            for (var propertName in direction) {
+                var _check = direction[propertName](moveX, moveY);
+                if (_check) {
+                    return _check;
+                }
+            }
+
+            return false;
+        },
+        move: function (element, d) {
+            var self = this;
+            self.x = Draw.getClientX(d) - self.disX - self.cx;
+            self.y = Draw.getClientY(d) - self.disY - self.cy;
+
+            element.attr({
+                x: self.x,
+                y: self.y
+            });
+
+            Fork.base.Parent.prototype.move.call(this);
+        },
+        validate: function () {
+            return Draw.findById(this.$id, 'to').length == 1
+                && Draw.findById(this.$id, 'from').length > 1;
+        }
+    });
+
+    function Dynamic() {
+        Dynamic.base.Constructor.call(this, "自由流转", "dynamic");
+    }
+
+    Dynamic.extend(Circle, {
+        draw: function () {
+            var drawOption = this.drawInstance.drawOption;
+            var dw = this.drawInstance.draw;
+            var n = this;
+            //'#1E9FFF' #e69090
+            var color = n.isSelect ? drawOption.color : '#009688';
+            color = n.isCurrent ? drawOption.executeColor : color;
+            var g = dw.group()
+                .add(dw.path("M10,0 a60 60 0 1 0 0 -0.1").fill(color));
+
+            dw.defs().add(g);
+            var start = dw
+                .use(g)
+                .move(this.x, this.y);
+
+
+            this.$id = start.id();
+            Draw._proto_NC[this.$id] = this;
+            Dynamic.base.Parent.prototype.draw.call(this);
+        },
+        bindEvent: function (n) {
+            Dynamic.base.Parent.prototype.bindEvent.call(this, n);
+            //  this.off('dblclick');
+        },
+        validate: function () {
+            return Draw.findById(this.$id, 'from').length > 0
+                && Draw.findById(this.$id, 'to').length > 0;
+        },
+        bound: function (mX, mY) {
+            var r = 65,
+                c = 5,
+                cx = this.x + r,
+                cy = this.y,
+                z = r * 2;
+            var tickness = this.tickness;
+
+            var direction = {
+                bottom: {
+                    x1: cx - r,
+                    y1: cy + r,
+                    x2: cx - r,
+                    y2: cy + r - tickness,
+                    x3: cx + z - r,
+                    y3: cy + r - tickness,
+                    x4: cx - r + z,
+                    y4: cy + r,
+                    check: function (moveX, moveY) {
+                        var center = {
+                            x: cx + c,
+                            y: cy + r - c
+                        };
+
+                        return this.x1 <= moveX &&
+                            this.x3 >= moveX &&
+                            this.y1 >= moveY &&
+                            this.y2 <= moveY ? center : false;
+                    }
+
+                },
+                top: {
+                    x1: cx - r,
+                    y1: cy - r,
+                    x2: cx - r,
+                    y2: cy - r + tickness,
+                    x3: cx + z - r,
+                    y3: cy - r,
+                    x4: cx + z - r,
+                    y4: cy - r + tickness,
+                    check: function (moveX, moveY) {
+
+                        var center = {
+                            x: cx + c,
+                            y: cy - r + c
+                        };
+
+                        return this.x1 <= moveX &&
+                            this.x3 >= moveX &&
+                            this.y1 <= moveY &&
+                            this.y2 >= moveY ? center : false;
+                    }
+                },
+                left: {
+                    x1: cx - r,
+                    y1: cy - r + tickness,
+                    x2: cx - r,
+                    y2: cy + r - tickness,
+                    x3: cx - r + tickness,
+                    y3: cy - r + tickness,
+                    x4: cx - r + tickness,
+                    y4: cy + r - tickness,
+                    check: function (moveX, moveY) {
+
+                        var center = {
+                            x: cx - r + c * 2,
+                            y: cy
+                        };
+
+                        return this.x1 <= moveX &&
+                            this.x3 >= moveX &&
+                            this.y1 <= moveY &&
+                            this.y2 >= moveY ? center : false;
+
+                    }
+                },
+                right: {
+                    x1: cx + r,
+                    y1: cy - r + tickness,
+                    x2: cx + r,
+                    y2: cy + r - tickness,
+                    x3: cx + r - tickness,
+                    y3: cy - r + tickness,
+                    x4: cx + r - tickness,
+                    y4: cy + r - tickness,
+                    check: function (moveX, moveY) {
+
+                        var center = {
+                            x: cx + r,
+                            y: cy
+                        };
+
+                        return this.x1 >= moveX &&
+                            this.x3 <= moveX &&
+                            this.y1 <= moveY &&
+                            this.y2 >= moveY ? center : false;
+                    }
+                }
+            }
+            for (var propertName in direction) {
+                var _o = direction[propertName],
+                    check = _o.check(mX, mY);
+                if (check) {
+                    return check;
+                }
+            }
+            return false;
+        }
+    });
+
+    function Form() {
+        this.w = 140;
+        this.h = 60;
+        this.x = 10;
+        this.y = 10;
+        this.cx = 40;
+        this.cy = 10;
+        this.disX = 0;
+        this.disY = 0;
+        Form.base.Constructor.call(this, "form", "form");
+        this.name = "表单节点";
+    }
+
+    Form.extend(Shape, {
+        draw: function () {
+            var n = this,
+                dw = n.drawInstance;
+
+            var color = n.isSelect ? dw.drawOption.color : dw.drawOption.backgroundColor;
+            color = n.isCurrent ? dw.drawOption.executeColor : color;
+
+            var rect = dw.draw.rect(n.w, n.h)
+                .attr({ fill: color, x: n.x, y: n.y });
+
+            n.brush = dw.draw.text(n.name);
+            n.brush.attr({
+                x: n.x + rect.width() / 2,
+                y: n.y + rect.height() / 2 + n.vertical()
+            });
+            n.$id = rect.id();
+            Draw._proto_NC[n.$id] = n;
+            return Form.base.Parent.prototype.draw.call(this);
+        },
+        bound: function (moveX, moveY) {
+            var x = this.x,
+                y = this.y,
+                w = this.w,
+                h = this.h,
+                tickness = this.tickness,
+                xt = x + w,
+                yt = y + h;
+
+            var direction = {
+                bottom: function (moveX, moveY) {
+                    var center = {
+                        x: x + w / 2,
+                        y: yt
+                    };
+                    return (x + tickness <= moveX
+                        && xt - tickness >= moveX
+                        && moveY >= yt - tickness
+                        && moveY <= yt) ? center : false;
+                },
+                top: function (moveX, moveY) {
+
+                    var center = {
+                        x: x + w / 2,
+                        y: y
+                    };
+                    return (x + tickness <= moveX && xt - tickness >= moveX
+                        && moveY >= y
+                        && moveY <= y + tickness) ? center : false;
+
+                },
+                left: function (moveX, moveY) {
+                    var center = {
+                        x: x,
+                        y: y + h / 2
+                    };
+
+                    return (
+                        x <= moveX
+                        && x + tickness >= moveX
+                        && moveY >= y
+                        && moveY <= yt
+                    ) ? center : false;
+
+                },
+                right: function (moveX, moveY) {
+
+                    var center = {
+                        x: xt,
+                        y: y + h / 2
+                    };
+
+                    return (
+                        xt - tickness <= moveX
+                        && xt >= moveX
+                        && moveY >= y
+                        && moveY <= yt
+                    ) ? center : false;
+                }
+            }
+
+            for (var propertName in direction) {
+                var _check = direction[propertName](moveX, moveY);
+                if (_check) {
+                    return _check;
+                }
+            }
+
+            return false;
+        },
+        move: function (element, d) {
+            var self = this;
+            self.x = Draw.getClientX(d) - self.disX - self.cx;
+            self.y = Draw.getClientY(d) - self.disY - self.cy;
+
+            element.attr({
+                x: self.x,
+                y: self.y
+            });
+
+            if (self.brush && this.category === 'form') {
+                self.brush.attr({
+                    x: (element.x() + (element.width() / 2)),
+                    y: element.y() + (element.height() / 2) + self.vertical()
+                });
+            }
+
+            Form.base.Parent.prototype.move.call(this);
+        },
+        validate: function () {
+            return Draw.findById(this.$id, 'to').length > 0
+                && Draw.findById(this.$id, 'from').length > 0;
+        },
+        vertical: function () {
+            return (this.drawInstance.support || window.navigator.userAgent.indexOf("Edge") > -1) ? 4 : 0;
+        }
+    });
 
     function XML(xml, support) {
         this.xml = xml;
@@ -1691,7 +2010,6 @@
 
     XML.style = {
         type: 'object',
-        mode: 'value',
         struct: {
             type: 'array',
             id: 'value',
@@ -1699,7 +2017,21 @@
             layout: 'value',
             category: 'value',
             cooperation: 'value',
+            assistant:'value',
+            veto: 'value',
+            back: 'value',
+            url:'value',
             group: {
+                type: 'array',
+                id: 'value',
+                name: 'value'
+            },
+            organization: {
+                type: 'array',
+                id: 'value',
+                name: 'value'
+            },
+            carbon: {
                 type: 'array',
                 id: 'value',
                 name: 'value'
@@ -1742,11 +2074,6 @@
         }
     };
 
-    XML.value = function (n) {
-        return (!!n.textContent) ? n.textContent : n.text;
-    }
-
-
     XML.nodeToObject = function (nodeWrap, propertyName, node) {
         for (var i = 0, c = node.childNodes.length; i < c; i++) {
             var n = node.childNodes[i];
@@ -1754,6 +2081,10 @@
                 nodeWrap[propertyName] = XML.value(n);
             }
         }
+    }
+
+    XML.value = function (n) {
+        return (!!n.textContent) ? n.textContent : n.text;
     }
 
     XML.readAttributes = function (nodeWrap, nodeAttribute, node) {

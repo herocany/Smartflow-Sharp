@@ -15,7 +15,9 @@ namespace Smartflow.Elements
         protected List<Transition> transitions = new List<Transition>();
         protected WorkflowNodeCategory category = WorkflowNodeCategory.Node;
         protected List<Action> actions = new List<Action>();
-        private int cooperation = 0;
+        private string cooperation = string.Empty;
+        private string assistant = string.Empty;
+
         public List<Action> Actions
         {
             get { return actions; }
@@ -35,12 +37,21 @@ namespace Smartflow.Elements
         }
 
         /// <summary>
-        /// 是否会签 
+        /// 流转策略 
         /// </summary>
-        public virtual int Cooperation
+        public virtual string Cooperation
         {
             get { return cooperation; }
             set { cooperation = value; }
+        }
+
+        /// <summary>
+        /// 协办策略
+        /// </summary>
+        public virtual string Assistant
+        {
+            get { return assistant; }
+            set { assistant = value; }
         }
 
     }

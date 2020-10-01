@@ -13,8 +13,7 @@ namespace Smartflow.Internals
     {
         public static Workflow Create(string resouceXml)
         {
-            return new ResolutionContext(new ManualResolution())
-                .Parse(resouceXml);
+            return new ManualResolution().Parse(resouceXml);
         }
     }
 }

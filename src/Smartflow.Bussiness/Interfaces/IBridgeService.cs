@@ -9,5 +9,6 @@ namespace Smartflow.Bussiness.Interfaces
 {
     public interface IBridgeService: IQuery<Bridge, string>, IQuery<Bridge, Dictionary<string, string>>
     {
+        Bridge GetBridge(string id);
     }
 }

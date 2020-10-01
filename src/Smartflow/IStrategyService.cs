@@ -8,7 +8,5 @@ namespace Smartflow
     public interface IStrategyService
     {
         bool Check(IList<WorkflowCooperation> records);
-
-        IWorkflowDiscuss Use();
     }
 }

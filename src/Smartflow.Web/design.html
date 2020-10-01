@@ -4,44 +4,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <title>Smartflow-Sharp工作流程设计工具</title>
     <link href="./Content/layui/css/layui.css" rel="stylesheet" />
-    <link href="./Content/design/smartflow.css?v=7.0" rel="stylesheet" />
+    <link href="./Content/design/smartflow.css?v=1122" rel="stylesheet" />
+    <link href="./Content/ztree/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
     <script src="./Content/jquery.min.js"></script>
     <script src="./Content/design/svg.js"></script>
-    <script src="./Content/layui/layui.all.js?v=100"></script>
-    <script src="./Content/design/smartflow.js?v=5654.11.11141411"></script>
+    <script src="./Content/layui/layui.all.js"></script>
+    <script src="./Content/design/smartflow.js"></script>
+    <script src="./Content/ztree/jquery.ztree.all.min.js"></script>
     <script src="./Content/common.js"></script>
-    <style type="text/css">
-        .container_ctr {
-            overflow: auto;
-        }
-        .container_draw {
-            height: 4000px;
-            width: 4000px;
-        }
-    </style>
 </head>
 <body>
     <div class="container_tools">
         <ul class="tools_menu clearfix" id="menus">
             <li command="save">
-                <img src="./Content/design/images/save.png" />
+                <img src="./Content/design/images/save.png" title="保存" />
             </li>
             <li command="select">
-                <img src="./Content/design/images/select.png" />
+                <img src="./Content/design/images/select.png" title="选择" />
             </li>
             <li command="join">
-                <img src="./Content/design/images/line.png" />
+                <img src="./Content/design/images/line.png" title="连线" />
             </li>
             <li command="node">
-                <img src="./Content/design/images/node.png" />
+                <img src="./Content/design/images/node.png" title="节点" />
             </li>
             <li command="decision">
-                <img src="./Content/design/images/decision.png" />
+                <img src="./Content/design/images/decision.png" title="分支判断" />
+            </li>
+            <li command="fork">
+                <img src="./Content/design/images/fork-1.png" title="分叉" />
+            </li>
+            <li command="merge">
+                <img src="./Content/design/images/merge.png" title="汇聚" />
+            </li>
+            <li command="form">
+                <img src="./Content/design/images/form.png" title="表单节点" />
+            </li>
+            <li command="dynamic">
+                <img src="./Content/design/images/dynamic.png" title="自由节点" />
             </li>
         </ul>
     </div>
     <div class="container container_right" id="attributes_tabs">
-        <div class="attributes_tab" id="workflow_help">
+        <div id="workflow-help" class="attributes_tab">
             <table class="attribute_tab_table">
                 <tr>
                     <td class="attribute_tab_table_column">方向</td>
@@ -49,7 +54,7 @@
                 </tr>
                 <tr>
                     <td class="attribute_tab_table_column">规则</td>
-                    <td class="attribute_tab_table_content">开始节点至少有一条出线，但没有进线、结束节点至少有一条进线，但没有出线，普通节点至少有一进一出的连线，决策节点至少有一条进线，两条以上出线</td>
+                    <td class="attribute_tab_table_content">开始节点至少有一条出线，但没有进线、结束节点至少有一条进线，但没有出线，普通节点只能一进一出的连线，决策节点至少有一条进线，两条以上出线。分叉和汇聚总是成对出现。</td>
                 </tr>
                 <tr>
                     <td class="attribute_tab_table_column">连线</td>
@@ -71,79 +76,67 @@
                     <td class="attribute_tab_table_column">删除</td>
                     <td class="attribute_tab_table_content">按住键盘中Ctrl+Alt键，然后鼠标双击元素，元素就会被删除</td>
                 </tr>
-                <tr>
-                    <td class="attribute_tab_table_column">模式</td>
-                    <td class="attribute_tab_table_content">
-                        支持单双向流程模式。单向即所有业务流转都由用户通过连线方式进行表述。双向即只要将所有节点都串联起来，由组件实现回退功能。默认配置为双向流程模式。
-                    </td>
-                </tr>
             </table>
         </div>
-        <div class="attributes_tab attributes_tab_node hide" id="workflow_node">
+        <div id="workflow-node" class="attributes_tab hide">
             <fieldset class="layui-elem-field" lay-filter="attributes_node_info" id="attributes_node_info">
                 <legend>基础信息</legend>
                 <div class="layui-field-box">
-                    <input type="text" placeholder="请输入节点名称" class="layui-input" id="node_name" />
-                    <div class="smartflow_checkbox">
-                        <input type="checkbox" id="node_cooperation" class="smartflow_checkbox_box" />
-                        <label for="chkCooperation" class="smartflow_checkbox_label">是否会签</label>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="layui-elem-field" lay-filter="attributes_decision_info" id="attributes_decision_info">
-                <legend>基础信息</legend>
-                <div class="layui-field-box">
-                    <form class="layui-form" lay-filter="form_decision">
+                    <form class="layui-form" lay-filter="form_node">
                         <div class="layui-form-item">
-                            <select placeholder="请选择数据" class="layui-select" style="width:100%;" lay-filter="decision_select" id="decision_select"></select>
+                            <input type="text" placeholder="请输入节点名称" class="layui-input" id="node_name" />
                         </div>
                         <div class="layui-form-item">
-                            <textarea placeholder="请输入SQL脚本" class="layui-textarea" spellcheck="false" id="decision_script"></textarea>
+                            <input type="checkbox" name="Veto" id="node_veto" class="smartflow_checkbox_box" lay-ignore lay-skin="primary" title="否决权" />
+                            <label for="node_veto" class="smartflow_checkbox_label">否决权</label>
+                        </div>
+                        <div class="layui-form-item">
+                            <select placeholder="请选择退回策略" id="node_back_select" lay-filter="node_back_select" class="layui-select" style="width:100%;">
+                                <option></option>
+                                <option value="Smartflow.Components.BackService">原路回退</option>
+                                <!--<option value="Smartflow.Components.BackSenderService">回退到发起人</option>-->
+                            </select>
                         </div>
                     </form>
                 </div>
             </fieldset>
-            <fieldset class="layui-elem-field" lay-filter="attributes_decision_expression" id="attributes_decision_expression">
-                <legend>表达式配置</legend>
-                <div class="layui-field-box">
-                    <div class="layui-form layui-form-pane" id="form_expression" lay-filter="form_expression">
 
-                    </div>
+            <fieldset class="layui-elem-field" lay-filter="attributes_cooperation" id="attributes_cooperation">
+                <legend>会签信息</legend>
+                <div class="layui-field-box">
+                    <form class="layui-form" lay-filter="form_cooperation">
+                        <div class="layui-form-item">
+                            <select placeholder="请选择协办策略" id="node_assistant_select" lay-filter="node_assistant_select" class="layui-select" style="width:100%;">
+                                <option></option>
+                                <option value="Smartflow.Components.RequiredStrategyService">按需协办</option>
+                            </select>
+                        </div>
+                        <div class="layui-form-item">
+                            <select placeholder="请选择流转策略" id="node_cooperation_select" lay-filter="node_cooperation_select" class="layui-select" style="width:100%;">
+                                <option></option>
+                                <option value="Smartflow.Components.FirstDecision">优先决策</option>
+                                <option value="Smartflow.Components.DemocraticDecision">民主决策</option>
+                                <option value="Smartflow.Components.LastDecision">最后决策</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
             </fieldset>
-            <fieldset class="layui-elem-field" lay-filter="attributes_role" id="attributes_role">
-                <legend>角色配置</legend>
-                <div class="layui-field-box">
-                    <div class="layui-textarea" id="node_role"></div>
-                </div>
-            </fieldset>
-            <fieldset class="layui-elem-field" lay-filter="attributes_user" id="attributes_user">
-                <legend>指定专人</legend>
-                <div class="layui-field-box">
-                    <div class="layui-textarea" id="node_user"></div>
-                </div>
-            </fieldset>
-            <fieldset class="layui-elem-field" lay-filter="attributes_config" id="attributes_config">
-                <legend>自动义动作配置</legend>
-                <div class="layui-field-box">
-                    <div class="layui-textarea" id="node_action">
 
-                    </div>
-                </div>
-            </fieldset>
             <fieldset class="layui-elem-field" lay-filter="attributes_strategy" id="attributes_strategy">
                 <legend>规则配置</legend>
                 <div class="layui-field-box">
                     <div class="layui-form" lay-filter="form_rule" id="form_rule"></div>
                 </div>
             </fieldset>
-        </div>
-        <div class="attributes_tab attributes_tab_node hide" id="workflow_transition">
-            <fieldset class="layui-elem-field" lay-filter="attributes_line_info">
-                <legend>基础信息</legend>
-                <div class="layui-field-box">
-                    <input type="text" placeholder="请输入线的名称" class="layui-input" id="transition_name" />
-                </div>
+            <fieldset class="layui-elem-field" lay-filter="attributes_actor" id="attributes_actor" style="border:none;cursor:default;">
+                <legend><span id="node_actor">参与者(点击选择参与者)</span></legend>
+            </fieldset>
+            <fieldset class="layui-elem-field" lay-filter="attributes_carbon" id="attributes_carbon" style="border:none;cursor:default;">
+                <legend><span id="node_carbon">抄送(点击选择抄送)</span></legend>
+            </fieldset>
+            <fieldset class="layui-elem-field" lay-filter="attributes_action" id="attributes_action" style="border:none;cursor:default;">
+                <legend><span id="node_action">自动定义动作(点击设置动作)</span></legend>
             </fieldset>
         </div>
     </div>
@@ -161,9 +154,12 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">业务类型</label>
-                <div class="layui-input-block">
-                    <select placeholder="请选择" class="layui-select" name="CateCode" style="width:100%;" id="category_select" lay-filter="category_select">
-                    </select>
+                <div class="layui-input-block" style="position:relative;">
+                    <input type="text" id="txtCateName" name="CateName" onclick="$('#zc').show()" class="layui-input" />
+                    <input type="hidden" id="hidCateCode" name="CateCode" />
+                    <div class="ztree-container" id="zc" onmouseleave="$('#zc').hide()">
+                        <div class="ztree" id="ztree"></div>
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -174,35 +170,25 @@
             </div>
         </form>
     </script>
-
-    
-    <script type="text/html" id="common_expression">
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">{{name}}</label>
-            <div class="layui-input-block">
-                <textarea name="{{id}}" class="layui-textarea">{{expression}}</textarea>
-            </div>
-        </div>
-    </script>
-    <script src="./Content/design/design.js?v=31.1.2221.1554.25"></script>
+    <script src="./Content/design/design.js"></script>
     <script type="text/javascript">
         $(function () {
             var setting = new design.Configuration({
+                node: 'workflow-node',
+                help:'workflow-help',
                 container: 'drawing',
                 categoryUrl: 'api/category/get',
-                categoryId: 'category_select',
-                dataSourceUrl: 'api/setting/GetDatabaseSourceList',
-                dataSourceId: 'decision_select',
+                categoryId: 'ztree',
                 url: 'api/structure/get',
                 save: 'api/structure/post',
-                constraintId: 'form_rule',
+                constraintID: 'form_rule',
                 constraintUrl: 'api/setting/GetConstraint'
             });
 
             $("#menus li").click(function () {
                 var command = $(this).attr("command");
                 var instance = $.SMF.getComponentById('drawing');
-                if (command === 'node' || command === 'decision') {
+                if ($.inArray(command, ['node', 'decision', 'form', 'fork', 'merge','dynamic']) > -1) {
                     instance.create(command);
                 } else {
                     if (instance[command]) {
@@ -211,12 +197,6 @@
                         setting.save();
                     }
                 }
-            });
-            $(".tools_menu img").mousedown(function () {
-                $(this).css("border", "solid 1px #ad9d9d");
-            });
-            $(".tools_menu img").mouseup(function () {
-                $(this).css("border", "none");
             });
         });
     </script>

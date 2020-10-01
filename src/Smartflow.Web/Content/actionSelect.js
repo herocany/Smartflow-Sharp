@@ -7,59 +7,15 @@
 
 
     function loadAction(nx) {
-        var ajaxSettings = { url: 'api/setting/GetAction', type: 'get' };
-        ajaxSettings.data = ajaxSettings.data || {};
-
-        ajaxSettings.success = function (serverData) {
-
-            var leftDataSource = [], rightDataSource = [];
-
-            $.each(serverData, function () {
-                leftDataSource.push({
-                    value: this.id,
-                    title: this.name,
-                    disabled: '',
-                    checked: ''
-                })
-            });
-            
-            $.each(nx.action, function () {
-                rightDataSource.push(this.id);
-            });
-
-            var transfer = layui.transfer;
-
-            //基础效果
-            transfer.render({
-                elem: '#transfer'
-                , title: ['待选择', '已选择']
-                , data: leftDataSource
-                , value: rightDataSource
-                , height: 495
-                , width: 322
-                , id: 'rightGroup'
-            });
-        };
-
-        util.ajaxService(ajaxSettings);
+        $('iframe').each(function () {
+            $(this).context.contentWindow.setting.load(nx);
+        });
     }
 
     function setAction(nx) {
-
-        var transfer = layui.transfer,
-            rightData = transfer.getData('rightGroup');
-
-        var actionArray = [];
-
-        $(rightData).each(function () {
-            var self = this;
-            actionArray.push({
-                id: self.value,
-                name: self.title
-            });
+        $('iframe').each(function () {
+            $(this).context.contentWindow.setting.set(nx);
         });
-
-        nx.action = actionArray;
     }
 
     window.setting = {

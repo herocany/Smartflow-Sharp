@@ -18,7 +18,7 @@ namespace Smartflow.Web.Controllers
         {
             _recordService = recordService;
         }
-
+     
         public IEnumerable<Record> Get(string id)
         {
             return _recordService.Query(id);

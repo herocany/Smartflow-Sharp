@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>流程督办</title>
+    <link href="../Content/common.css" rel="stylesheet" />
+    <link href="../Content/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Content/jquery.min.js"></script>
+    <script src="../Content/layui/layui.all.js"></script>
+    <script src="../Content/common.js"></script>
+    <script src="../Content/wf/supervise.js"></script>
+</head>
+<body>
+    <div class="layui-container" style="padding-top:20px;">
+        <blockquote class="layui-elem-quote">
+            <form class="layui-form" lay-filter="form-search">
+                <div class="layui-inline">
+                    <div class="layui-btn-group">
+                        <button type="button" class="layui-btn" id="change" title="参与者"><i class="layui-icon layui-icon-user"></i>参与者</button>
+                        <button type="button" class="layui-btn" id="kill" title="终止流程"><i class="layui-icon layui-icon-circle"></i>终止流程</button>
+                        <button type="button" class="layui-btn" id="delete" title="删除"><i class="layui-icon layui-icon-delete"></i>删除</button>
+                        <button type="button" class="layui-btn" id="reboot" title="重新发起"><i class="layui-icon layui-icon-top"></i>重新发起</button>
+                    </div>
+                </div>
+            </form>
+        </blockquote>
+        <table class="layui-hide" id="supervise-table" lay-filter="supervise-table"></table>
+    </div>
+</body>
+</html>

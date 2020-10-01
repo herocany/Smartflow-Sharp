@@ -11,5 +11,10 @@ namespace Smartflow.Common
         {
             command.Execute(entry);
         }
+
+        public static void Dispatch(ICommand command, object o)
+        {
+            command.Execute(o);
+        }
     }
 }

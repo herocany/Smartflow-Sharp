@@ -17,7 +17,6 @@ namespace Smartflow.Elements
     {
         private string destination = string.Empty;
         private string expression = string.Empty;
-        private WorkflowOpertaion direction = WorkflowOpertaion.Go;
 
         public string RelationshipID
         {
@@ -29,12 +28,6 @@ namespace Smartflow.Elements
         {
             get;
             set;
-        }
-     
-        public WorkflowOpertaion Direction
-        {
-            get {return direction; }
-            set { direction=value; }
         }
 
         public string Destination

@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>人员变更</title>
+    <link href="../Content/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Content/wf/userSelect.css" rel="stylesheet" />
+    <script src="../Content/jquery.min.js"></script>
+    <script src="../Content/layui/layui.all.js"></script>
+    <script src="../Content/common.js"></script>
+    <script src="../Content/wf/uc.js"></script>
+    <style type="text/css">
+        .layui-container{
+            width:auto;
+            margin-top:10px;
+        }
+        .layui-left, .layui-right, .layui-center{
+            height:600px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-container">
+        <div class="layui-form">
+            <div class="layui-input-inline" style="width:265px;">
+                <input type="text" id="title" placeholder="用户名模糊搜索" class="layui-input">
+            </div>
+            <div class="layui-btn-group">
+                <button id="reload" class="layui-btn">搜索</button>
+            </div>
+        </div>
+        <div id="transferTable" class="clearfix">
+            <div class="layui-left">
+                <div id="table_left" lay-filter="table_left"></div>
+            </div>
+            <div class="layui-right">
+                <div id="table_right" lay-filter="table_right"></div>
+            </div>
+            <div class="layui-center">
+                <div class="layui-middle">
+                    <button id="right_table_1" class="rigth_table_1 layui-btn layui-btn-sm layui-btn-disabled"><i class="layui-icon layui-icon-next"></i></button>
+                    <button id="left_table_1" class="left_table_1 layui-btn layui-btn-sm layui-btn-disabled"><i class="layui-icon layui-icon-prev"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

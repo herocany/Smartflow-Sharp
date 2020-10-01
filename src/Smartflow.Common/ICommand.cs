@@ -9,4 +9,9 @@ namespace Smartflow.Common
     {
         void Execute(T model);
     }
+
+    public interface ICommand
+    {
+        void Execute(Object o);
+    }
 }

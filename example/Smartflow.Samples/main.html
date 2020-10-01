@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Smartflow-Sharp工作流管理平台</title>
+    <link href="./Content/main.css" rel="stylesheet" />
+    <link href="./Content/layui/css/layui.css" rel="stylesheet" />
+    <script src="./Content/jquery.min.js"></script>
+    <script src="./Content/layui/layui.all.js"></script>
+    <script src="./Content/base64.min.js"></script>
+    <script src="./Content/common.js"></script>
+    <script src="./Content/main.js"></script>
+</head>
+<body class="smartflow_main">
+    <div class="smartflow_head">
+        <span class="smartflow_title">Smartflow-Sharp 工作流管理平台</span>
+        <div class="smartflow_menu fr">
+            <ul class="smartflow_menu_items clearfix" id="smartflow_menu_items">
+                <li class="smartflow_menu_item fr">
+                    <i class="layui-icon layui-icon-logout" command="exit" style="cursor:pointer;"></i>
+                </li>
+                <li class="smartflow_menu_item fr">
+                    <i class="layui-icon  layui-icon-dialogue" command="pending" style="cursor:pointer;"></i>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="smartflow_content">
+        <div class="smartflow_left clearfix" id="menu">
+            <div class="menu_item">
+                <div class="menu_title">业务管理</div>
+                <ul class="menu_sub_items hide">
+                    <li class="menu_sub_item">
+                        <span url="./Vacation/edit.html">请假申请</span>
+                    </li>
+                    <li class="menu_sub_item">
+                        <span url="../../Smartflow.Web/list.html">流程定义</span>
+                    </li>
+                    <li class="menu_sub_item">
+                        <span url="./WF/supervise.html">流程督办</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="smartflow_right">
+            <iframe style="width:100%;height:100%;" id="ifrmContent" src="about:blank" frameborder="0"></iframe>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $.Main({
+                iframeContent: '#ifrmContent',
+                login: './login.html'
+            });
+        });
+    </script>
+</body>
+</html>

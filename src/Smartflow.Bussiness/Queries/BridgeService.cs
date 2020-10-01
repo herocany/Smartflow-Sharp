@@ -12,6 +12,12 @@ namespace Smartflow.Bussiness.Queries
 {
     public class BridgeService : IBridgeService
     {
+        public Bridge GetBridge(string id)
+        {
+            return DBUtils.CreateWFConnection().Query<Bridge>(ResourceManage.SQL_BRIDGE_SELECT_BY_KEY,
+                new { ID = id }).FirstOrDefault();
+        }
+
         public Bridge Query(string instanceID)
         {
             return DBUtils.CreateWFConnection()

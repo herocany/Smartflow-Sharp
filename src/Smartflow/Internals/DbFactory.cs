@@ -65,7 +65,7 @@ namespace Smartflow.Internals
                 transaction.Commit();
                 return instanceID;
             }
-            catch
+            catch(Exception ex)
             {
                 transaction.Rollback();
                 return string.Empty;

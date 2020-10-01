@@ -22,7 +22,7 @@ namespace Smartflow
             set;
         }
 
-        public Node Current
+        public IEnumerable<Node> Current
         {
             get;
             set;
@@ -40,18 +40,10 @@ namespace Smartflow
             set;
         }
 
-        public WorkflowMode Mode
-        {
-            get;
-            set;
-        }
-
-
         public static WorkflowInstance GetInstance(string instanceID)
         {
             return WorkflowGlobalServiceProvider.Resolve<IWorkflowInstanceService>()
-                .Query(instanceID)
-                .FirstOrDefault();
+                .Query(instanceID);
         }
     }
 }

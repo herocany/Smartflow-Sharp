@@ -15,6 +15,12 @@ namespace Smartflow.Bussiness.Models
             set;
         }
 
+        public string ParentID
+        {
+            get;
+            set;
+        }
+
         public string Name
         {
             get;
@@ -22,17 +28,6 @@ namespace Smartflow.Bussiness.Models
         }
 
         public string Url
-        {
-            get;
-            set;
-        }
-
-        public string Script
-        {
-            get; set;
-        }
-
-        public string Expression
         {
             get;
             set;

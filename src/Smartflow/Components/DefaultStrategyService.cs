@@ -10,12 +10,7 @@ namespace Smartflow.Components
     {
         public bool Check(IList<WorkflowCooperation> records)
         {
-            return (records.Count >= 2);
-        }
-
-        public IWorkflowDiscuss Use()
-        {
-            return new FirstDiscuss();
+            return (records.Count >= 3);
         }
     }
 }
