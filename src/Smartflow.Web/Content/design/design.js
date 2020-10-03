@@ -397,7 +397,7 @@
                             $("#hidCateCode").val(node.NID);
                             $("#txtCateName").val(node.Name);
                         },
-                        onDblClick: function () {
+                        onDblClick: function (event, id, node) {
                             $("#hidCateCode").val(node.NID);
                             $("#txtCateName").val(node.Name);
                             $("#zc").hide();
