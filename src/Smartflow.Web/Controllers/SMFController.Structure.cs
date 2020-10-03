@@ -59,14 +59,19 @@ namespace Smartflow.Web.Controllers
         public void Post(WorkflowStructureCommandDto dto)
         {
             dto.StructXml = Uri.UnescapeDataString(dto.StructXml);
-            WorkflowStructure model = _abstractService.WorkflowStructureService.Query(dto.NID).FirstOrDefault();
-            if (model != null)
+            if (!String.IsNullOrEmpty(dto.NID))
             {
-                if (dto.CateCode != model.CateCode)
+                WorkflowStructure model = _abstractService.WorkflowStructureService
+                    .Query(dto.NID).FirstOrDefault();
+                if (model != null)
                 {
-                    dto.Status = 0;
+                    if (dto.CateCode != model.CateCode)
+                    {
+                        dto.Status = 0;
+                    }
                 }
             }
+
             var w = EmitCore.Convert<WorkflowStructureCommandDto, WorkflowStructure>(dto);
             w.CreateDateTime = DateTime.Now;
             _abstractService.WorkflowStructureService.Persistent(w);
