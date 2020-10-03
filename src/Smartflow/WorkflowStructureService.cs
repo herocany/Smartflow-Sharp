@@ -29,7 +29,7 @@ namespace Smartflow
             return base.Connection.Query<WorkflowStructure>(ResourceManage.SQL_WORKFLOW_STRUCTURE_SELECT).ToList();
         }
 
-        public IList<WorkflowStructure> Query(int pageIndex, int pageSize, out int total, Dictionary<string, string> queryArg)
+        public List<WorkflowStructure> Query(int pageIndex, int pageSize, out int total, Dictionary<string, string> queryArg)
         {
             string conditionStr = SetQueryArg(queryArg);
             string query = String.Format(ResourceManage.SQL_WORKFLOW_STRUCTURE_SELECT_PAGING, pageSize, pageSize * (pageIndex - 1), conditionStr);

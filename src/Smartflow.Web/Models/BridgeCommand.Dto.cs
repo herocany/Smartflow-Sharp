@@ -6,19 +6,11 @@ using System.Web;
 
 namespace Smartflow.Web.Models
 {
-    public class PendingDeleteDto
+    public class BridgeCommandDto
     {
         [Required]
         [StringLength(50)]
-        public string ID
-        {
-            get;
-            set;
-        }
-
-        [Required]
-        [StringLength(1024)]
-        public string ActorIDs
+        public string CategoryID
         {
             get;
             set;
@@ -26,7 +18,21 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public string NodeID
+        public string Key
+        {
+            get;
+            set;
+        }
+
+        [StringLength(2048)]
+        public string Comment
+        {
+            get; set;
+        }
+
+        [Required]
+        [StringLength(50)]
+        public string Creator
         {
             get;
             set;

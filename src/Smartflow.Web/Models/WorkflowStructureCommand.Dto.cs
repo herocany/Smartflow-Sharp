@@ -6,11 +6,10 @@ using System.Web;
 
 namespace Smartflow.Web.Models
 {
-    public class PostContextDto
+    public class WorkflowStructureCommandDto
     {
-        [Required]
         [StringLength(50)]
-        public string InstanceID
+        public string NID
         {
             get;
             set;
@@ -18,28 +17,43 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public String ActorID
+        public string StructName
+        {
+            get;
+            set;
+        }
+
+        [Required]
+        [StringLength(50)]
+        public string CateCode
+        {
+            get;
+            set;
+        }
+        [Required]
+        [StringLength(50)]
+        public string CateName
+        {
+            get;
+            set;
+        }
+
+        [Required]
+        [DataType(DataType.Text)]
+        public string StructXml
         {
             get;
             set;
         }
 
         [StringLength(2048)]
-        public string Message
+        public string Memo
         {
             get;
             set;
         }
 
-        [Required]
-        [StringLength(50)]
-        public String TransitionID
-        {
-            get;
-            set;
-        }
-
-        public dynamic Data
+        public int Status
         {
             get;
             set;

@@ -25,9 +25,7 @@ namespace Smartflow.Samples.Code
                 };
 
                 HttpContent content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(arg), System.Text.Encoding.UTF8, "application/json");
-                Task<HttpResponseMessage> response =
-                    client.PostAsync(ConfigurationManager.AppSettings["Start"].ToString(), content);
-
+                Task<HttpResponseMessage> response =client.PostAsync(ConfigurationManager.AppSettings["Start"].ToString(), content);
                 return response.Result.Content.ReadAsStringAsync().Result;
             }
         }

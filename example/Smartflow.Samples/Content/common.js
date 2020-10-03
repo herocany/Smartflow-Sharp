@@ -4,8 +4,8 @@
         smf: 'http://localhost/Smartflow.Web/',
         process: 'http://localhost/Smartflow.Web/image.html?id=',
         pending: 'http://localhost/Smartflow.Samples/WF/pending.html?id=',
-        actor: 'http://localhost/Smartflow.Web/actorSelect.html',
-        carbon: 'http://localhost/Smartflow.Web/carbonSelect.html',
+        actor: 'http://localhost/Smartflow.Samples/WF/actorSelect.html',
+        carbon: 'http://localhost/Smartflow.Web/WF/carbonSelect.html',
         ajaxService: function (settings) {
             var url = util.prefix + settings.url;
             var defaultSettings = $.extend({
@@ -148,8 +148,12 @@
         },
         image: function (id, code) {
             util.ajaxService({
-                type: 'get',
-                url:'api/bridge/get/' + id + '?categoryId=' + code,
+                type: 'post',
+                url: 'api/bridge/GetBridgeByMultipleKeys',
+                data: JSON.stringify({
+                    ID: id,
+                    CategoryID: code
+                }),
                 success: function (serverData) {
                     util.openWin(util.process + serverData.InstanceID);
                 }

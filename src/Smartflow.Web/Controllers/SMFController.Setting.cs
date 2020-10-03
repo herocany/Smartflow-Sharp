@@ -19,7 +19,6 @@ namespace Smartflow.Web.Controllers
         private readonly AbstractBridgeService _abstractService;
         private readonly IQuery<IList<Constraint>> _constraintService;
         private readonly IOrganizationService _organizationService;
-
         public SettingController(AbstractBridgeService abstractService, IQuery<IList<Constraint>> constraintService, IOrganizationService organizationService)
         {
             _abstractService = abstractService;
@@ -56,21 +55,21 @@ namespace Smartflow.Web.Controllers
         }
 
         [HttpPost]
-        public dynamic GetActor([FromBody]Paging info)
+        public dynamic GetActor(Paging info)
         {
             return CommonMethods.Response(_abstractService
                 .GetActor(info.Page, info.Limit, out int total, info.Get()), total);
         }
 
         [HttpPost]
-        public dynamic GetAssignActor([FromBody]Paging info)
+        public dynamic GetAssignActor(Paging info)
         {
             IList<WorkflowActor> list = _abstractService.GetActor(info.Get());
             return CommonMethods.Response(list, list.Count);
         }
 
         [HttpPost]
-        public dynamic Getcarbon([FromBody]Paging info)
+        public dynamic Getcarbon(Paging info)
         {
             return CommonMethods
                 .Response(_abstractService
@@ -78,7 +77,7 @@ namespace Smartflow.Web.Controllers
         }
 
         [HttpPost]
-        public dynamic GetAssignCarbon([FromBody]Paging info)
+        public dynamic GetAssignCarbon(Paging info)
         {
             IList<WorkflowCarbon> list = _abstractService.GetCarbon(info.Get());
             return CommonMethods.Response(list, list.Count);
@@ -94,22 +93,6 @@ namespace Smartflow.Web.Controllers
             IList<Organization> orgs = new List<Organization>();
             _organizationService.Load("0", orgs);
             return orgs;
-        }
-
-        public IEnumerable<KeyValuePair<string,string>> GetDiscusses()
-        {
-            IList<KeyValuePair<string, string>> workflowDiscusses = new List<KeyValuePair<string, string>>();
-            workflowDiscusses.Add(new KeyValuePair<string, string>(typeof(DemocraticDecision).FullName, "民主决策"));
-            workflowDiscusses.Add(new KeyValuePair<string, string>(typeof(FirstDecision).FullName,"第一决策")); ;
-            workflowDiscusses.Add(new KeyValuePair<string, string>(typeof(LastDecision).FullName, "最后决策"));
-            return workflowDiscusses;
-        }
-
-        public IEnumerable<KeyValuePair<string, string>> GetBacks()
-        {
-            IList<KeyValuePair<string, string>> workflowDiscusses = new List<KeyValuePair<string, string>>();
-            workflowDiscusses.Add(new KeyValuePair<string, string>(typeof(FirstDecision).FullName, "第一决策")); ;
-            return workflowDiscusses;
         }
     }
 }

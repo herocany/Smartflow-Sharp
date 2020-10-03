@@ -6,11 +6,19 @@ using System.Web;
 
 namespace Smartflow.Web.Models
 {
-    public class PendingDeleteDto
+    public class PendingCommandDto
     {
         [Required]
         [StringLength(50)]
         public string ID
+        {
+            get;
+            set;
+        }
+
+        [Required]
+        [StringLength(50)]
+        public string CateCode
         {
             get;
             set;

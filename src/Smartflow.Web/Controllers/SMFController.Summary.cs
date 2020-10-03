@@ -23,14 +23,14 @@ namespace ZTT.MES.Web.Controllers
         }
 
         [HttpPost]
-        public ResultData Paging([FromBody] Paging info)
+        public ResultData Paging(Paging info)
         {
             List<Summary> list = _summaryService.Query(info, out int total).ToList();
             return CommonMethods.Response(EmitCore.Convert<List<Summary>, List<SummaryDto>>(list), total);
         }
 
         [HttpPost]
-        public ResultData PagingSupervise([FromBody]Paging info)
+        public ResultData PagingSupervise(Paging info)
         {
             List<Summary> list = _summaryService.QuerySupervise(info, out int total).ToList();
             return CommonMethods.Response(EmitCore.Convert<List<Summary>, List<SummaryDto>>(list), total);
@@ -40,7 +40,8 @@ namespace ZTT.MES.Web.Controllers
         public ResultData Query(Dictionary<string, string> queryArg)
         {
             IList<Summary> list = _summaryService.Query(queryArg);
-            return CommonMethods.Response(list, list.Count);
+
+            return CommonMethods.Response(EmitCore.Convert<IList<Summary>, List<SummaryDto>>(list), list.Count);
         }
 
         public void Delete(SummaryDeleteDto dto)

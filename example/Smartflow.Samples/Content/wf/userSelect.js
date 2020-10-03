@@ -22,13 +22,13 @@
         nx.actor = actorArray;
     }
 
-    function load(rData, id, destination) {
+    function load(nx) {
 
         var table = layui.table;
 
         var actors = [];
-        $.each(rData, function () {
-            actors.push(this.ID);
+        $.each(nx.actor, function () {
+            actors.push(this.id);
         });
 
         util.table({
@@ -36,18 +36,18 @@
             , url: 'api/setting/GetActor'
             , method: 'post'
             , contentType: 'application/x-www-form-urlencoded'
-            , height: 569
+            , height: 489
             , page: {
-                layout: ['prev', 'page', 'next']
+                layout: ['prev', 'page', 'next', 'count']
             }
             , where: {
-                arg: JSON.stringify({ actor: actors.join(',') })
+                arg: JSON.stringify({ actor: actors.join(',')})
             }
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , cols: [[
                 { checkbox: true, fixed: true }
                 , { field: 'ID', title: 'ID', hide: true }
-                , { field: 'Name', title: '姓名', width: 120, align: 'left' }
+                , { field: 'Name', title: '用户名', width: 120, align: 'left' }
                 , {
                     title: '部门名称', templet: function (d) {
                         return d.Data.OrgName;
@@ -58,19 +58,24 @@
 
         util.table({
             elem: '#table_right'
-            , url: 'api/actor/GetAuditUser'
+            , url: 'api/setting/GetAssignActor'
+            , method: 'post'
+            , contentType: 'application/x-www-form-urlencoded'
             , where: {
-                ID: id,
-                Destination: destination
+                arg: JSON.stringify({ actor: actors.join(',') })
             }
-            , height: 569
+            , height: 489
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , page: false
             , cols: [[
                 { checkbox: true, fixed: true }
                 , { field: 'ID', title: 'ID', hide: true }
-                , { field: 'Name', title: '姓名', width: 120, align: 'center' }
-                , { field: 'OrganizationName', title: '部门名称' }
+                , { field: 'Name', title: '用户名', width: 120, align: 'center' }
+                , {
+                    title: '部门名称', templet: function (d) {
+                        return d.Data.OrgName;
+                    }
+                }
             ]]
         });
 
@@ -89,7 +94,7 @@
             $('#left_table_1')[methodName]('layui-btn-disabled');
         });
     }
-
+   
     window.setting = {
         load: load,
         set: set
@@ -97,36 +102,49 @@
 
 })();
 
+
 $(function () {
-    var id = util.doQuery("id");
-    var destination = util.doQuery("destination");
-    var cateCode = util.doQuery('cateCode');
-    util.ajaxService({
-        url: 'api/actor/get',
-        type: 'post',
-        data: JSON.stringify({
-            ID: id,
-            Destination: destination
-        }),
-        success: function (r) {
-            setting.load(r.Data, id, destination);
+
+    loadTree();
+    $("#tree").click(function () {
+        var display = $("#zc").is(":hidden");
+        if (display) {
+            $("#zc").show();
+        } else {
+            $("#zc").hide();
         }
+    });
+
+    $("#zc").hover(function () { }, function () {
+        $("#zc").hide();
     });
 
     $('#reload').on('click', function () {
         var key = $('#title').val();
+
         var cacheData = layui.table.cache.table_right;
         var actors = [];
         $.each(cacheData, function () {
             actors.push(this.ID);
         });
-        $("#right_table_1").addClass('layui-btn-disabled');
-        layui.table.reload('table_left', {
+
+        var orgCode = $("#node-value").val();
+
+        var searchCondition = {
+            searchKey: key,
+            orgCode: orgCode,
+            actor: actors.join(',')
+        };
+
+        var config = {
             page: { curr: 1 },
             where: {
-                arg: JSON.stringify({ actor: actors.join(','), searchKey: key })
+                arg: JSON.stringify(searchCondition)
             }
-        });
+        };
+
+        $("#right_table_1").addClass('layui-btn-disabled');
+        layui.table.reload('table_left', config);
     });
 
     $("#left_table_1").click(function () {
@@ -134,23 +152,34 @@ $(function () {
         var key = $('#title').val();
         if (!$this.hasClass('layui-btn-disabled')) {
             var checkStatus = layui.table.checkStatus('table_right');
-            if (checkStatus.data.length > 0) {
-                removeData(checkStatus.data);
-                var cacheData = layui.table.cache.table_right;
-                var actors = [];
-                $.each(cacheData, function () {
-                    actors.push(this.ID);
-                });
-                deletePending(checkStatus.data, function () {
-                    layui.table.reload('table_left', {
-                        page: { curr: 1 },
-                        where: {
-                            arg: JSON.stringify({ actor: actors.join(','), searchKey: key })
-                        }
-                    });
-                    layui.table.reload('table_right', { page: false });
-                });
-            }
+            removeData(checkStatus.data);
+
+            var cacheData = layui.table.cache.table_right;
+            var actors = [];
+            $.each(cacheData, function () {
+                actors.push(this.ID);
+            });
+
+            var config = {
+                page: { curr: 1 },
+                where: {
+                    arg: JSON.stringify({
+                        searchKey: key,
+                        actor: actors.join(',')
+                    })
+                }
+            };
+
+            layui.table.reload('table_left', config);
+            layui.table.reload('table_right', {
+                page: false,
+                where: {
+                    arg: JSON.stringify({
+                        actor: actors.join(',')
+                    })
+                }
+            });
+
             $this.addClass('layui-btn-disabled');
         }
     });
@@ -159,75 +188,43 @@ $(function () {
         var $this = $(this);
         var key = $('#title').val();
         if (!$this.hasClass('layui-btn-disabled')) {
-            var checkStatus = layui.table.checkStatus('table_left');
+            var checkStatus = layui.table.checkStatus('table_left'), data = checkStatus.data;
             if (checkStatus.data.length > 0) {
                 var cacheData = layui.table.cache.table_right;
                 var actors = [];
                 $.each(cacheData, function () {
                     actors.push(this.ID);
                 });
-
                 if (checkStatus.data.length > 0) {
-
                     $.each(checkStatus.data, function () {
                         actors.push(this.ID);
                     });
-                    addPending(checkStatus.data, function () {
-                        layui.table.reload('table_left', {
-                            page: { curr: 1 },
-                            where: {
-                                arg: JSON.stringify({ actor: actors.join(','), searchKey: key })
-                            }
-                        });
-                        layui.table.reload('table_right', { page: false });
-                    });
                 }
+
+                var config = {
+                    page: { curr: 1 },
+                    where: {
+                        arg: JSON.stringify({
+                            searchKey: key,
+                            actor: actors.join(',')
+                        })
+                    }
+                };
+
+                layui.table.reload('table_left', config);
+                layui.table.reload('table_right', {
+                    page: false,
+                    where: {
+                        arg: JSON.stringify({
+                            actor: actors.join(',')
+                        })
+                    }
+                });
             }
 
             $this.addClass('layui-btn-disabled');
         }
     });
-
-    function deletePending(data, callback) {
-        var actors = [];
-        $.each(data, function () {
-            actors.push(this.ID);
-        });
-        util.ajaxService({
-            url: 'api/pending/delete',
-            type: 'delete',
-            data: JSON.stringify({
-                ID: id,
-                NodeID: destination,
-                ActorIDs: actors.join(',')
-            }),
-            contentType: 'application/json',
-            success: function () {
-                callback && callback();
-            }
-        });
-    }
-
-    function addPending(data, callback) {
-        var actors = [];
-        $.each(data, function () {
-            actors.push(this.ID);
-        });
-        util.ajaxService({
-            url: 'api/pending/post',
-            type: 'post',
-            data: JSON.stringify({
-                ID: id,
-                NodeID: destination,
-                ActorIDs: actors.join(','),
-                CateCode: cateCode
-            }),
-            contentType: 'application/json',
-            success: function () {
-                callback && callback();
-            }
-        });
-    }
 
     function removeData(selectDataArray) {
         var cacheData = layui.table.cache.table_right;
@@ -240,5 +237,35 @@ $(function () {
                 }
             }
         });
+    } 
+
+    function loadTree() {
+        util.ajaxWFService({
+            type: 'get',
+            url: 'api/setting/getorgs',
+            success: function (serverData) {
+                $.fn.zTree.init($("#ztree"), {
+                    callback: {
+                        onClick: function (event, treeId,node) {
+                           // alert(node.ID);
+                            $("#tree").val(node.Name);
+                            $("#node-value").val(node.ID);
+                        }
+                    },
+                    data: {
+                        key: {
+                            name:'Name'
+                        },
+                        simpleData: {
+                            enable: true,
+                            idKey: 'ID',
+                            pIdKey: 'ParentID',
+                            rootPId: 0
+                        }
+                    }
+                }, serverData);
+            }
+        });
     }
+
 });

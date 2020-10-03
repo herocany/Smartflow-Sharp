@@ -29,12 +29,13 @@ namespace Smartflow.Web.Controllers
             return EmitCore.Convert<Bridge, BridgeDto>(_bridgeService.GetBridge(id));
         }
 
-        public ResultData Get([Required]string id, string categoryId)
+        [HttpPost]
+        public ResultData GetBridgeByMultipleKeys(BridgeRequestDto dto)
         {
             Dictionary<string, string> queryArg = new Dictionary<string, string>
             {
-                { "Key", id },
-                { "CategoryID", categoryId }
+                { "Key", dto.ID },
+                { "CategoryID", dto.CategoryID }
             };
             return CommonMethods.Response(data: _bridgeService.Query(queryArg));
         }

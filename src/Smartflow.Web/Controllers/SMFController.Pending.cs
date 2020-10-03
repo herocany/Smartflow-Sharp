@@ -48,7 +48,7 @@ namespace Smartflow.Web.Controllers
             }
         }
 
-        public void Post(PendingDto dto)
+        public void Post(PendingCommandDto dto)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
             var node = instance.Current.FirstOrDefault(e => e.ID== dto.NodeID);

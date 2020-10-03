@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Smartflow.Web.Models
 {
-    public class SummaryStatDto
+    public class BridgeRequestDto
     {
         public string ID
         {

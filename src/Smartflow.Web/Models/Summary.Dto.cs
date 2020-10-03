@@ -86,7 +86,6 @@ namespace Smartflow.Web.Models
                 return result;
             }
         }
-
         public string RealName
         {
             get;

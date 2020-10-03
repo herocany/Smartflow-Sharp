@@ -32,18 +32,6 @@ namespace Smartflow.Web.Controllers
         }
 
         [HttpPost]
-        public ResultData Get(RequestInstanceDto dto)
-        {
-            Node current = NodeService.FindNodeByID(dto.Destination, dto.ID);
-            Dictionary<String, string> queryArg = new Dictionary<string, string> {
-
-                { "instanceID", dto.ID },
-                { "nodeID", current.NID}
-            };
-            return CommonMethods.Response(data: _actorService.Query(queryArg));
-        }
-
-        [HttpPost]
         public ResultData GetAuditUser(RequestInstanceDto dto)
         {
             Node current = NodeService.FindNodeByID(dto.Destination, dto.ID);

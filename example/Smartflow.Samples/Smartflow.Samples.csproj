@@ -100,6 +100,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\wf\actorSelect.js" />
     <Content Include="Content\wf\audit.css" />
     <Content Include="Content\base64.min.js" />
     <Content Include="Content\common.css" />
@@ -346,12 +347,34 @@
     <Content Include="Content\main.js" />
     <Content Include="Content\wf\audit.js" />
     <Content Include="Content\wf\auditWindow.js" />
+    <Content Include="Content\wf\carbonSelect.css" />
+    <Content Include="Content\wf\carbonSelect.js" />
     <Content Include="Content\wf\next.js" />
+    <Content Include="Content\wf\organizationSelect.js" />
     <Content Include="Content\wf\record.js" />
     <Content Include="Content\wf\pending.js" />
+    <Content Include="Content\wf\roleSelect.js" />
     <Content Include="Content\wf\supervise.js" />
+    <Content Include="Content\wf\tab.css" />
     <Content Include="Content\wf\uc.js" />
     <Content Include="Content\wf\userSelect.css" />
+    <Content Include="Content\wf\userSelect.js" />
+    <Content Include="Content\ztree\jquery.ztree.all.min.js" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\1_close.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\1_open.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\2.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\3.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\4.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\5.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\6.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\7.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\8.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\diy\9.png" />
+    <Content Include="Content\ztree\zTreeStyle\img\line_conn.gif" />
+    <Content Include="Content\ztree\zTreeStyle\img\loading.gif" />
+    <Content Include="Content\ztree\zTreeStyle\img\zTreeStandard.gif" />
+    <Content Include="Content\ztree\zTreeStyle\img\zTreeStandard.png" />
+    <Content Include="Content\ztree\zTreeStyle\zTreeStyle.css" />
     <Content Include="Global.asax" />
     <Content Include="Vacation\detail.html" />
     <Content Include="Vacation\edit.html" />
@@ -362,10 +385,15 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="WF\actorSelect.html" />
     <Content Include="WF\auditWindow.html" />
+    <Content Include="WF\carbonSelect.html" />
+    <Content Include="WF\OrganizationSelect.html" />
     <Content Include="WF\pending.html" />
+    <Content Include="WF\roleSelect.html" />
     <Content Include="WF\supervise.html" />
     <Content Include="WF\uc.html" />
+    <Content Include="WF\userSelect.html" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

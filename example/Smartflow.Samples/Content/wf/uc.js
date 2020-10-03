@@ -102,7 +102,7 @@ $(function () {
     var destination = util.doQuery("destination");
     var cateCode = util.doQuery('cateCode');
     util.ajaxWFService({
-        url: 'api/actor/get',
+        url: 'api/actor/GetAuditUser',
         type: 'post',
         data: JSON.stringify({
             ID: id,

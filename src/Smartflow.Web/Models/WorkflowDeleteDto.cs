@@ -9,6 +9,7 @@ namespace Smartflow.Web.Models
     public class WorkflowDeleteDto
     {
         [Required]
+        [StringLength(50)]
         public string InstanceID
         {
             get;
@@ -16,6 +17,7 @@ namespace Smartflow.Web.Models
         }
 
         [Required]
+        [StringLength(50)]
         public string Key
         {
             get;
@@ -23,6 +25,7 @@ namespace Smartflow.Web.Models
         }
 
         [Required]
+        [StringLength(50)]
         public string CategoryID
         {
             get;

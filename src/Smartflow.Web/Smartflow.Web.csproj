@@ -102,7 +102,6 @@
     <Content Include="Content\list.js" />
     <Content Include="Content\organizationSelect.js" />
     <Content Include="Content\tab.css" />
-    <Content Include="Content\uc.js" />
     <Content Include="Content\carbonSelect.css" />
     <Content Include="Content\carbonSelect.js" />
     <Content Include="Content\userSelect.css" />
@@ -278,6 +277,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\ArgumentCheckAttribute.cs" />
     <Compile Include="Code\CommonMethods.cs" />
     <Compile Include="Code\EmitCore.cs" />
     <Compile Include="Code\IgnoreCaseRule.cs" />
@@ -296,17 +296,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ActorDto.cs" />
+    <Compile Include="Models\ActorCommand.Dto.cs" />
+    <Compile Include="Models\BridgeCommand.Dto.cs" />
     <Compile Include="Models\BridgeDto.cs" />
+    <Compile Include="Models\BridgeRequest.Dto.cs" />
     <Compile Include="Models\PendingDeleteDto.cs" />
+    <Compile Include="Models\PendingCommand.Dto.cs" />
     <Compile Include="Models\PendingDto.cs" />
     <Compile Include="Models\PostLostContextDto.cs" />
     <Compile Include="Models\PostContextDto.cs" />
+    <Compile Include="Models\RecordDto.cs" />
     <Compile Include="Models\RequestInstanceDto.cs" />
     <Compile Include="Models\Summary.DeleteDto.cs" />
     <Compile Include="Models\Summary.Dto.cs" />
-    <Compile Include="Models\Summary.StatDto.cs" />
     <Compile Include="Models\WorkflowDeleteDto.cs" />
+    <Compile Include="Models\WorkflowStructure.Dto.cs" />
+    <Compile Include="Models\WorkflowStructureCommand.Dto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

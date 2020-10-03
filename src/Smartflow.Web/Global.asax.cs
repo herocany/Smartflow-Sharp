@@ -20,6 +20,7 @@ namespace Smartflow.Web
         protected void Application_Start(object sender, EventArgs e)
         {
             var config = GlobalConfiguration.Configuration;
+            config.Filters.Add(new ArgumentCheckAttribute());
 
             NinjectDependencyResolver dependencyResolver = new NinjectDependencyResolver();
 
@@ -27,7 +28,7 @@ namespace Smartflow.Web
             dependencyResolver.Register<IBridgeService, BridgeService>();
             dependencyResolver.Register<IQuery<IList<Category>>, CategoryService>();
             dependencyResolver.Register<IPendingService, PendingService>();
-            dependencyResolver.Register<IQuery<IList<Record>, string>, RecordService>();
+            dependencyResolver.Register<IQuery<List<Record>, string>, RecordService>();
             dependencyResolver.Register<IQuery<IList<Constraint>>, ConstraintService>();
             dependencyResolver.Register<AbstractBridgeService, BaseBridgeService>();
             dependencyResolver.Register<IOrganizationService, OrganizationService>();

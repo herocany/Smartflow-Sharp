@@ -7,6 +7,7 @@ using System.Web.Http;
 using Smartflow.Bussiness.WorkflowService;
 using Smartflow.Common;
 using Smartflow.Web.Code;
+using Smartflow.Web.Models;
 
 namespace Smartflow.Web.Controllers
 {
@@ -19,24 +20,26 @@ namespace Smartflow.Web.Controllers
         }
 
         [HttpPost]
-        public dynamic Query(Paging paging)
+        public ResultData Query(Paging paging)
         {
-            IList<WorkflowStructure> structs =
+           List<WorkflowStructure> structures =
                 _abstractService.WorkflowStructureService.Query(paging.Page, paging.Limit, out int total, paging.Get());
-
-            return CommonMethods.Response(structs, total);
+            var w = EmitCore.Convert<List<WorkflowStructure>, List<WorkflowStructureDto>>(structures);
+            return CommonMethods.Response(w, total);
         }
 
-        public WorkflowStructure Get(string id)
+        public WorkflowStructureDto Get(string id)
         {
-            return _abstractService.WorkflowStructureService.Query(id).FirstOrDefault();
+            return EmitCore.Convert<WorkflowStructure, WorkflowStructureDto>(
+                _abstractService.WorkflowStructureService.Query(id).FirstOrDefault());
         }
 
-        public void Put(WorkflowStructure workflowStructure)
+        public void Put(WorkflowStructureCommandDto dto)
         {
-            WorkflowStructure model = this.Get(workflowStructure.NID);
+            WorkflowStructure model = _abstractService
+                .WorkflowStructureService.Query(dto.NID).FirstOrDefault();
 
-            model.Status = workflowStructure.Status;
+            model.Status = dto.Status;
 
             if (model.Status == 1)
             {
@@ -53,20 +56,20 @@ namespace Smartflow.Web.Controllers
             _abstractService.WorkflowStructureService.Persistent(model);
         }
 
-        public void Post(WorkflowStructure workflowStructure)
+        public void Post(WorkflowStructureCommandDto dto)
         {
-            workflowStructure.StructXml = Uri.UnescapeDataString(workflowStructure.StructXml);
-            workflowStructure.CreateDateTime = DateTime.Now;
-            WorkflowStructure model = this.Get(workflowStructure.NID);
+            dto.StructXml = Uri.UnescapeDataString(dto.StructXml);
+            WorkflowStructure model = _abstractService.WorkflowStructureService.Query(dto.NID).FirstOrDefault();
             if (model != null)
             {
-                if (workflowStructure.CateCode != model.CateCode)
+                if (dto.CateCode != model.CateCode)
                 {
-                    workflowStructure.Status = 0;
+                    dto.Status = 0;
                 }
             }
-
-            _abstractService.WorkflowStructureService.Persistent(workflowStructure);
+            var w = EmitCore.Convert<WorkflowStructureCommandDto, WorkflowStructure>(dto);
+            w.CreateDateTime = DateTime.Now;
+            _abstractService.WorkflowStructureService.Persistent(w);
         }
 
         public void Delete(string id)

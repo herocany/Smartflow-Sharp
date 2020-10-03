@@ -11,6 +11,7 @@ using Smartflow.Bussiness.Queries;
 using Smartflow.Bussiness.WorkflowService;
 using Smartflow.Common;
 using Smartflow.Elements;
+using Smartflow.Web.Code;
 using Smartflow.Web.Models;
 
 namespace Smartflow.Web.Controllers
@@ -40,15 +41,16 @@ namespace Smartflow.Web.Controllers
         /// 启动
         /// </summary>
         [HttpPost]
-        public string Start(Bridge model)
+        public string Start(BridgeCommandDto dto)
         {
             Category category = new CategoryService().Query()
-                                .FirstOrDefault(cate => cate.NID == model.CategoryID);
+                                .FirstOrDefault(cate => cate.NID == dto.CategoryID);
 
             WorkflowStructure workflowStructure =
                 _abstractService.WorkflowStructureService.Query()
                 .FirstOrDefault(e => e.CateCode == category.NID && e.Status == 1);
 
+            var model = EmitCore.Convert<BridgeCommandDto, Bridge>(dto);
             string instanceID = WorkflowEngine.Instance.Start(workflowStructure.StructXml);
             model.InstanceID = instanceID;
             model.Comment = String.IsNullOrEmpty(model.Comment) ? category.Name : model.Comment;
@@ -80,7 +82,7 @@ namespace Smartflow.Web.Controllers
         /// <returns></returns>
 
         [HttpPost]
-        public dynamic Get(ActorDto dto)
+        public dynamic Get(ActorCommandDto dto)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
             IList<Pending> pendings = _pendingService.GetPending(instance.InstanceID, dto.ActorID);
@@ -239,7 +241,7 @@ namespace Smartflow.Web.Controllers
         }
 
         [HttpPost]
-        public IEnumerable<Transition> GetTransition(ActorDto dto)
+        public IEnumerable<Transition> GetTransition(ActorCommandDto dto)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
             var current = GetCurrent(instance, dto.ActorID);
@@ -322,7 +324,7 @@ namespace Smartflow.Web.Controllers
         /// <param name="id">实例ID</param>
         /// <returns></returns>
         [HttpPost]
-        public int GetNodeCooperation(ActorDto dto)
+        public int GetNodeCooperation(ActorCommandDto dto)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
 
