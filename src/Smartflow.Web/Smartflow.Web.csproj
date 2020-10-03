@@ -312,6 +312,7 @@
     <Compile Include="Models\WorkflowDeleteDto.cs" />
     <Compile Include="Models\WorkflowStructure.Dto.cs" />
     <Compile Include="Models\WorkflowStructureCommand.Dto.cs" />
+    <Compile Include="Models\WorkflowStructureRequst.Dto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

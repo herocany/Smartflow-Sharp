@@ -34,7 +34,7 @@ namespace Smartflow.Web.Controllers
                 _abstractService.WorkflowStructureService.Query(id).FirstOrDefault());
         }
 
-        public void Put(WorkflowStructureCommandDto dto)
+        public void Put(WorkflowStructureRequstDto dto)
         {
             WorkflowStructure model = _abstractService
                 .WorkflowStructureService.Query(dto.NID).FirstOrDefault();
