@@ -5,7 +5,7 @@
         process: 'http://localhost/Smartflow.Web/image.html?id=',
         pending: 'http://localhost/Smartflow.Samples/WF/pending.html?id=',
         actor: 'http://localhost/Smartflow.Samples/WF/actorSelect.html',
-        carbon: 'http://localhost/Smartflow.Web/WF/carbonSelect.html',
+        carbon: 'http://localhost/Smartflow.Samples/WF/carbonSelect.html',
         ajaxService: function (settings) {
             var url = util.prefix + settings.url;
             var defaultSettings = $.extend({
