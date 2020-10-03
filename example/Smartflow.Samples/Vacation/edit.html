@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="layui-form-item" id="layui-form-button" style="text-align:right;margin-right:20px;">
-                        <button class="layui-btn" lay-submit type="button" lay-filter="form-vacation-create">提交</button>
+                        <button class="layui-btn"  lay-submit type="button"  id="btnSubmit" lay-filter="form-vacation-create">提交</button>
                     </div>
                 </div>
             </div>
@@ -96,11 +96,16 @@
             form.on('submit(form-vacation-create)', function () {
                 var form = layui.form;
                 var data = form.val('form-vacation');
+
+                $("#btnSubmit").addClass("layui-disabled");
+                $("#btnSubmit").attr("disabled", "disabled");
                 util.ajaxService({
                     type: 'post',
                     url: 'api/vacation/post',
                     data: JSON.stringify(data),
-                    success: function (id) {
+                    success: function () {
+                        $("#btnSubmit").removeClass("layui-disabled");
+                        $("#btnSubmit").removeAttr("disabled");
                         alert('操作成功。请点击右上角【消息图标】打开待办列表，然后通过【待办-我审批】查看详情，在详情页面上点击【查看进度】按钮，打开业务审批进度页面，将鼠标放到蓝色节点中，会提示下一节点审批人。');
                     }
                 });
