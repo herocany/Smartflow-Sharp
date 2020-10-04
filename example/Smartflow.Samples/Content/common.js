@@ -86,9 +86,17 @@
             return index;
         },
         openLayer: function (wnd, args) {
-            //var wnd = args;
-            var url = !!args ? wnd.url + '?' + util.serialize(args) : wnd.url;
-            util.create($.extend({}, wnd, { url: url }));
+            if ($.isPlainObject(wnd)) {
+                var url = !!args ? wnd.url + '?' + util.serialize(args) : wnd.url;
+                util.create($.extend({}, wnd, { url: url }));
+            } else {
+                util.create($.extend({
+                    title: '窗体弹多大，由你来决定',
+                    width: 600,
+                    url: wnd,
+                    height: 420
+                }));
+            }
         },
         openFullLayer: function (name, args, title) {
             var wnd = window.top.util.windows[name];
