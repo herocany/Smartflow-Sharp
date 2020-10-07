@@ -98,6 +98,9 @@
     <Content Include="Content\condition.js" />
     <Content Include="Content\easyAction.js" />
     <Content Include="Content\form.js" />
+    <Content Include="Content\icon\iconfont.css" />
+    <Content Include="Content\icon\iconfont.js" />
+    <Content Include="Content\icon\iconfont.svg" />
     <Content Include="Content\layui.extension.css" />
     <Content Include="Content\list.js" />
     <Content Include="Content\organizationSelect.js" />
@@ -138,6 +141,11 @@
     <Content Include="carbonSelect.html" />
     <Content Include="userSelect.html" />
     <Content Include="list.html" />
+    <Content Include="Content\icon\iconfont.eot" />
+    <Content Include="Content\icon\iconfont.json" />
+    <Content Include="Content\icon\iconfont.ttf" />
+    <Content Include="Content\icon\iconfont.woff" />
+    <Content Include="Content\icon\iconfont.woff2" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Smartflow.Web.pubxml" />
     <None Include="Web.Debug.config">
