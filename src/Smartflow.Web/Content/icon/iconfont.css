@@ -252,17 +252,15 @@
 }
 
 
-
-.iconfont:hover{
-    color:#ff6a00;
+.iconfont:hover {
+    color: #ff6a00;
+    border: solid 1px #ff6a00;
 }
-
 .icon-line {
     font-weight: 900;
 }
-
 .icon-decision {
-    font-size: 30px;
+    font-size: 20px;
 }
 .icon-fork {
     font-size: 8px;
