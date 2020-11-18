@@ -17,7 +17,7 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public string StructName
+        public string Name
         {
             get;
             set;
@@ -25,14 +25,14 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public string CateCode
+        public string CategoryCode
         {
             get;
             set;
         }
         [Required]
         [StringLength(50)]
-        public string CateName
+        public string CategoryName
         {
             get;
             set;
@@ -40,7 +40,14 @@ namespace Smartflow.Web.Models
 
         [Required]
         [DataType(DataType.Text)]
-        public string StructXml
+        public string Resource
+        {
+            get;
+            set;
+        }
+
+
+        public int Status
         {
             get;
             set;
@@ -48,12 +55,6 @@ namespace Smartflow.Web.Models
 
         [StringLength(2048)]
         public string Memo
-        {
-            get;
-            set;
-        }
-
-        public int Status
         {
             get;
             set;

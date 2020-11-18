@@ -12,13 +12,13 @@ namespace Smartflow.Samples.Code
 {
     public class CommonMethods
     {
-        public static string Start(string id, string categoryID, string creator, string comment = null)
+        public static string Start(string id, string categoryCode, string creator, string comment = null)
         {
             using (var client = new HttpClient())
             {
                 var arg = new
                 {
-                    CategoryID = categoryID,
+                    CategoryCode = categoryCode,
                     Key = id,
                     Comment = comment,
                     Creator = creator

@@ -17,7 +17,7 @@ namespace Smartflow.Internals
 
         #region WorkflowCooperationService
 
-        public const string SQL_WORKFLOW_COOPERATION_INSERT = " INSERT INTO T_cooperation(NID,InstanceID,TransitionID,NodeID,CreateDateTime) VALUES(@NID,@InstanceID,@TransitionID,@NodeID,@CreateDateTime)";
+        public const string SQL_WORKFLOW_COOPERATION_INSERT = " INSERT INTO T_cooperation(NID,InstanceID,TransitionID,NodeID,CreateTime) VALUES(@NID,@InstanceID,@TransitionID,@NodeID,@CreateTime)";
         public const string SQL_WORKFLOW_COOPERATION_DELETE = " DELETE FROM T_cooperation WHERE NodeID=@NodeID AND InstanceID=@InstanceID ";
         public const string SQL_WORKFLOW_COOPERATION_SELECT = " SELECT * FROM T_cooperation  WHERE InstanceID=@InstanceID  ";
 

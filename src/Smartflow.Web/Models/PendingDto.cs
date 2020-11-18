@@ -13,7 +13,7 @@ namespace Smartflow.Web.Models
             set;
         }
 
-        public string CateCode
+        public string CategoryCode
         {
             get;
             set;

@@ -27,7 +27,7 @@ namespace Smartflow.Bussiness.WorkflowService
                     Name = executeContext.From.Name,
                     NodeID = executeContext.From.NID,
                     Comment = executeContext.Message,
-                    CreateDateTime = DateTime.Now,
+                    CreateTime = DateTime.Now,
                     AuditUserID = UUID,
                     Url = string.Empty,
                     AuditUserName = auditUserName,

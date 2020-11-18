@@ -13,41 +13,43 @@ namespace Smartflow.Web.Models
             set;
         }
 
-        public string StructName
+        public string Name
         {
             get;
             set;
         }
 
-        public string CateCode
+        public string CategoryCode
         {
             get;
             set;
         }
 
-        public string CateName
+        public string CategoryName
         {
             get;
             set;
         }
 
-        public string StructXml
+        public string Resource
+        {
+            get;
+            set;
+        }
+
+        public DateTime CreateTime
+        {
+            get;
+            set;
+        }
+
+        public int Status
         {
             get;
             set;
         }
 
         public string Memo
-        {
-            get;
-            set;
-        }
-        public DateTime CreateDateTime
-        {
-            get;
-            set;
-        }
-        public int Status
         {
             get;
             set;

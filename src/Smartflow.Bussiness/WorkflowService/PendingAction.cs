@@ -103,10 +103,10 @@ namespace Smartflow.Bussiness.WorkflowService
         public void WritePending(string actorID, ExecutingContext executeContext)
         {
             var node = executeContext.To;
-            string cateCode = (String)executeContext.Data.CateCode;
+            string categoryCode = (String)executeContext.Data.CategoryCode;
             string instanceID = (String)executeContext.Instance.InstanceID;
             Category model = new CategoryService().Query()
-                 .FirstOrDefault(cate => cate.NID == cateCode);
+                 .FirstOrDefault(cate => cate.NID == categoryCode);
 
             Pending entry = new Pending
             {
@@ -115,10 +115,10 @@ namespace Smartflow.Bussiness.WorkflowService
                 InstanceID = instanceID,
                 NodeID = node.NID,
                 Url = model.Url,
-                CreateDateTime = DateTime.Now,
+                CreateTime = DateTime.Now,
                 NodeName = node.Name,
-                CateCode = cateCode,
-                CateName = model.Name
+                CategoryCode = categoryCode,
+                CategoryName = model.Name
             };
 
             CommandBus.Dispatch<Pending>(new CreatePending(), entry);

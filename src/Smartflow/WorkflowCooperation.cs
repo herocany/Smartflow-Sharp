@@ -31,7 +31,7 @@ namespace Smartflow
             set;
         }
 
-        public DateTime CreateDateTime
+        public DateTime CreateTime
         {
             get;
             set;

@@ -41,7 +41,7 @@ namespace Smartflow
             {
                 InstanceID = instanceID,
                 Direction = (int)WorkflowOpertaion.Go
-            }).OrderBy(order => order.CreateDateTime).ToList();
+            }).OrderBy(order => order.CreateTime).ToList();
         }
     }
 }

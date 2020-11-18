@@ -127,7 +127,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 WorkflowProcess process = base.ProcessService
                                          .Get(node.InstanceID)
                                          .Where(n => n.Origin == node.ID)
-                                         .OrderByDescending(e => e.CreateDateTime)
+                                         .OrderByDescending(e => e.CreateTime)
                                          .FirstOrDefault();
 
                 return userList.Where(e => e.ID == process.ActorID).ToList();
@@ -225,7 +225,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 if (ruleType == WorkflowRuleType.NODE_SEND_START_USER)
                 {
                     WorkflowProcess process = base.ProcessService.Get(rule.InstanceID)
-                                                .OrderByDescending(e => e.CreateDateTime)
+                                                .OrderByDescending(e => e.CreateTime)
                                                 .FirstOrDefault(e => e.NodeType == WorkflowNodeCategory.Start);
 
                     if (process != null)
@@ -236,7 +236,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 }
                 else
                 {
-                    WorkflowProcess process = base.ProcessService.Get(rule.InstanceID).OrderByDescending(e => e.CreateDateTime).FirstOrDefault();
+                    WorkflowProcess process = base.ProcessService.Get(rule.InstanceID).OrderByDescending(e => e.CreateTime).FirstOrDefault();
                     if (process != null)
                     {
                         String orgCode = _actorService.GetOrganizationCode(process.ActorID);

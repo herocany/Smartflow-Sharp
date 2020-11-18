@@ -34,7 +34,8 @@ namespace Smartflow.Web.Controllers
                 _abstractService.WorkflowStructureService.Query(id).FirstOrDefault());
         }
 
-        public void Put(WorkflowStructureRequstDto dto)
+        [HttpPost]
+        public void Update(WorkflowStructureRequstDto dto)
         {
             WorkflowStructure model = _abstractService
                 .WorkflowStructureService.Query(dto.NID).FirstOrDefault();
@@ -44,7 +45,7 @@ namespace Smartflow.Web.Controllers
             if (model.Status == 1)
             {
                 IList<WorkflowStructure> wfList = _abstractService
-                    .WorkflowStructureService.Query().Where(e => e.CateCode == model.CateCode && e.NID != model.NID && e.Status == 1)
+                    .WorkflowStructureService.Query().Where(e => e.CategoryCode == model.CategoryCode && e.NID != model.NID && e.Status == 1)
                     .ToList<WorkflowStructure>();
 
                 foreach (WorkflowStructure entry in wfList)
@@ -58,14 +59,14 @@ namespace Smartflow.Web.Controllers
 
         public void Post(WorkflowStructureCommandDto dto)
         {
-            dto.StructXml = Uri.UnescapeDataString(dto.StructXml);
+            dto.Resource = Uri.UnescapeDataString(dto.Resource);
             if (!String.IsNullOrEmpty(dto.NID))
             {
                 WorkflowStructure model = _abstractService.WorkflowStructureService
                     .Query(dto.NID).FirstOrDefault();
                 if (model != null)
                 {
-                    if (dto.CateCode != model.CateCode)
+                    if (dto.CategoryCode != model.CategoryCode)
                     {
                         dto.Status = 0;
                     }
@@ -73,7 +74,7 @@ namespace Smartflow.Web.Controllers
             }
 
             var w = EmitCore.Convert<WorkflowStructureCommandDto, WorkflowStructure>(dto);
-            w.CreateDateTime = DateTime.Now;
+            w.CreateTime = DateTime.Now;
             _abstractService.WorkflowStructureService.Persistent(w);
         }
 

@@ -33,7 +33,7 @@ namespace Smartflow.Bussiness.Queries
                   .Query<Bridge>(ResourceManage.SQL_BRIDGE_SELECT, new
                   {
                       Key = queryArg["Key"],
-                      CategoryID = queryArg["CategoryID"]
+                      CategoryCode= queryArg["CategoryCode"]
                   }).FirstOrDefault();
         }
     }

@@ -213,7 +213,7 @@
                 transitionID: transition,
                 message: message,
                 data: {
-                    CateCode: settings.code,
+                    CategoryCode: settings.code,
                     UUID: result.ID,
                     Name: result.Name,
                     Group: convertStrs($this.nodeSetting.group),

@@ -38,13 +38,13 @@ namespace Smartflow.Bussiness.Models
             set;
         }
 
-        public string CateCode
+        public string CategoryCode
         {
             get;
             set;
         }
 
-        public string CateName
+        public string CategoryName
         {
             get;
             set;
@@ -56,7 +56,7 @@ namespace Smartflow.Bussiness.Models
             set;
         }
 
-        public DateTime CreateDateTime
+        public DateTime CreateTime
         {
             get;
             set;

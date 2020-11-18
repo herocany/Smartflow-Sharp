@@ -1,8 +1,6 @@
-CREATE DATABASE Smartflow
-GO
 USE [Smartflow]
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetAssistant]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  UserDefinedFunction [dbo].[GetAssistant]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30,7 +28,7 @@ BEGIN
 
 END
 GO
-/****** Object:  UserDefinedFunction [dbo].[GetNodeNames]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  UserDefinedFunction [dbo].[GetNodeNames]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -53,7 +51,7 @@ end
 return @Names
 end
 GO
-/****** Object:  Table [dbo].[t_action]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_action]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -64,14 +62,14 @@ CREATE TABLE [dbo].[t_action](
 	[ID] [varchar](512) NULL,
 	[Name] [varchar](512) NULL,
 	[InstanceID] [varchar](50) NULL,
-	[CreateDateTime] [datetime] NULL,
+	[CreateTime] [datetime] NULL,
  CONSTRAINT [PK_t_action] PRIMARY KEY CLUSTERED 
 (
 	[NID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_actor]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_actor]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -82,14 +80,14 @@ CREATE TABLE [dbo].[t_actor](
 	[ID] [varchar](50) NULL,
 	[Name] [varchar](50) NULL,
 	[InstanceID] [varchar](50) NULL,
-	[CreateDateTime] [datetime] NULL,
+	[CreateTime] [datetime] NULL,
  CONSTRAINT [PK_t_actor] PRIMARY KEY CLUSTERED 
 (
 	[NID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_assistant]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_assistant]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -105,25 +103,25 @@ CREATE TABLE [dbo].[t_assistant](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_bridge]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_bridge]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[t_bridge](
 	[InstanceID] [varchar](50) NOT NULL,
-	[CategoryID] [varchar](50) NULL,
+	[CategoryCode] [varchar](50) NULL,
 	[Comment] [varchar](512) NULL,
 	[Key] [varchar](50) NULL,
 	[Creator] [varchar](50) NULL,
-	[CreateDateTime] [datetime] NULL,
+	[CreateTime] [datetime] NULL,
  CONSTRAINT [PK_t_bridge] PRIMARY KEY CLUSTERED 
 (
 	[InstanceID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_carbon]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_carbon]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -131,7 +129,7 @@ GO
 CREATE TABLE [dbo].[t_carbon](
 	[NID] [varchar](50) NOT NULL,
 	[InstanceID] [varchar](50) NULL,
-	[CreateDateTime] [datetime] NULL,
+	[CreateTime] [datetime] NULL,
 	[ID] [varchar](50) NULL,
 	[Name] [varchar](50) NULL,
 	[RelationshipID] [varchar](50) NULL,
@@ -141,7 +139,7 @@ CREATE TABLE [dbo].[t_carbon](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_carbonCopy]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_carbonCopy]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -150,7 +148,7 @@ CREATE TABLE [dbo].[t_carbonCopy](
 	[NID] [varchar](50) NOT NULL,
 	[ActorID] [varchar](50) NULL,
 	[InstanceID] [varchar](50) NULL,
-	[CreateDateTime] [datetime] NULL,
+	[CreateTime] [datetime] NULL,
 	[NodeID] [varchar](50) NULL,
  CONSTRAINT [PK_t_carbonCopy] PRIMARY KEY CLUSTERED 
 (
@@ -158,7 +156,7 @@ CREATE TABLE [dbo].[t_carbonCopy](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_category]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_category]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -174,7 +172,7 @@ CREATE TABLE [dbo].[t_category](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_command]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_command]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -191,7 +189,7 @@ CREATE TABLE [dbo].[t_command](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_config]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_config]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -207,7 +205,7 @@ CREATE TABLE [dbo].[t_config](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_constraint]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_constraint]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -222,7 +220,7 @@ CREATE TABLE [dbo].[t_constraint](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_cooperation]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_cooperation]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -232,14 +230,14 @@ CREATE TABLE [dbo].[t_cooperation](
 	[InstanceID] [varchar](50) NULL,
 	[TransitionID] [varchar](50) NULL,
 	[NodeID] [varchar](50) NULL,
-	[CreateDateTime] [datetime] NULL,
+	[CreateTime] [datetime] NULL,
  CONSTRAINT [PK_t_cooperation] PRIMARY KEY CLUSTERED 
 (
 	[NID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_group]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_group]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -256,7 +254,7 @@ CREATE TABLE [dbo].[t_group](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_instance]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_instance]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -272,7 +270,7 @@ CREATE TABLE [dbo].[t_instance](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_link]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_link]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -287,7 +285,7 @@ CREATE TABLE [dbo].[t_link](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_mail]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_mail]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -306,7 +304,7 @@ CREATE TABLE [dbo].[t_mail](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_node]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_node]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -328,7 +326,7 @@ CREATE TABLE [dbo].[t_node](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_organization]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_organization]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -345,7 +343,7 @@ CREATE TABLE [dbo].[t_organization](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_pending]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_pending]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -356,17 +354,17 @@ CREATE TABLE [dbo].[t_pending](
 	[NodeID] [varchar](50) NULL,
 	[InstanceID] [varchar](50) NULL,
 	[NodeName] [varchar](50) NULL,
-	[CateCode] [varchar](50) NULL,
-	[CateName] [varchar](50) NULL,
+	[CategoryCode] [varchar](50) NULL,
+	[CategoryName] [varchar](50) NULL,
+	[CreateTime] [datetime] NULL,
 	[Url] [varchar](512) NULL,
-	[CreateDateTime] [datetime] NULL,
  CONSTRAINT [PK_t_pending] PRIMARY KEY CLUSTERED 
 (
 	[NID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_process]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_process]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -378,7 +376,7 @@ CREATE TABLE [dbo].[t_process](
 	[TransitionID] [varchar](50) NULL,
 	[InstanceID] [varchar](50) NULL,
 	[NodeType] [varchar](50) NULL,
-	[CreateDateTime] [datetime] NULL,
+	[CreateTime] [datetime] NULL,
 	[RelationshipID] [varchar](50) NULL,
 	[Direction] [varchar](50) NULL,
 	[ActorID] [varchar](50) NULL,
@@ -388,7 +386,7 @@ CREATE TABLE [dbo].[t_process](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_record]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_record]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -399,7 +397,7 @@ CREATE TABLE [dbo].[t_record](
 	[Name] [varchar](50) NULL,
 	[Comment] [text] NULL,
 	[InstanceID] [varchar](50) NULL,
-	[CreateDateTime] [datetime] NULL,
+	[CreateTime] [datetime] NULL,
 	[Url] [varchar](2048) NULL,
 	[AuditUserID] [varchar](50) NULL,
 	[AuditUserName] [varchar](50) NULL,
@@ -409,7 +407,7 @@ CREATE TABLE [dbo].[t_record](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_rule]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_rule]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -426,14 +424,14 @@ CREATE TABLE [dbo].[t_rule](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_script]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_script]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[t_script](
 	[ID] [varchar](50) NOT NULL,
-	[CategoryID] [varchar](50) NULL,
+	[CategoryCode] [varchar](50) NULL,
 	[Text] [text] NULL,
 	[Sort] [int] NULL,
  CONSTRAINT [PK_t_script] PRIMARY KEY CLUSTERED 
@@ -442,27 +440,27 @@ CREATE TABLE [dbo].[t_script](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_structure]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_structure]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[t_structure](
 	[NID] [varchar](50) NOT NULL,
-	[StructName] [varchar](50) NULL,
-	[StructXml] [text] NULL,
-	[CateCode] [varchar](50) NULL,
-	[CateName] [varchar](50) NULL,
+	[Name] [varchar](50) NULL,
+	[Resource] [text] NULL,
+	[CategoryCode] [varchar](50) NULL,
+	[CategoryName] [varchar](50) NULL,
 	[Status] [int] NULL,
+	[CreateTime] [datetime] NULL,
 	[Memo] [text] NULL,
-	[CreateDateTime] [datetime] NULL,
  CONSTRAINT [PK_T_STRUCTURE] PRIMARY KEY CLUSTERED 
 (
 	[NID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[t_transition]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  Table [dbo].[t_transition]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -482,11 +480,17 @@ CREATE TABLE [dbo].[t_transition](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[v_summary]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  View [dbo].[v_summary]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+
+
+
+
+
 
 
 
@@ -496,19 +500,25 @@ GO
 CREATE view [dbo].[v_summary]
 as
 
-   select (select Name from [dbo].[t_category]  t where t.NID=b.CategoryID) CategoryName,InstanceID,CategoryID,Comment,[Key],
+   select (select Name from [dbo].[t_category]  t where t.NID=b.CategoryCode) CategoryName,InstanceID,CategoryCode,Comment,[Key],
 
  [dbo].[GetNodeNames](b.InstanceID) NodeName, 
 	(SELECT i.State  FROM t_instance i WHERE i.InstanceID=b.InstanceID) [State],
-    (SELECT Name FROM [Demo].dbo.t_sys_user where ID=Creator) RealName,
+    (SELECT Name FROM [Demo].dbo.t_sys_user where ID=Creator) Name,
 	(SELECT (select  Name FROM  [Demo].[dbo].[t_sys_organization] WHERE ID=[OrganizationCode])  FROM [Demo].dbo.t_sys_user where ID=Creator) OrganizationName,
-   Creator,CreateDateTime from t_bridge b
+   Creator,CreateTime from t_bridge b
 GO
-/****** Object:  View [dbo].[v_supervise]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  View [dbo].[v_supervise]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+
+
+
+
+
 
 
 
@@ -523,21 +533,21 @@ as
 
 
 
-   select (select Name from [dbo].[t_category]  t where t.NID=b.CategoryID) CategoryName,b.InstanceID,CategoryID,Comment,[Key],
+   select (select Name from [dbo].[t_category]  t where t.NID=b.CategoryCode) CategoryName,b.InstanceID,CategoryCode,Comment,[Key],
 
     (SELECT (SELECT NAME FROM t_node n WHERE n.ID=l.RelationshipID and n.InstanceID=b.InstanceID) ) NodeName,
 	l.RelationshipID AS NodeID,
  	(SELECT i.State  FROM t_instance i WHERE i.InstanceID=b.InstanceID) [State],
-    (SELECT Name FROM  [Demo].dbo.t_sys_user where ID=Creator) RealName,
+    (SELECT Name FROM  [Demo].dbo.t_sys_user where ID=Creator) Name,
 	(SELECT (select  Name FROM  [Demo].[dbo].[t_sys_organization] WHERE ID=[OrganizationCode])  FROM  [Demo].dbo.t_sys_user where ID=Creator) OrganizationName,
-   Creator,CreateDateTime from t_bridge b left join t_link l on (b.InstanceID=l.InstanceID ) 
+   Creator,CreateTime from t_bridge b left join t_link l on (b.InstanceID=l.InstanceID ) 
 
 
 
 GO
-ALTER TABLE [dbo].[t_action] ADD  CONSTRAINT [DF_t_action_CreateDateTime]  DEFAULT (getdate()) FOR [CreateDateTime]
+ALTER TABLE [dbo].[t_action] ADD  CONSTRAINT [DF_t_action_CreateDateTime]  DEFAULT (getdate()) FOR [CreateTime]
 GO
-ALTER TABLE [dbo].[t_actor] ADD  CONSTRAINT [DF_t_actor_INSERTDATE]  DEFAULT (getdate()) FOR [CreateDateTime]
+ALTER TABLE [dbo].[t_actor] ADD  CONSTRAINT [DF_t_actor_INSERTDATE]  DEFAULT (getdate()) FOR [CreateTime]
 GO
 ALTER TABLE [dbo].[t_carbon] ADD  CONSTRAINT [DF_t_carbon_NID]  DEFAULT (newid()) FOR [NID]
 GO
@@ -561,30 +571,31 @@ ALTER TABLE [dbo].[t_node] ADD  CONSTRAINT [DF_t_node_Cooperation]  DEFAULT ((0)
 GO
 ALTER TABLE [dbo].[t_pending] ADD  CONSTRAINT [DF_t_pending_NID]  DEFAULT (newid()) FOR [NID]
 GO
-ALTER TABLE [dbo].[t_process] ADD  CONSTRAINT [DF_t_process_INSERTDATE]  DEFAULT (getdate()) FOR [CreateDateTime]
+ALTER TABLE [dbo].[t_process] ADD  CONSTRAINT [DF_t_process_INSERTDATE]  DEFAULT (getdate()) FOR [CreateTime]
 GO
-ALTER TABLE [dbo].[t_record] ADD  CONSTRAINT [DF_t_record_InsertDate]  DEFAULT (getdate()) FOR [CreateDateTime]
+ALTER TABLE [dbo].[t_record] ADD  CONSTRAINT [DF_t_record_InsertDate]  DEFAULT (getdate()) FOR [CreateTime]
 GO
 ALTER TABLE [dbo].[t_script] ADD  CONSTRAINT [DF_t_sys_command_ID]  DEFAULT (newid()) FOR [ID]
 GO
 ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_NID]  DEFAULT (newid()) FOR [NID]
 GO
-ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_StructName]  DEFAULT ('类型名称') FOR [StructName]
+ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_StructName]  DEFAULT ('类型名称') FOR [Name]
 GO
-ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_StructXml]  DEFAULT ('资源Xml') FOR [StructXml]
+ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_StructXml]  DEFAULT ('资源Xml') FOR [Resource]
 GO
-ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_CateCode]  DEFAULT ('类型编号') FOR [CateCode]
+ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_CateCode]  DEFAULT ('类型编号') FOR [CategoryCode]
 GO
-ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_CateName]  DEFAULT ('类型名称') FOR [CateName]
+ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_CateName]  DEFAULT ('类型名称') FOR [CategoryName]
 GO
-ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_CreateDateTime]  DEFAULT (getdate()) FOR [CreateDateTime]
+ALTER TABLE [dbo].[t_structure] ADD  CONSTRAINT [DF_t_structure_CreateDateTime]  DEFAULT (getdate()) FOR [CreateTime]
 GO
-/****** Object:  StoredProcedure [dbo].[SMF_DELETE_RECORD]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  StoredProcedure [dbo].[SMF_DELETE_RECORD]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[SMF_DELETE_RECORD](@InstanceID VARCHAR(50),@Key VARCHAR(50),@CategoryID VARCHAR(50))
+
+CREATE PROCEDURE [dbo].[SMF_DELETE_RECORD](@InstanceID VARCHAR(50),@Key VARCHAR(50),@CategoryCode VARCHAR(50))
  
 AS
 
@@ -611,7 +622,7 @@ DELETE FROM [dbo].t_assistant     WHERE InstanceID=@InstanceID;
 BEGIN
     SET @ID=@Key
 	DECLARE command_cursor cursor
-	FOR SELECT [Text] FROM t_script WHERE  CategoryID=@CategoryID Order by Sort 
+	FOR SELECT [Text] FROM t_script WHERE  CategoryCode=@CategoryCode Order by Sort 
 	--打开游标--
 	OPEN command_cursor
 	--开始循环游标变量--
@@ -627,7 +638,7 @@ BEGIN
 	END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[SMF_DELETE_WF_RECORD]    Script Date: 2020-09-26 21:09:27 ******/
+/****** Object:  StoredProcedure [dbo].[SMF_DELETE_WF_RECORD]    Script Date: 2020-11-18 21:32:16 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -666,7 +677,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'参与者的�
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'工作流实例ID 与 T_INSTANCE表关联' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_actor', @level2type=N'COLUMN',@level2name=N'InstanceID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'参与者审批时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_actor', @level2type=N'COLUMN',@level2name=N'CreateDateTime'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'参与者审批时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_actor', @level2type=N'COLUMN',@level2name=N'CreateTime'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'审批参与者' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_actor'
 GO
@@ -754,7 +765,7 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'工作流实�
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'节点类型' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_process', @level2type=N'COLUMN',@level2name=N'NodeType'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'创建时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_process', @level2type=N'COLUMN',@level2name=N'CreateDateTime'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'创建时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_process', @level2type=N'COLUMN',@level2name=N'CreateTime'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'跳转到的节点NID' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_process', @level2type=N'COLUMN',@level2name=N'RelationshipID'
 GO
@@ -762,9 +773,9 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'记录所有�
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键标识 GUID' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_structure', @level2type=N'COLUMN',@level2name=N'NID'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'流程图模板名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_structure', @level2type=N'COLUMN',@level2name=N'StructName'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'流程图模板名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_structure', @level2type=N'COLUMN',@level2name=N'Name'
 GO
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'存储描述流程数据结构' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_structure', @level2type=N'COLUMN',@level2name=N'StructXml'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'存储描述流程数据结构' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_structure', @level2type=N'COLUMN',@level2name=N'Resource'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'流程模板' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N't_structure'
 GO

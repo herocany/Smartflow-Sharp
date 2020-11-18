@@ -35,7 +35,7 @@ namespace Smartflow.Web.Controllers
             Dictionary<string, string> queryArg = new Dictionary<string, string>
             {
                 { "Key", dto.ID },
-                { "CategoryID", dto.CategoryID }
+                { "CategoryCode", dto.CategoryCode }
             };
             return CommonMethods.Response(data: _bridgeService.Query(queryArg));
         }

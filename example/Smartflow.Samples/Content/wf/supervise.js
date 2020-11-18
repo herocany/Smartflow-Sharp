@@ -37,15 +37,15 @@ $(function () {
                 , { width: 50, type: 'numbers', sort: false, title: '序号', align: 'center', unresize: true }
                 , { field: 'CategoryName', width: 120, title: '业务类型', sort: false, align: 'center' }
                 , { field: 'OrganizationName', width: 130, title: '所属单位', sort: false, align: 'center' }
-                , { field: 'RealName', width: 120, title: '创建人', sort: false, align: 'center' }
+                , { field: 'Name', width: 120, title: '创建人', sort: false, align: 'center' }
                 , {
                     field: 'Comment', title: '标题', minWidth: 140, align: 'left', event: 'jump', templet: function (d) {
                         return "<span class=\"jump-click\">" + d.Comment + "</span>";
                     }
                  }
                 , {
-                    field: 'CreateDateTime', title: '创建时间', width: 200, align: 'center',
-                    templet: function (d) { return layui.util.toDateString(d.CreateDateTime, 'yyyy.MM.dd HH:mm:ss'); }
+                    field: 'CreateTime', title: '创建时间', width: 200, align: 'center',
+                    templet: function (d) { return layui.util.toDateString(d.CreateTime, 'yyyy.MM.dd HH:mm:ss'); }
                 }
                 , { field: 'StateName', width: 100, title: '运行状态', align: 'center', unresize: true }
                 , {
@@ -73,12 +73,12 @@ $(function () {
     Page.prototype.jump = function (obj) {
         var config = this.setting.config;
         util.ajaxWFService({
-            url: config.category + '/' + obj.CategoryID,
+            url: config.category + '/' + obj.CategoryCode,
             type: 'get',
             success: function (data) {
                 util.openDetailFullLayer(data.Url, {
                     id: obj.Key,
-                    code: obj.CategoryID,
+                    code: obj.CategoryCode,
                     instanceID: obj.InstanceID
                 }, obj.CategoryName);
             }
@@ -139,7 +139,7 @@ $(function () {
             change: function () {
                 Page.check('supervise-table', function (data) {
                     if (data.State.toLowerCase() === 'running') {
-                        util.openWin('./uc.html?id=' + data.InstanceID + "&cateCode=" + data.CategoryID + "&destination=" + data.NodeID, data.CategoryName, 895, 660);
+                        util.openWin('./uc.html?id=' + data.InstanceID + "&categoryCode=" + data.CategoryCode + "&destination=" + data.NodeID, data.CategoryName, 895, 660);
                     } else {
                         layer.msg(util.message.running);
                     }
@@ -154,7 +154,7 @@ $(function () {
                                 ID: data.InstanceID,
                                 Destination: data.NodeID,
                                 data: {
-                                    CateCode: data.CategoryID
+                                    CategoryCode: data.CategoryCode
                                 }
                             });
                             util.ajaxWFService({
@@ -179,7 +179,7 @@ $(function () {
                         $this.delete({
                             instanceID: data.InstanceID,
                             key: data.Key,
-                            categoryID: data.CategoryID
+                            categoryCode: data.CategoryCode 
                         });
                     });
                 });
@@ -192,7 +192,7 @@ $(function () {
                             $this.reboot({
                                 instanceID: data.InstanceID,
                                 key: data.Key,
-                                categoryID: data.CategoryID
+                                categoryCode: data.CategoryCode
                             });
                         });
                     } else {

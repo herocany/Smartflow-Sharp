@@ -100,7 +100,7 @@
 $(function () {
     var id = util.doQuery("id");
     var destination = util.doQuery("destination");
-    var cateCode = util.doQuery('cateCode');
+    var categoryCode = util.doQuery('categoryCode');
     util.ajaxWFService({
         url: 'api/actor/GetAuditUser',
         type: 'post',
@@ -220,7 +220,7 @@ $(function () {
                 ID: id,
                 NodeID: destination,
                 ActorIDs: actors.join(','),
-                CateCode: cateCode
+                CategoryCode: categoryCode
             }),
             contentType: 'application/json',
             success: function () {

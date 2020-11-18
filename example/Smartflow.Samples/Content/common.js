@@ -160,7 +160,7 @@
                 url: 'api/bridge/GetBridgeByMultipleKeys',
                 data: JSON.stringify({
                     ID: id,
-                    CategoryID: code
+                    CategoryCode: code
                 }),
                 success: function (serverData) {
                     util.openWin(util.process + serverData.InstanceID);

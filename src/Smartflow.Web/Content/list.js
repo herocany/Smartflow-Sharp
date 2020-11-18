@@ -35,8 +35,8 @@ $(function () {
             , cols: [[
                 { type: 'radio' }
                 , { width: 60, type: 'numbers', sort: false, title: '序号', align: 'center', unresize: true }
-                , { field: 'StructName', width: 240, title: '名称', align: 'left' }
-                , { field: 'CateName', width: 100, title: '业务类型', sort: false, align: 'center' }
+                , { field: 'Name', width: 240, title: '名称', align: 'left' }
+                , { field: 'CategoryName', width: 100, title: '业务类型', sort: false, align: 'center' }
                 , { field: 'Status', width: 120, title: '状态', align: 'center', templet: config.templet.checkbox, unresize: true }
                 , { field: 'Memo', title: '备注', minWidth: 120, align: 'left' }
             ]]
@@ -46,8 +46,8 @@ $(function () {
             var id = $(obj.elem).attr('code');
             var useState = (obj.elem.checked ? 1 : 0);
             util.ajaxService({
-                type: 'put',
-                url: 'api/structure/put',
+                type: 'post',
+                url: 'api/structure/Update',
                 data: JSON.stringify({ Status: useState, NID: id }),
                 success: function () {
                     layui.table.reload(config.id);
@@ -69,12 +69,12 @@ $(function () {
                             return !node.isParent;
                         },
                         onClick: function (event, id, node) {
-                            $("#hidCateCode").val(node.NID);
-                            $("#txtCateName").val(node.Name);
+                            $("#hidCategoryCode").val(node.NID);
+                            $("#txtCategoryName").val(node.Name);
                         },
                         onDblClick: function () {
-                            $("#hidCateCode").val(node.NID);
-                            $("#txtCateName").val(node.Name);
+                            $("#hidCategoryCode").val(node.NID);
+                            $("#txtCategoryName").val(node.Name);
                             $("#zc").hide();
                         }
                     },

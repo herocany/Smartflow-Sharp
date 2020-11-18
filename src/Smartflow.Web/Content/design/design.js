@@ -172,7 +172,7 @@
                 type: 'Get',
                 success: function (serverData) {
                     $.SMF.getComponentById($this.option.container)
-                        .import(serverData.StructXml);
+                        .import(serverData.Resource);
                 }
             });
         } else {
@@ -341,7 +341,7 @@
                 if (id) {
                     formData.NID = id;
                 }
-                formData.StructXml = instance.export();
+                formData.Resource = instance.export();
                 util.ajaxService({
                     url: $this.option.save,
                     data: JSON.stringify(formData),
@@ -365,7 +365,7 @@
             type: 'Get',
             success: function (serverData) {
                 var form = layui.form;
-                $this.select(serverData.CateCode, 'ztree');
+                $this.select(serverData.CategoryCode, 'ztree');
                 form.val('layui_flow_info', serverData);
             }
         });
@@ -377,7 +377,7 @@
         if (nodes.length > 0) {
             var n = nodes[0];
             treeObj.selectNode(n);
-            $('#txtCateName').val(n.Name);
+            $('#txtCategoryName').val(n.Name);
         }
     }
 
@@ -394,12 +394,12 @@
                     },
                     callback: {
                         onClick: function (event, id, node) {
-                            $("#hidCateCode").val(node.NID);
-                            $("#txtCateName").val(node.Name);
+                            $("#hidCategoryCode").val(node.NID);
+                            $("#txtCategoryName").val(node.Name);
                         },
                         onDblClick: function (event, id, node) {
-                            $("#hidCateCode").val(node.NID);
-                            $("#txtCateName").val(node.Name);
+                            $("#hidCategoryCode").val(node.NID);
+                            $("#txtCategoryName").val(node.Name);
                             $("#zc").hide();
                         }
                     },

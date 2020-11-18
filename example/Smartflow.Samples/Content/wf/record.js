@@ -34,7 +34,7 @@
                           //  .replace(/{{NodeName}}/ig, setting.Type ? this.OrganizationName:this.NodeName)
                          //   .replace(/{{UserGroup}}/ig, this.UserGroup)
                             .replace(/{{Comment}}/ig, this.Comment)
-                            .replace(/{{CreateDateTime}}/ig, this.CreateDateTime ? layui.util.toDateString(this.CreateDateTime, 'yyyy-MM-dd HH:mm') : '')
+                            .replace(/{{CreateTime}}/ig, this.CreateTime ? layui.util.toDateString(this.CreateTime, 'yyyy-MM-dd HH:mm') : '')
                             .replace(/{{Sign}}/ig, util.isEmpty(this.Url) ? '' : "<image src=\"" + this.Url + "\" />")
                             .replace(/{{AuditUserName}}/ig, this.AuditUserName)
                     );
@@ -62,7 +62,7 @@
     };
 
     $.Record = function (option) {
-        var templet = "<tr><td class=\"flow-node\" next=\"{{NodeName}}\">{{Name}}</td><td class=\"flow-message\">{{Comment}}<div class=\"flow-audit-info\"><span>审批时间：{{CreateDateTime}}</span><span>{{Sign}}</span><span>审批人：{{AuditUserName}}</span></div></td></tr>";
+        var templet = "<tr><td class=\"flow-node\" next=\"{{NodeName}}\">{{Name}}</td><td class=\"flow-message\">{{Comment}}<div class=\"flow-audit-info\"><span>审批时间：{{CreateTime}}</span><span>{{Sign}}</span><span>审批人：{{AuditUserName}}</span></div></td></tr>";
         return new Record($.extend({
             templet: templet,
             id: '#record-table',

@@ -12,36 +12,18 @@ namespace Smartflow.Bussiness.Queries
 {
     public class SummaryService : ISummaryService
     {
-        public DataTable GetStat(string actor, string categoryID)
-        {
-            string query = @" SELECT
-                            (SELECT Count(1) FROM T_PENDING p WHERE  p.ACTORID = @Actor AND p.InstanceID in (select InstanceID  FROM [dbo].[v_summary] WHERE  CategoryID Like @CategoryID)) Pending,
-                            (SELECT Count(1) FROM [dbo].[v_summary]  WHERE CategoryID Like @CategoryID AND InstanceID  in (SELECT InstanceID  FROM [dbo].t_carbonCopy c  WHERE  c.ACTORID = @Actor )) Carbon,
-                            (SELECT Count(1) FROM [dbo].[v_summary]  WHERE CategoryID Like @CategoryID  AND InstanceID in  (SELECT InstanceID FROM [dbo].t_record  WHERE  AuditUserID=@Actor) ) Record,
-                            (SELECT Count(1) FROM v_summary s WHERE CategoryID Like @CategoryID  AND  s.Creator = @Actor ) Apply  ";
-
-            var dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("Actor", actor);
-            dynamicParameters.Add("CategoryID", string.Concat(categoryID, "%"));
-            DataTable dataTable = new DataTable();
-            using (IDataReader dataReader =DBUtils.CreateWFConnection().ExecuteReader(query, dynamicParameters))
-            {
-                dataTable.Load(dataReader);
-            }
-            return dataTable;
-        }
-
+      
         public IList<Summary> Query(Dictionary<string, string> queryArg)
         {
             string conditionStr = SetQueryArg(queryArg);
-            string query = String.Format("SELECT * FROM V_SUMMARY WHERE 1=1 {0} ORDER BY CreateDateTime Desc ", conditionStr);
+            string query = String.Format("SELECT * FROM V_SUMMARY WHERE 1=1 {0} ORDER BY CreateTime Desc ", conditionStr);
             return DBUtils.CreateWFConnection().Query<Summary>(query).ToList();
         }
 
         public IList<Summary> Query(Paging info, out int total)
         {
             string conditionStr = SetQueryArg(info.Get());
-            string query = String.Format("SELECT TOP {0} * FROM V_SUMMARY WHERE InstanceID NOT IN (SELECT TOP {1} InstanceID FROM V_SUMMARY WHERE 1=1 {2} ORDER BY CreateDateTime Desc ) {2}  ORDER BY CreateDateTime Desc ", info.Limit, info.Limit * (info.Page - 1), conditionStr);
+            string query = String.Format("SELECT TOP {0} * FROM V_SUMMARY WHERE InstanceID NOT IN (SELECT TOP {1} InstanceID FROM V_SUMMARY WHERE 1=1 {2} ORDER BY CreateTime Desc ) {2}  ORDER BY CreateTime Desc ", info.Limit, info.Limit * (info.Page - 1), conditionStr);
             total = DBUtils.CreateWFConnection().ExecuteScalar<int>(String.Format("SELECT COUNT(1) FROM V_SUMMARY WHERE 1=1 {0}", conditionStr));
             return DBUtils.CreateWFConnection().Query<Summary>(query).ToList();
         }
@@ -49,7 +31,7 @@ namespace Smartflow.Bussiness.Queries
         public IList<Summary> QuerySupervise(Paging info, out int total)
         {
             string conditionStr = SetQueryArg(info.Get());
-            string query = String.Format("SELECT TOP {0} * FROM V_SUPERVISE WHERE InstanceID NOT IN (SELECT TOP {1} InstanceID FROM V_SUPERVISE WHERE 1=1 {2} ORDER BY CreateDateTime Desc ) {2}  ORDER BY CreateDateTime Desc ", info.Limit, info.Limit * (info.Page - 1), conditionStr);
+            string query = String.Format("SELECT TOP {0} * FROM V_SUPERVISE WHERE InstanceID NOT IN (SELECT TOP {1} InstanceID FROM V_SUPERVISE WHERE 1=1 {2} ORDER BY CreateTime Desc ) {2}  ORDER BY CreateTime Desc ", info.Limit, info.Limit * (info.Page - 1), conditionStr);
             total = DBUtils.CreateWFConnection().ExecuteScalar<int>(String.Format("SELECT COUNT(1) FROM V_SUPERVISE WHERE 1=1 {0}", conditionStr));
             return DBUtils.CreateWFConnection().Query<Summary>(query).ToList();
         }
@@ -94,9 +76,9 @@ namespace Smartflow.Bussiness.Queries
                 buildWhere.AppendFormat("  AND  Creator = '{0}' AND InstanceID IN (SELECT InstanceID FROM T_INSTANCE WHERE  State='Running') ", queryArg["actor"]);
             }
 
-            if (queryArg.ContainsKey("categoryID"))
+            if (queryArg.ContainsKey("categoryCode"))
             {
-                buildWhere.AppendFormat("  AND CategoryID Like '{0}%'", queryArg["categoryID"]);
+                buildWhere.AppendFormat("  AND CategoryCode Like '{0}%'", queryArg["categoryCode"]);
             }
 
             return buildWhere.ToString();

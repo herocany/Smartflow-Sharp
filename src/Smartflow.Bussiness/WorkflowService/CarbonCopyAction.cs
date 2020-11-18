@@ -42,7 +42,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 ActorID = actorID,
                 InstanceID = instanceID,
                 NodeID= nodeID,
-                CreateDateTime = DateTime.Now
+                CreateTime = DateTime.Now
             });
         }
     }

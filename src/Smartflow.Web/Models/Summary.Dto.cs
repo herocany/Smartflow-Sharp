@@ -17,7 +17,7 @@ namespace Smartflow.Web.Models
             get;
             set;
         }
-        public string CategoryID
+        public string CategoryCode
         {
             get;
             set;
@@ -39,7 +39,7 @@ namespace Smartflow.Web.Models
             set;
 
         }
-        public DateTime CreateDateTime
+        public DateTime CreateTime
         {
             get;
             set;
@@ -86,7 +86,8 @@ namespace Smartflow.Web.Models
                 return result;
             }
         }
-        public string RealName
+
+        public string Name
         {
             get;
             set;

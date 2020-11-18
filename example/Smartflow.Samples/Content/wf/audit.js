@@ -10,7 +10,7 @@
         var $this = this;
         this.init(this.setting.key, function (s) {
             $this.setting.key = s.Key;
-            $this.setting.code = s.CategoryID;
+            $this.setting.code = s.CategoryCode;
             $this.setting.instanceID = s.InstanceID;
             $this.setCurrent();
             $this.bind();

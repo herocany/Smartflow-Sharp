@@ -40,17 +40,15 @@ namespace Smartflow
         private string SetQueryArg(Dictionary<string, string> queryArg)
         {
             StringBuilder buildWhere = new StringBuilder();
-
-            if (queryArg.ContainsKey("CateCode"))
+            if (queryArg.ContainsKey("CategoryCode"))
             {
-                buildWhere.AppendFormat(" And CateCode='{0}'", queryArg["CateCode"]);
+                buildWhere.AppendFormat(" And CategoryCode='{0}'", queryArg["CategoryCode"]);
             }
 
-            if (queryArg.ContainsKey("key"))
+            if (queryArg.ContainsKey("Key"))
             {
-                buildWhere.AppendFormat(" And StructName LIKE '%{0}%'", queryArg["key"]);
+                buildWhere.AppendFormat(" And Name LIKE '%{0}%'", queryArg["Key"]);
             }
-
             return buildWhere.ToString();
         }
     }

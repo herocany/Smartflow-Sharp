@@ -52,7 +52,7 @@ namespace Smartflow.Web.Controllers
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
             var node = instance.Current.FirstOrDefault(e => e.ID== dto.NodeID);
-            Category model = _categoryService.Query().FirstOrDefault(cate => cate.NID == dto.CateCode);
+            Category model = _categoryService.Query().FirstOrDefault(cate => cate.NID == dto.CategoryCode);
             string[] ids = dto.ActorIDs.Split(',');
             foreach (string id in ids)
             {
@@ -63,10 +63,10 @@ namespace Smartflow.Web.Controllers
                     InstanceID = instance.InstanceID,
                     NodeID = node.NID,
                     Url = model.Url,
-                    CreateDateTime = DateTime.Now,
+                    CreateTime = DateTime.Now,
                     NodeName = node.Name,
-                    CateCode = dto.CateCode,
-                    CateName = model.Name
+                    CategoryCode = dto.CategoryCode,
+                    CategoryName = model.Name
                 });
             }
         }

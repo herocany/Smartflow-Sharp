@@ -18,7 +18,7 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public string CategoryID
+        public string CategoryCode
         {
             get;
             set;

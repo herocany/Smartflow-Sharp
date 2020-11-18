@@ -9,7 +9,7 @@ namespace Smartflow.Components
     {
         public string Execute(IList<WorkflowCooperation> records)
         {
-            var record = records.OrderByDescending(e => e.CreateDateTime).FirstOrDefault();
+            var record = records.OrderByDescending(e => e.CreateTime).FirstOrDefault();
 
             return record.TransitionID;
         }

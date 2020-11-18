@@ -14,7 +14,7 @@ namespace Smartflow.Bussiness.Commands
         public void Execute(Script arg)
         {
             DBUtils.CreateWFConnection().Execute("SMF_DELETE_RECORD",
-                 new { arg.InstanceID, arg.Key, arg.CategoryID },
+                 new { arg.InstanceID, arg.Key, arg.CategoryCode },
                  commandType: CommandType.StoredProcedure);
         }
     }

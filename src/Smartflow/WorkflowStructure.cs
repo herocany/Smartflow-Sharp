@@ -13,31 +13,31 @@ namespace Smartflow
             set;
         }
 
-        public string StructName
+        public string Name
         {
             get;
             set;
         }
 
-        public string CateCode
+        public string CategoryCode
         {
             get;
             set;
         }
 
-        public string CateName
+        public string CategoryName
         {
             get;
             set;
         }
 
-        public string StructXml
+        public string Resource
         {
             get;
             set;
         }
 
-        public string Memo
+        public DateTime CreateTime
         {
             get;
             set;
@@ -49,7 +49,8 @@ namespace Smartflow
             set;
         }
 
-        public DateTime CreateDateTime
+
+        public string Memo
         {
             get;
             set;

@@ -32,7 +32,7 @@ namespace Smartflow.Bussiness.Models
             set;
         }
   
-        public DateTime CreateDateTime
+        public DateTime CreateTime
         {
             get;
             set;

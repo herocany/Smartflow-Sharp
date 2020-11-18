@@ -19,7 +19,7 @@ namespace Smartflow.Bussiness.Models
             set;
         }
 
-        public string CategoryID
+        public string CategoryCode
         {
             get;
             set;

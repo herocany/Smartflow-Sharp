@@ -44,23 +44,23 @@ namespace Smartflow.Web.Controllers
         public string Start(BridgeCommandDto dto)
         {
             Category category = new CategoryService().Query()
-                                .FirstOrDefault(cate => cate.NID == dto.CategoryID);
+                                .FirstOrDefault(cate => cate.NID == dto.CategoryCode);
 
             WorkflowStructure workflowStructure =
                 _abstractService.WorkflowStructureService.Query()
-                .FirstOrDefault(e => e.CateCode == category.NID && e.Status == 1);
+                .FirstOrDefault(e => e.CategoryCode == category.NID && e.Status == 1);
 
             var model = EmitCore.Convert<BridgeCommandDto, Bridge>(dto);
-            string instanceID = WorkflowEngine.Instance.Start(workflowStructure.StructXml);
+            string instanceID = WorkflowEngine.Instance.Start(workflowStructure.Resource);
             model.InstanceID = instanceID;
             model.Comment = String.IsNullOrEmpty(model.Comment) ? category.Name : model.Comment;
-            model.CreateDateTime = DateTime.Now;
+            model.CreateTime = DateTime.Now;
             CommandBus.Dispatch(new CreateBridge(), model);
 
             var b = _bridgeService.Query(instanceID);
             WorkflowInstance Instance = WorkflowInstance.GetInstance(instanceID);
             var current = GetCurrent(Instance, model.Creator);
-            string serialObject = GetAuditNext(current, model.CategoryID, b.Creator, b.Name, out string selectTransitionID);
+            string serialObject = GetAuditNext(current, model.CategoryCode, b.Creator, b.Name, out string selectTransitionID);
 
             WorkflowEngine.Instance.Jump(new WorkflowContext()
             {
@@ -159,12 +159,11 @@ namespace Smartflow.Web.Controllers
         [HttpPost]
         public void Reboot(WorkflowDeleteDto dto)
         {
+            WorkflowInstance wfInstance = WorkflowInstance.GetInstance(dto.InstanceID);
+            string resourceXml = wfInstance.Resource;
             CommandBus.Dispatch<string>(new DeleteWFRecord(), dto.InstanceID);
-            WorkflowStructure workflowStructure =
-             _abstractService.WorkflowStructureService.Query()
-             .FirstOrDefault(e => e.CateCode == dto.CategoryID && e.Status == 1);
 
-            string instanceID = WorkflowEngine.Instance.Start(workflowStructure.StructXml);
+            string instanceID = WorkflowEngine.Instance.Start(resourceXml);
             Bridge bridge = _bridgeService.GetBridge(dto.Key);
             bridge.InstanceID = instanceID;
             CommandBus.Dispatch<Bridge>(new UpdateBridge(), bridge);
@@ -201,7 +200,7 @@ namespace Smartflow.Web.Controllers
 
             var serialObject = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                CateCode = dto.CategoryID,
+                CategoryCode = dto.CategoryCode,
                 UUID = bridge.Creator,
                 bridge.Name,
                 Group = string.Join(",", groupIDs),
@@ -248,7 +247,7 @@ namespace Smartflow.Web.Controllers
             return NodeService.GetExecuteTransition(current);
         }
 
-        private string GetAuditNext(Node current, string categoryID, string creator, string name, out string selectTransitionID)
+        private string GetAuditNext(Node current, string categoryCode, string creator, string name, out string selectTransitionID)
         {
             string instanceID = current.InstanceID;
             Transition transitionSelect = current.Transitions.FirstOrDefault();
@@ -278,7 +277,7 @@ namespace Smartflow.Web.Controllers
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                CateCode = categoryID,
+                CategoryCode = categoryCode,
                 UUID = creator,
                 Name = name,
                 Group = string.Join(",", groupIDs),

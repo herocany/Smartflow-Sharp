@@ -25,7 +25,7 @@ namespace Smartflow.Components
                 NodeID = current.NID,
                 InstanceID = context.Instance.InstanceID,
                 TransitionID = context.TransitionID,
-                CreateDateTime = DateTime.Now
+                CreateTime = DateTime.Now
             });
 
             IList<WorkflowCooperation> records = workflowCooperationService.Query(instanceID).Where(e => e.NodeID == current.NID).ToList();

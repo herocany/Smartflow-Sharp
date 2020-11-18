@@ -80,7 +80,7 @@ namespace Smartflow
         /// <summary>
         /// 创建日期
         /// </summary>
-        public DateTime CreateDateTime
+        public DateTime CreateTime
         {
             get;
             set;

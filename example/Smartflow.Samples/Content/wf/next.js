@@ -25,7 +25,7 @@
             data: {
                 UUID: result.ID,
                 Name: result.Name,
-                CateCode: '',
+                CategoryCode: '',
                 Group: '',
                 Actor: '',
                 Carbon: '',
