@@ -91,10 +91,6 @@
     <Content Include="Content\decision.js" />
     <Content Include="Content\actionSelect.js" />
     <Content Include="Content\actorSelect.js" />
-    <Content Include="Content\design\images\fork-1.png" />
-    <Content Include="Content\design\images\fork.png" />
-    <Content Include="Content\design\images\form.png" />
-    <Content Include="Content\design\images\merge.png" />
     <Content Include="Content\condition.js" />
     <Content Include="Content\easyAction.js" />
     <Content Include="Content\form.js" />
@@ -156,18 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\design\design.js" />
-    <Content Include="Content\design\images\decision.png" />
-    <Content Include="Content\design\images\grid16.png" />
-    <Content Include="Content\design\images\grid_12.png" />
     <Content Include="Content\design\images\grid_15.png" />
-    <Content Include="Content\design\images\grid_23.png" />
-    <Content Include="Content\design\images\help.png" />
-    <Content Include="Content\design\images\left.png" />
-    <Content Include="Content\design\images\line.png" />
-    <Content Include="Content\design\images\node.png" />
-    <Content Include="Content\design\images\save.png" />
-    <Content Include="Content\design\images\select.png" />
-    <Content Include="Content\design\images\wg1.png" />
     <Content Include="Content\layui\css\layui.css" />
     <Content Include="Content\layui\css\layui.mobile.css" />
     <Content Include="Content\layui\css\modules\code.css" />
