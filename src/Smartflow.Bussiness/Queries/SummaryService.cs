@@ -55,7 +55,7 @@ namespace Smartflow.Bussiness.Queries
             //审批过
             else if (queryArg.ContainsKey("type") && "2" == queryArg["type"])
             {
-                buildWhere.AppendFormat("  AND InstanceID IN(SELECT InstanceID FROM t_record WHERE AuditUserID = '{0}')", queryArg["actor"]);
+                buildWhere.AppendFormat("  AND InstanceID IN(SELECT InstanceID FROM t_record WHERE Name<>'开始' AND AuditUserID = '{0}')", queryArg["actor"]);
             }
 
             //申请的

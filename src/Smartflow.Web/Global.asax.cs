@@ -39,7 +39,7 @@ namespace Smartflow.Web
             //注册全局的动作 即每跳转一个节点，都会执行动作。
             WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(PendingAction));
             WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(RecordAction));
-         
+
             //抄送动作
             WorkflowGlobalServiceProvider.RegisterGlobalService(typeof(CarbonCopyAction));
 
@@ -64,7 +64,10 @@ namespace Smartflow.Web
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-
+            if (Request.Headers.AllKeys.Contains("Origin") && String.Equals(Request.HttpMethod, "OPTIONS", StringComparison.OrdinalIgnoreCase))
+            {
+                Response.Flush();
+            }
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
