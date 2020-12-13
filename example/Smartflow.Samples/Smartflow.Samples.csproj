@@ -388,7 +388,7 @@
     <Content Include="WF\actorSelect.html" />
     <Content Include="WF\auditWindow.html" />
     <Content Include="WF\carbonSelect.html" />
-    <Content Include="WF\OrganizationSelect.html" />
+    <Content Include="WF\organizationSelect.html" />
     <Content Include="WF\pending.html" />
     <Content Include="WF\roleSelect.html" />
     <Content Include="WF\supervise.html" />

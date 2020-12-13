@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="layui-container p10">
-        <div class="layui-tab layui-tab-brief">
+        <div class="layui-tab layui-tab-brief" lay-filter="tab">
             <ul class="layui-tab-title">
                 <li class="layui-this">任务中心</li>
                 <li>任务处理</li>
@@ -26,7 +26,7 @@
                                 <input type="radio" name="task" value="2" title="我审批" />
                                 <input type="radio" name="task" value="3" title="我办理" />
                                 <input type="radio" name="task" value="1" title="抄送我" />
-                         </div>
+                            </div>
                         </form>
                     </blockquote>
                     <table class="layui-hide" id="pending-table" lay-filter="pending-table"></table>

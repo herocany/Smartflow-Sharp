@@ -13,11 +13,19 @@ $(function () {
 
     Page.prototype.bind = function () {
         var $this = this;
+        var el = layui.element;
         $.each($this.setting.event, function (propertyName) {
             var selector = '#' + propertyName;
             $(selector).click(function () {
                 $this.setting.event[propertyName].call($this);
             });
+        });
+        el.on('tab(tab)', function (data) {
+            if (data.index === 0) {
+                $("#form-center-search input[type=radio]:eq(0)").next('.layui-form-radio').trigger('click');
+            } else {
+                $this.loadTask(this.userID);
+            }
         });
     }
 
@@ -26,7 +34,6 @@ $(function () {
         form.render('radio', 'form-center-search');
         this.bind();
         this.bindButtonGroup();
-        this.loadTask(this.userID);
         $("#form-center-search input[type=radio]:eq(0)").next('.layui-form-radio').trigger('click');
     }
     Page.prototype.bindButtonGroup = function () {
@@ -171,7 +178,6 @@ $(function () {
             callback && callback(dataArray[0]);
         }
     }
-
     var page = new Page({
         config: {
             id: 'pending-table',
@@ -196,8 +202,6 @@ $(function () {
             }
         }
     });
-
-    //刷新
     window.invoke = function () {
         page.refresh();
     }
