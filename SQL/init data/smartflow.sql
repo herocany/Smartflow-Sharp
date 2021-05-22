@@ -1,4 +1,4 @@
-USE [Smartflow]
+USE [Smartflow.Core]
 GO
 INSERT [dbo].[t_category] ([NID], [Name], [Url], [ParentID]) VALUES (N'001', N'Smartflow-Sharp', NULL, N'00')
 GO
