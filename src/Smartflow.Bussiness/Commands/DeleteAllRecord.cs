@@ -1,21 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
-using Dapper;
+using NHibernate;
 using Smartflow.Bussiness.Models;
 using Smartflow.Common;
 
 namespace Smartflow.Bussiness.Commands
 {
-    public class DeleteAllRecord : ICommand<Script>
+    public class DeleteAllRecord : ICommand
     {
-        public void Execute(Script arg)
+        public void Execute(Object o)
         {
-            DBUtils.CreateWFConnection().Execute("SMF_DELETE_RECORD",
-                 new { arg.InstanceID, arg.Key, arg.CategoryCode },
-                 commandType: CommandType.StoredProcedure);
+            Script script = o as Script;
+            using ISession session = DbFactory.OpenSession();
+            DbCommand command= session.Connection.CreateCommand();
+            command.CommandText = "SMF_DELETE_RECORD";
+            command.CommandType = CommandType.StoredProcedure;
+
+            DbParameter instanceIDParameter = command.CreateParameter();
+            instanceIDParameter.ParameterName = "InstanceID";
+            instanceIDParameter.Value = script.InstanceID;
+            instanceIDParameter.DbType =DbType.String;
+            instanceIDParameter.Size = 50;
+            instanceIDParameter.Direction = ParameterDirection.Input;
+
+            DbParameter keyParameter = command.CreateParameter();
+
+            keyParameter.ParameterName = "Key";
+            keyParameter.Value = script.Key;
+            keyParameter.DbType = DbType.String;
+            keyParameter.Size = 50;
+            keyParameter.Direction = ParameterDirection.Input;
+
+            DbParameter categoryCodeParameter = command.CreateParameter();
+            categoryCodeParameter.ParameterName = "CategoryCode";
+            categoryCodeParameter.Value = script.CategoryCode;
+            categoryCodeParameter.DbType = DbType.String;
+            categoryCodeParameter.Size = 50;
+            categoryCodeParameter.Direction = ParameterDirection.Input;
+
+            command.Parameters.Add(instanceIDParameter);
+            command.Parameters.Add(keyParameter);
+            command.Parameters.Add(categoryCodeParameter);
+            command.ExecuteNonQuery();
         }
     }
 }

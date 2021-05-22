@@ -4,9 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dapper;
-using Smartflow.Bussiness.Scripts;
 using Smartflow.Bussiness.Interfaces;
+using NHibernate;
 
 namespace Smartflow.Bussiness.Queries
 {
@@ -14,9 +13,11 @@ namespace Smartflow.Bussiness.Queries
     {
         public IList<Organization> Query(String id)
         {
-            return DBUtils.CreateConnection()
-               .Query<Organization>(ResourceManage.SQL_ORGANIZATION_SELECT, new { ID = id })
-               .ToList();
+            using ISession session = DbFactory.OpenBussinessSession();
+            return session
+                       .Query<Organization>()
+                       .Where(e=>e.ParentID==id)
+                       .ToList();
         }
 
         public void Load(string id, IList<Organization> all)

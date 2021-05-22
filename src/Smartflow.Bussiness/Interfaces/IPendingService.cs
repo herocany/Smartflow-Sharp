@@ -7,8 +7,12 @@ using System.Text;
 
 namespace Smartflow.Bussiness.Interfaces
 {
-    public interface IPendingService : IQuery<IList<Pending>, string>, IQuery<IList<Pending>, Dictionary<string, object>>
+    public interface IPendingService 
     {
         IList<Pending> GetPending(string instanceID, string actorID);
+
+        IList<Pending> GetPendingByInstanceID(string instanceID);
+
+        IList<Pending> Query(Dictionary<string, object> queryArg);
     }
 }

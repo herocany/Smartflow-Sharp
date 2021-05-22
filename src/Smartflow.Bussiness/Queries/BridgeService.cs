@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dapper;
+using NHibernate;
+using NHibernate.Criterion;
 using Smartflow.Bussiness.Interfaces;
 using Smartflow.Bussiness.Models;
-using Smartflow.Bussiness.Scripts;
 using Smartflow.Common;
 
 namespace Smartflow.Bussiness.Queries
@@ -14,27 +14,24 @@ namespace Smartflow.Bussiness.Queries
     {
         public Bridge GetBridge(string id)
         {
-            return DBUtils.CreateWFConnection().Query<Bridge>(ResourceManage.SQL_BRIDGE_SELECT_BY_KEY,
-                new { ID = id }).FirstOrDefault();
+            using ISession session = DbFactory.OpenSession();
+            return session.Query<Bridge>().Where(r => r.Key == id).ToList().FirstOrDefault();
         }
 
-        public Bridge Query(string instanceID)
+        public Bridge GetBridgeByInstanceID(string instanceID)
         {
-            return DBUtils.CreateWFConnection()
-               .Query<Bridge>(ResourceManage.SQL_BRIDGE_SELECT_BY_INSTANCEID, new
-               {
-                   InstanceID = instanceID
-               }).FirstOrDefault();
+            using ISession session = DbFactory.OpenSession();
+            return session.Query<Bridge>().Where(r => r.InstanceID == instanceID).ToList().FirstOrDefault();
         }
 
         public Bridge Query(Dictionary<string, string> queryArg)
         {
-            return DBUtils.CreateWFConnection()
-                  .Query<Bridge>(ResourceManage.SQL_BRIDGE_SELECT, new
-                  {
-                      Key = queryArg["Key"],
-                      CategoryCode= queryArg["CategoryCode"]
-                  }).FirstOrDefault();
+            using ISession session = DbFactory.OpenSession();
+            return session.CreateCriteria(typeof(Bridge))
+                  .Add(Expression.Eq("Key", queryArg["Key"]))
+                  .Add(Expression.Eq("CategoryCode", queryArg["CategoryCode"]))
+                  .List<Bridge>()
+                  .FirstOrDefault();
         }
     }
 }

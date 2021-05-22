@@ -7,42 +7,36 @@ namespace Smartflow.Bussiness.Models
 {
     public class Bridge
     {
-        public string InstanceID
+        public virtual string InstanceID
         {
             get;
             set;
         }
 
-        public string CategoryCode
+        public virtual string CategoryCode
         {
             get;
             set;
         }
 
-        public string Key
+        public virtual string Key
         {
             get;
             set;
         }
 
-        public string Comment
+        public virtual string Comment
         {
             get; set;
         }
 
-        public string Creator
+        public virtual string Creator
         {
             get;
             set;
         }
 
-        public DateTime CreateTime
-        {
-            get;
-            set;
-        }
-
-        public string Name
+        public virtual DateTime CreateTime
         {
             get;
             set;

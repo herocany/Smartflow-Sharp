@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 
 namespace Smartflow.Web.Models
 {
     public class WorkflowStructureCommandDto
     {
-        [StringLength(50)]
-        public string NID
+        [Key]
+        public virtual string NID
         {
             get;
             set;
@@ -17,7 +17,7 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public string Name
+        public virtual string Name
         {
             get;
             set;
@@ -25,14 +25,15 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public string CategoryCode
+        public virtual string CategoryCode
         {
             get;
             set;
         }
+
         [Required]
         [StringLength(50)]
-        public string CategoryName
+        public virtual string CategoryName
         {
             get;
             set;
@@ -40,21 +41,21 @@ namespace Smartflow.Web.Models
 
         [Required]
         [DataType(DataType.Text)]
-        public string Resource
+        public virtual string Resource
         {
             get;
             set;
         }
 
-
-        public int Status
+        public virtual int Status
         {
             get;
             set;
         }
 
-        [StringLength(2048)]
-        public string Memo
+        [Required]
+        [StringLength(50)]
+        public virtual string Memo
         {
             get;
             set;

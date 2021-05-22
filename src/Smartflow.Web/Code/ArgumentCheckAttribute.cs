@@ -1,24 +1,24 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
-using System.Web.Http.Controllers;
-using System.Web.Http.Filters;
-using System.Web.Http.ModelBinding;
 
 namespace Smartflow.Web.Code
 {
     public class ArgumentCheckAttribute : ActionFilterAttribute
     {
-        public override void OnActionExecuting(HttpActionContext actionContext)
+        public override void OnActionExecuting(ActionExecutingContext actionContext)
         {
             if (!actionContext.ModelState.IsValid)
             {
                 IList<string> errors = new List<string>();
                 foreach (string key in actionContext.ModelState.Keys)
                 {
-                    if (actionContext.ModelState.TryGetValue(key, out ModelState modelError))
+                    if (actionContext.ModelState.TryGetValue(key, out ModelStateEntry modelError))
                     {
                         foreach (ModelError error in modelError.Errors)
                         {
@@ -32,11 +32,7 @@ namespace Smartflow.Web.Code
                     string errorMessage = errors.Count > 0 && !String.IsNullOrEmpty(string.Join("", errors)) ? string.Join("", errors) : data.Message;
                     data.Message = string.Format("{0}", errorMessage);
                 }
-
-                actionContext.Response = new HttpResponseMessage()
-                {
-                    Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(data))
-                };
+                actionContext.Result = new JsonResult(data);
             }
             base.OnActionExecuting(actionContext);
         }

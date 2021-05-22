@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Smartflow.Core"
+                   namespace="Smartflow.Core">
+
+  <class name="WorkflowProcess" table="t_process">
+    <id name="NID" column="NID" type="String">
+      <generator class="uuid.hex">
+        <param name="format"></param>
+        <param name="separator"></param>
+      </generator>
+    </id>
+    <property name="Origin" column="Origin" type="String" />
+    <property name="Destination" column="Destination" type="String" />
+    <property name="TransitionID" column="TransitionID" type="String" />
+    <property name="InstanceID" column="InstanceID" type="String" />
+    <property name="NodeType" column="NodeType" type="NHibernate.Type.EnumStringType`1[[Smartflow.Core.WorkflowNodeCategory, Smartflow.Core]], NHibernate" />
+    <property name="CreateTime" column="CreateTime" type="DateTime" />
+    <property name="RelationshipID" column="RelationshipID" type="String" />
+    <property name="Direction" column="Direction" type="NHibernate.Type.EnumStringType`1[[Smartflow.Core.WorkflowOpertaion, Smartflow.Core]], NHibernate"/>
+    <property name="ActorID" column="ActorID" type="String" />
+  </class>
+</hibernate-mapping>

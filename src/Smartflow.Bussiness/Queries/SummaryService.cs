@@ -1,87 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Dapper;
-using System.Data;
 using Smartflow.Bussiness.Interfaces;
 using Smartflow.Bussiness.Models;
 using Smartflow.Common;
+using NHibernate;
+using NHibernate.Criterion;
 
 namespace Smartflow.Bussiness.Queries
 {
     public class SummaryService : ISummaryService
     {
-      
         public IList<Summary> Query(Dictionary<string, string> queryArg)
         {
-            string conditionStr = SetQueryArg(queryArg);
-            string query = String.Format("SELECT * FROM V_SUMMARY WHERE 1=1 {0} ORDER BY CreateTime Desc ", conditionStr);
-            return DBUtils.CreateWFConnection().Query<Summary>(query).ToList();
+            using ISession session = DbFactory.OpenSession();
+            IQueryOver<Summary> queries = session.QueryOver<Summary>();
+            SetQueryArg(queries.RootCriteria, queryArg);
+            return queries.List();
         }
 
         public IList<Summary> Query(Paging info, out int total)
         {
-            string conditionStr = SetQueryArg(info.Get());
-            string query = String.Format("SELECT TOP {0} * FROM V_SUMMARY WHERE InstanceID NOT IN (SELECT TOP {1} InstanceID FROM V_SUMMARY WHERE 1=1 {2} ORDER BY CreateTime Desc ) {2}  ORDER BY CreateTime Desc ", info.Limit, info.Limit * (info.Page - 1), conditionStr);
-            total = DBUtils.CreateWFConnection().ExecuteScalar<int>(String.Format("SELECT COUNT(1) FROM V_SUMMARY WHERE 1=1 {0}", conditionStr));
-            return DBUtils.CreateWFConnection().Query<Summary>(query).ToList();
+            using ISession session = DbFactory.OpenSession();
+            IQueryOver<Summary> queries = session.QueryOver<Summary>();
+            SetQueryArg(queries.RootCriteria, info.Get());
+            total = queries.RowCount();
+            return queries
+                    .Skip((info.Page - 1) * info.Limit)
+                    .Take(info.Limit)
+                    .List();
         }
 
-        public IList<Summary> QuerySupervise(Paging info, out int total)
+        public IList<Supervise> QuerySupervise(Paging info, out int total)
         {
-            string conditionStr = SetQueryArg(info.Get());
-            string query = String.Format("SELECT TOP {0} * FROM V_SUPERVISE WHERE InstanceID NOT IN (SELECT TOP {1} InstanceID FROM V_SUPERVISE WHERE 1=1 {2} ORDER BY CreateTime Desc ) {2}  ORDER BY CreateTime Desc ", info.Limit, info.Limit * (info.Page - 1), conditionStr);
-            total = DBUtils.CreateWFConnection().ExecuteScalar<int>(String.Format("SELECT COUNT(1) FROM V_SUPERVISE WHERE 1=1 {0}", conditionStr));
-            return DBUtils.CreateWFConnection().Query<Summary>(query).ToList();
+            using ISession session = DbFactory.OpenSession();
+            IQueryOver<Supervise> queries = session.QueryOver<Supervise>();
+            SetQueryArg(queries.RootCriteria, info.Get());
+            total = queries.RowCount();
+            return queries
+                    .Skip((info.Page - 1) * info.Limit)
+                    .Take(info.Limit)
+                    .List();
         }
 
-
-        private string SetQueryArg(Dictionary<string, string> queryArg)
+        private void SetQueryArg(ICriteria criteria, Dictionary<string, string> queryArg)
         {
-            StringBuilder buildWhere = new StringBuilder();
+            if (queryArg.ContainsKey("categoryCode"))
+            {
+                criteria.Add(Expression.Like("CategoryCode", queryArg["categoryCode"]));
+            }
+            if (queryArg.ContainsKey("type") && "3" == queryArg["type"])
+            {
+                criteria.Add(Expression.Eq("Creator", queryArg["actor"]));
+            }
             //待办事项
             if (queryArg.ContainsKey("type") && "0" == queryArg["type"])
             {
-                buildWhere.AppendFormat("  AND InstanceID IN(SELECT InstanceID FROM T_PENDING WHERE  ACTORID = '{0}')", queryArg["actor"]);
+                criteria.Add(Expression.Sql("  InstanceID IN (SELECT InstanceID FROM T_PENDING WHERE  ACTORID =? )", new object[] { queryArg["actor"] }, new NHibernate.Type.IType[] { NHibernate.NHibernateUtil.String }));
             }
 
             //抄送
             else if (queryArg.ContainsKey("type") && "1" == queryArg["type"])
             {
-                buildWhere.AppendFormat("  AND InstanceID IN(SELECT InstanceID FROM t_carbonCopy WHERE  ACTORID = '{0}')", queryArg["actor"]);
+                criteria.Add(Expression.Sql("   InstanceID IN (SELECT InstanceID FROM t_carbonCopy WHERE  ACTORID =? )", new object[] { queryArg["actor"] }, new NHibernate.Type.IType[] { NHibernate.NHibernateUtil.String }));
             }
 
             //审批过
             else if (queryArg.ContainsKey("type") && "2" == queryArg["type"])
             {
-                buildWhere.AppendFormat("  AND InstanceID IN(SELECT InstanceID FROM t_record WHERE Name<>'开始' AND AuditUserID = '{0}')", queryArg["actor"]);
-            }
-
-            //申请的
-            else if (queryArg.ContainsKey("type") && "3" == queryArg["type"])
-            {
-                buildWhere.AppendFormat("  AND  Creator = '{0}' ", queryArg["actor"]);
+                criteria.Add(Expression.Sql("   InstanceID IN (SELECT InstanceID FROM t_record WHERE Name<>'开始' AND AuditUserID =? )", new object[] { queryArg["actor"] }, new NHibernate.Type.IType[] { NHibernate.NHibernateUtil.String }));
             }
 
             //实例表 查询监督信息
             else if (queryArg.ContainsKey("type") && "4" == queryArg["type"])
             {
-                buildWhere.Append("  AND b.InstanceID IN(SELECT InstanceID FROM T_INSTANCE WHERE  State='Running')");
+                criteria.Add(Expression.Sql("   InstanceID IN (SELECT InstanceID FROM T_INSTANCE WHERE  State='Running' )"));
             }
 
             //申请的
             else if (queryArg.ContainsKey("type") && "5" == queryArg["type"])
             {
-                buildWhere.AppendFormat("  AND  Creator = '{0}' AND InstanceID IN (SELECT InstanceID FROM T_INSTANCE WHERE  State='Running') ", queryArg["actor"]);
+                criteria.Add(Expression.Sql(" Creator =? AND InstanceID IN (SELECT InstanceID FROM T_INSTANCE WHERE  State='Running') ", new object[] { queryArg["actor"] }, new NHibernate.Type.IType[] { NHibernate.NHibernateUtil.String }));
             }
 
-            if (queryArg.ContainsKey("categoryCode"))
-            {
-                buildWhere.AppendFormat("  AND CategoryCode Like '{0}%'", queryArg["categoryCode"]);
-            }
-
-            return buildWhere.ToString();
+            criteria.AddOrder(new Order("CreateTime", false));
         }
     }
 }

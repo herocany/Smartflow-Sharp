@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../content/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var param = JSON.stringify({
+                instanceID: "04cf05d6-2be4-4dae-93ba-a1e3b2f058dd",
+                actorID: "4F41BDD7-31DF-4859-A245-F65E4697AE63",
+                transitionID: "4F41BDD7-31DF-4859-A245-F65E4697AE63",
+                message: "测试",
+                data: {
+                    CategoryCode: "10010",
+                    UUID: "4F41BDD7-31DF-4859-A245-F65E4697AE63",
+                    Name: "4F41BDD7-31DF-4859-A245-F65E4697AE63",
+                    Group: "4F41BDD7-31DF-4859-A245-F65E4697AE63,C9F768AD-65A4-4657-9085-4ADB5C32C04C",
+                    Actor: "4F41BDD7-31DF-4859-A245-F65E4697AE63,C9F768AD-65A4-4657-9085-4ADB5C32C04C",
+                    Carbon: "4F41BDD7-31DF-4859-A245-F65E4697AE63,C9F768AD-65A4-4657-9085-4ADB5C32C04C",
+                    Organization: "4F41BDD7-31DF-4859-A245-F65E4697AE63,C9F768AD-65A4-4657-9085-4ADB5C32C04C"
+                }
+            });
+            $("#btnCross").click(function () {
+                $.ajax({
+                    type: 'post',
+                    url: '//localhost:50012/api/smf/invoke',
+                    data: param,
+                    contentType: 'application/json',
+                    cache: false,
+                    dataType:'',
+                    success: function () {
+                       alert('登录失败');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+
+    <input type="button"  id="btnCross"  value="点击按钮测试跨域"/>
+
+
+</body>
+</html>

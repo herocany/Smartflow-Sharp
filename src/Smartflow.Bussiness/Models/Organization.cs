@@ -7,19 +7,20 @@ namespace Smartflow.Bussiness.Models
 {
     public class Organization
     {
-        public string ID
+
+        public virtual string ID
         {
             get;
             set;
         }
 
-        public string ParentID
+        public virtual string ParentID
         {
             get;
             set;
         }
 
-        public string Name
+        public virtual string Name
         {
             get;
             set;

@@ -4,16 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dapper;
-using Smartflow.Bussiness.Scripts;
+using NHibernate;
 
 namespace Smartflow.Bussiness.Commands
 {
-    public class CreateCarbonCopy : ICommand<CarbonCopy>
+    public class CreateCarbonCopy : ICommand
     {
-        public void Execute(CarbonCopy model)
+        public void Execute(Object o)
         {
-            DBUtils.CreateWFConnection().Execute(ResourceManage.SQL_CARBONCOPY_INSERT, model);
+            using ISession session = DbFactory.OpenSession();
+            session.Persist(o);
+            session.Flush();
         }
     }
 }

@@ -4,21 +4,23 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Dapper;
-using Smartflow.Bussiness.Scripts;
+using NHibernate;
 
 namespace Smartflow.Bussiness.Commands
 {
-    public class DeletePendingByActor : ICommand<Dictionary<string, object>>
+    public class DeletePendingByActor : ICommand
     {
-        public void Execute(Dictionary<string, object> queryArg)
+        public void Execute(Object o)
         {
-            DBUtils.CreateWFConnection().Execute(ResourceManage.SQL_PENDING_DELETE_2, new
-            {
-                InstanceID = queryArg["instanceID"],
-                NodeID = queryArg["nodeID"],
-                ActorID = queryArg["actorID"]
-            });
+            Dictionary<string, object> queryArg = (o as Dictionary<string, object>);
+            using ISession session = DbFactory.OpenSession();
+            session
+                .CreateQuery(" delete from Pending p where p.InstanceID=:InstanceID and p.NodeID=:NodeID and p.ActorID=:ActorID ")
+                .SetParameter("InstanceID", queryArg["instanceID"])
+                .SetParameter("NodeID", queryArg["nodeID"])
+                .SetParameter("ActorID", queryArg["actorID"])
+                .ExecuteUpdate();
+            session.Flush();
         }
     }
 }

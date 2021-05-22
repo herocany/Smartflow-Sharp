@@ -7,7 +7,8 @@ using Smartflow.Bussiness.Models;
 using Smartflow.Bussiness.Queries;
 using Smartflow.Bussiness.WorkflowService;
 using Smartflow.Common;
-using Smartflow.Elements;
+using Smartflow.Core;
+using Smartflow.Core.Elements;
 
 namespace Smartflow.Bussiness.WorkflowService
 {
@@ -36,9 +37,8 @@ namespace Smartflow.Bussiness.WorkflowService
         /// <param name="executeContext"></param>
         public void WriteCarbon(string actorID,string nodeID,string instanceID)
         {
-            CommandBus.Dispatch<CarbonCopy>(new CreateCarbonCopy(), new CarbonCopy
+            CommandBus.Dispatch(new CreateCarbonCopy(), new CarbonCopy
             {
-                NID = Guid.NewGuid().ToString(),
                 ActorID = actorID,
                 InstanceID = instanceID,
                 NodeID= nodeID,

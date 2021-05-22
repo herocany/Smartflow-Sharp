@@ -18,6 +18,16 @@ namespace Smartflow.Common
             return string.Join(",", NRArray);
         }
 
+        public static IEnumerable<string> StringToList(string ids)
+        {
+            IList<string> results = new List<string>();
+            if (!String.IsNullOrEmpty(ids))
+            {
+                results = ids.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList<string>();
+            }
+            return results;
+        }
+
         public static dynamic ToDynamic(Dictionary<string, object> dict)
         {
             dynamic result = new System.Dynamic.ExpandoObject();

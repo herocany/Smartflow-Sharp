@@ -25,7 +25,7 @@ namespace Smartflow.Web.Models
         }
 
         [Required]
-        [StringLength(1024)]
+        [StringLength(2048)]
         public string ActorIDs
         {
             get;

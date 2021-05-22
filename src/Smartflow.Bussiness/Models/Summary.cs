@@ -7,72 +7,71 @@ namespace Smartflow.Bussiness.Models
 {
     public class Summary
     {
-        public string CategoryName
+        public virtual string CategoryName
         {
             get;
             set;
         }
-        public string InstanceID
+        public virtual string InstanceID
         {
             get;
             set;
         }
-        public string CategoryCode
-        {
-            get;
-            set;
-
-        }
-        public string Comment
-        {
-            get;
-            set;
-        }
-        public string Key
-        {
-            get;
-            set;
-        }
-        public string Creator
+        public virtual string CategoryCode
         {
             get;
             set;
 
         }
-        public DateTime CreateTime
+        public virtual string Comment
+        {
+            get;
+            set;
+        }
+        public virtual string Key
+        {
+            get;
+            set;
+        }
+        public virtual string Creator
+        {
+            get;
+            set;
+
+        }
+        public virtual DateTime CreateTime
         {
             get;
             set;
         }
 
-        public string NodeName
+        public virtual string NodeName
         {
             get;
             set;
         }
 
-        public string State
+        public virtual string State
         {
             get;
             set;
         }
 
-        public string Name
-        {
-            get;
-            set;
-        }
-
-
-        public string NodeID
+        public virtual string Name
         {
             get;
             set;
         }
 
 
+        public virtual string NodeID
+        {
+            get;
+            set;
+        }
 
-        public string OrganizationName
+
+        public virtual string OrganizationName
         {
             get;
             set;

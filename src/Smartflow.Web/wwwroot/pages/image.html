@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Smartflow 业务流程图</title>
+    <link href="../content/layui/css/layui.css" rel="stylesheet" />
+    <link href="../content/design/smartflow.css" rel="stylesheet" />
+    <script src="../content/jquery.min.js"></script>
+    <script src="../content/layui/layui.all.js"></script>
+    <script src="../content/design/svg.js"></script>
+    <script src="../content/design/smartflow.js"></script>
+    <script src="../content/common.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var id = util.doQuery('id');
+            $("#drawing").SMF({
+                container: 'drawing',
+                color: '#009688',
+                executeColor: 'blue',
+                mouseout: function (node, evt) {
+                    layer.closeAll();
+                },
+                mouseover: function (node, evt) {
+                    showTip(node, evt);
+                }
+            });
+
+            loadFlow();
+
+            function loadFlow() {
+                util.ajaxService({
+                    type: 'get',
+                    url: util.format("api/setting/process/{instanceID}/list",{ instanceID: id }),
+                    success: function (serverData) {
+                        var instance = $.SMF.getComponentById('drawing');
+                        instance.import(serverData.structure, serverData.link, serverData.record);
+                    }
+                });
+            }
+            function showTip(node, evt) {
+                util.ajaxService({
+                    url: util.format('api/setting/actor/{instanceID}/user/{nodeID}/list', { instanceID: id, nodeID: node.id }),
+                    type: 'get',
+                    success: function (d) {
+                        var actor = [];
+                        $.each(d.Data, function () {
+                            actor.push(this.Name);
+                        });
+                        if (actor.length > 0) {
+                            layer.tips("<div style=\"word-break:break-all;\">本节点审批人：<br/>" + actor.join(',') + "</div>", (evt.target || evt.currentTarget), {
+                                tips: [1, '#3595CC'],
+                                time: 0
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container_process">
+        <div class="container_draw" id="drawing"></div>
+    </div>
+</body>
+</html>

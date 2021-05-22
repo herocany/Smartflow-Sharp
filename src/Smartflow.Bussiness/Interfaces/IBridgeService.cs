@@ -7,8 +7,12 @@ using System.Text;
 
 namespace Smartflow.Bussiness.Interfaces
 {
-    public interface IBridgeService: IQuery<Bridge, string>, IQuery<Bridge, Dictionary<string, string>>
+    public interface IBridgeService 
     {
         Bridge GetBridge(string id);
+
+        Bridge GetBridgeByInstanceID(string instanceID);
+
+        Bridge Query(Dictionary<string, string> queryArg);
     }
 }

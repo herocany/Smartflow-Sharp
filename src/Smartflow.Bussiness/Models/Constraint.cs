@@ -7,16 +7,14 @@ namespace Smartflow.Bussiness.Models
 {
     public class Constraint
     {
-        public string NID
+        public virtual string NID
         {
             get; set;
         }
 
-        public string Name
+        public virtual string Name
         {
             get; set;
         }
-
-
     }
 }

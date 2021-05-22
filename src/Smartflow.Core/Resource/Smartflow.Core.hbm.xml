@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Smartflow.Core"
+                   namespace="Smartflow.Core.Elements">
+
+	<class name="Workflow" table="t_instance">
+		<id name="InstanceID" column="InstanceID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+
+		<set name="Nodes"  table="t_node"  inverse="false" lazy="true"  generic="true"  cascade="all">
+			<key column="InstanceID"/>
+			<one-to-many class="Smartflow.Core.Elements.Node,Smartflow.Core"/>
+		</set>
+	</class>
+
+	<class name="Node" table="t_node">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ID" column="ID" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+		<property name="Cooperation" column="Cooperation" type="String" />
+		<property name="Assistant" column="Assistant" type="String" />
+		<property name="NodeType" column="NodeType"  type="NHibernate.Type.EnumStringType`1[[Smartflow.Core.WorkflowNodeCategory, Smartflow.Core]], NHibernate" />
+		<property name="Veto" column="Veto" type="String" />
+		<property name="Back" column="Back" type="String"  />
+		<property name="Url" column="Url" type="String" />
+		<set name="Actions"  table="t_Action"  inverse="false" lazy="false"  generic="true"  cascade="all">
+			<key column="RelationshipID"/>
+			<one-to-many class="Smartflow.Core.Elements.Action,Smartflow.Core"/>
+		</set>
+		<set name="Rules"  table="t_rule"  inverse="false" lazy="false"  generic="true"  cascade="all">
+			<key column="RelationshipID"/>
+			<one-to-many class="Smartflow.Core.Elements.Rule,Smartflow.Core"/>
+		</set>
+		<set name="Transitions"  table="t_transition"  inverse="false" lazy="false"  generic="true"  cascade="all">
+			<key column="RelationshipID"/>
+			<one-to-many class="Smartflow.Core.Elements.Transition,Smartflow.Core"/>
+		</set>
+		<set name="Groups"  table="t_group"  inverse="false" lazy="false"  generic="true"  cascade="all">
+			<key column="RelationshipID"/>
+			<one-to-many class="Smartflow.Core.Elements.Group,Smartflow.Core"/>
+		</set>
+		<set name="Actors"  table="t_actor"  inverse="false" lazy="false"  generic="true"  cascade="all">
+			<key column="RelationshipID"/>
+			<one-to-many class="Smartflow.Core.Elements.Actor,Smartflow.Core"/>
+		</set>
+		<set name="Organizations"  table="t_organization"  inverse="false" lazy="false"  generic="true"  cascade="all">
+			<key column="RelationshipID"/>
+			<one-to-many class="Smartflow.Core.Elements.Organization,Smartflow.Core"/>
+		</set>
+		<set name="Carbons"  table="t_carbon"  inverse="false" lazy="false"  generic="true"  cascade="all">
+			<key column="RelationshipID"/>
+			<one-to-many class="Smartflow.Core.Elements.Carbon,Smartflow.Core"/>
+		</set>
+		<one-to-one name="Command" class="Smartflow.Core.Elements.Command,Smartflow.Core" property-ref="Node" cascade="all"/>
+	</class>
+
+	<class name="Transition" table="t_transition">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ID" column="ID" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+		<property name="Origin" column="Origin" type="String" />
+		<property name="Destination" column="Destination" type="String" />
+		<property name="Expression" column="Expression" type="String" />
+	</class>
+
+	<class name="Action" table="t_action">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ID" column="ID" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+	</class>
+
+	<class name="Rule" table="t_rule">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ID" column="ID" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+	</class>
+
+	<class name="Group" table="t_group">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ID" column="ID" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+	</class>
+
+	<class name="Carbon" table="t_carbon">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ID" column="ID" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+	</class>
+
+	<class name="Organization" table="t_organization">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ID" column="ID" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+	</class>
+
+	<class name="Actor" table="t_actor">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ID" column="ID" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+	</class>
+
+	<class name="Command" table="t_command">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ID" column="ID" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+		<property name="Text" column="Text" type="String" />
+		<many-to-one name="Node" class="Smartflow.Core.Elements.Node,Smartflow.Core" cascade="save-update" column="RelationshipID"  unique="true"></many-to-one>
+	</class>
+</hibernate-mapping>

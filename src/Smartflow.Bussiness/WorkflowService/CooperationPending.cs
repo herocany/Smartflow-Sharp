@@ -2,7 +2,8 @@
 using Smartflow.Bussiness.Models;
 using Smartflow.Bussiness.Queries;
 using Smartflow.Common;
-using Smartflow.Elements;
+using Smartflow.Core;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 { "nodeID",nodeID },
                 { "actorID",actorID }
             };
-            CommandBus.Dispatch<Dictionary<string, Object>>(new DeletePendingByActor(), deleteArg);
+            CommandBus.Dispatch(new DeletePendingByActor(), deleteArg);
         }
     }
 }

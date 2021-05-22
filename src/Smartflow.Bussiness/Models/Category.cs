@@ -9,25 +9,25 @@ namespace Smartflow.Bussiness.Models
 {
     public class Category
     {
-        public string NID
+        public virtual string NID
         {
             get;
             set;
         }
 
-        public string ParentID
+        public virtual string ParentID
         {
             get;
             set;
         }
 
-        public string Name
+        public virtual string Name
         {
             get;
             set;
         }
 
-        public string Url
+        public virtual string Url
         {
             get;
             set;

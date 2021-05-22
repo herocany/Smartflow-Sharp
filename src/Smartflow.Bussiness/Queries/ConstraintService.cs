@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dapper;
+using NHibernate;
 using Smartflow.Bussiness.Models;
-using Smartflow.Bussiness.Scripts;
 using Smartflow.Common;
 
 namespace Smartflow.Bussiness.Queries
@@ -13,9 +12,8 @@ namespace Smartflow.Bussiness.Queries
     {
         public IList<Constraint> Query()
         {
-            return DBUtils.CreateWFConnection()
-               .Query<Constraint>(ResourceManage.SQL_CONSTRAINT_SELECT)
-               .ToList();
+            using ISession session = DbFactory.OpenSession();
+            return session.Query<Constraint>().ToList();
         }
     }
 }

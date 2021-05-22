@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../content/common.css" rel="stylesheet" />
+    <link href="../content/layui/css/layui.css" rel="stylesheet" />
+    <script src="../content/jquery.min.js"></script>
+    <script src="../content/layui/layui.all.js"></script>
+    <script src="../content/common.js"></script>
+    <script src="../content/wf/pending.js"></script>
+</head>
+<body>
+    <div class="layui-container p10">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">任务中心</li>
+                <li>任务处理</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <blockquote class="layui-elem-quote">
+                        <form class="layui-form" lay-filter="form-center-search" id="form-center-search">
+                            <div class="layui-inline" style="vertical-align:middle;">
+                                <input type="radio" name="task" value="0" title="待办理" checked="checked" />
+                                <input type="radio" name="task" value="2" title="我审批" />
+                                <input type="radio" name="task" value="3" title="我办理" />
+                                <input type="radio" name="task" value="1" title="抄送我" />
+                         </div>
+                        </form>
+                    </blockquote>
+                    <table class="layui-hide" id="pending-table" lay-filter="pending-table"></table>
+                </div>
+                <div class="layui-tab-item">
+                    <blockquote class="layui-elem-quote">
+                        <form class="layui-form">
+                            <div class="layui-inline">
+                                <div class="layui-btn-group">
+                                    <button type="button" class="layui-btn" id="delete" title="删除"><i class="layui-icon layui-icon-delete"></i>删除</button>
+                                </div>
+                            </div>
+                        </form>
+                    </blockquote>
+                    <table class="layui-hide" id="task-table" lay-filter="task-table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

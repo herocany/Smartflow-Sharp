@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Smartflow.Bussiness"
+                   namespace="Smartflow.Bussiness.Models">
+
+	<class name="Constraint" table="t_constraint">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="Name" column="Name" type="String" />
+	</class>
+
+	<class name="Category" table="t_category">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="Name" column="Name" type="String" />
+		<property name="Url" column="Url" type="String" />
+		<property name="ParentID" column="ParentID" type="String" />
+	</class>
+
+	<class name="Bridge" table="t_bridge">
+		<id name="InstanceID" column="InstanceID" type="String" generator="assigned" />
+		<property name="CategoryCode" column="CategoryCode" type="String" />
+		<property name="Key" column="Key" type="String" />
+		<property name="Comment" column="Comment" type="String" />
+		<property name="Creator" column="Creator" type="String" />
+		<property name="CreateTime" column="CreateTime" type="DateTime" />
+	</class>
+
+	<class name="Script" table="t_script">
+		<id name="InstanceID" column="InstanceID" type="String" generator="assigned" />
+		<property name="Key" column="Key" type="String" />
+		<property name="CategoryCode" column="CategoryCode" type="String" />
+	</class>
+
+	<class name="CarbonCopy" table="t_carbonCopy">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ActorID" column="ActorID" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+		<property name="NodeID" column="NodeID" type="String" />
+		<property name="CreateTime" column="CreateTime" type="DateTime" />
+	</class>
+
+	<class name="Record" table="t_record">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="NodeID" column="NodeID" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="Comment" column="Comment" type="String" />
+		<property name="CreateTime" column="CreateTime" type="DateTime" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+		<property name="Url" column="Url" type="String" />
+		<property name="AuditUserID" column="AuditUserID" type="String" />
+		<property name="AuditUserName" column="AuditUserName" type="String" />
+	</class>
+
+	<class name="Pending" table="t_pending">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ActorID" column="ActorID" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+		<property name="NodeID" column="NodeID" type="String" />
+		<property name="NodeName" column="NodeName" type="String" />
+		<property name="CategoryCode" column="CategoryCode" type="String" />
+		<property name="CategoryName" column="CategoryName" type="String" />
+		<property name="Url" column="Url" type="String" />
+		<property name="CreateTime" column="CreateTime" type="DateTime" />
+	</class>
+
+	<class name="Summary" table="v_summary">
+		<id name="InstanceID" column="InstanceID" type="String" generator="assigned"/>
+		<property name="CategoryName" column="CategoryName" type="String" />
+		<property name="CategoryCode" column="CategoryCode" type="String" />
+		<property name="Comment" column="Comment" type="String" />
+		<property name="Key" column="Key" type="String" />
+		<property name="NodeName" column="NodeName" type="String" />
+		<property name="State" column="State" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="OrganizationName" column="OrganizationName" type="String" />
+		<property name="Creator" column="Creator" type="String" />
+		<property name="CreateTime" column="CreateTime" type="DateTime" />
+	</class>
+
+	<class name="Supervise" table="v_supervise">
+		<id name="InstanceID" column="InstanceID" type="String" generator="assigned"/>
+		<property name="CategoryName" column="CategoryName" type="String" />
+		<property name="CategoryCode" column="CategoryCode" type="String" />
+		<property name="Comment" column="Comment" type="String" />
+		<property name="Key" column="Key" type="String" />
+		<property name="NodeName" column="NodeName" type="String" />
+		<property name="NodeID" column="NodeID" type="String" />
+		<property name="State" column="State" type="String" />
+		<property name="Name" column="Name" type="String" />
+		<property name="OrganizationName" column="OrganizationName" type="String" />
+		<property name="Creator" column="Creator" type="String" />
+		<property name="CreateTime" column="CreateTime" type="DateTime" />
+	</class>
+
+	<sql-query name="queryAssistantByInstance">
+		insert into t_assistant(NID,InstanceID,NodeID,Total) select NEWID(),InstanceID,NodeID,[dbo].[GetAssistant](InstanceID,NodeID) from (SELECT InstanceID,NodeID from t_pending where NodeID not in (select NodeID from t_assistant where [InstanceID]=:InstanceID)  and InstanceID=:InstanceID group by InstanceID,NodeID) T
+	</sql-query>
+
+</hibernate-mapping>

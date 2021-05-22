@@ -5,43 +5,41 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using Dapper;
-using Smartflow.Bussiness.Scripts;
 using Smartflow.Bussiness.Interfaces;
+using NHibernate;
+using NHibernate.Criterion;
+using Smartflow.Core.Elements;
 
 namespace Smartflow.Bussiness.Queries
 {
     public class PendingService : IPendingService
     {
-        private IDbConnection Connection
+        public IList<Pending> GetPendingByInstanceID(string id)
         {
-            get { return DBUtils.CreateWFConnection(); }
+            using ISession session = DbFactory.OpenSession();
+            return session
+                       .Query<Pending>()
+                       .Where(e => e.ActorID == id).OrderByDescending(e => e.CreateTime)
+                       .ToList();
         }
-
-
-        public IList<Pending> Query(string id)
-        {
-            return Connection
-                 .Query<Pending>(ResourceManage.SQL_PENDING_SELECT, new { ActorID = id })
-                 .ToList();
-        }
-
 
         public IList<Pending> Query(Dictionary<string, object> queryArg)
         {
-            return Connection
-                .Query<Pending>(ResourceManage.SQL_PENDING_SELECT_1, new { InstanceID = queryArg["instanceID"], ActorID = queryArg["actorID"], NodeID = queryArg["nodeID"] })
-                .ToList();
+            using ISession session = DbFactory.OpenSession();
+            return session
+                       .CreateCriteria(typeof(Pending))
+                       .Add(Expression.Eq("InstanceID", queryArg["instanceID"]))
+                       .Add(Expression.Eq("ActorID", queryArg["actorID"]))
+                       .Add(Expression.Eq("NodeID", queryArg["nodeID"]))
+                       .List<Pending>();
         }
 
         public IList<Pending> GetPending(string instanceID, string actorID)
         {
-            return Connection
-                .Query<Pending>(ResourceManage.SQL_PENDING_SELECT_2, new {
-                    InstanceID = instanceID,
-                    ActorID = actorID
-                })
-                .ToList();
+            using ISession session = DbFactory.OpenSession();
+            return session.Query<Pending>()
+                    .Where(e => e.InstanceID == instanceID && e.ActorID == actorID)
+                    .ToList();
         }
     }
 }

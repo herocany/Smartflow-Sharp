@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using Smartflow.Bussiness.Models;
 using Smartflow.Common;
-using Dapper;
-using Smartflow.Bussiness.Scripts;
+using NHibernate;
 
 namespace Smartflow.Bussiness.Commands
 {
-    public class CreateBridge : ICommand<Bridge>
+    public class CreateBridge : ICommand
     {
-        public void Execute(Bridge model)
+        public void Execute(Object o)
         {
-            DBUtils.CreateWFConnection().Execute(ResourceManage.SQL_BRIDGE_INSERT, model);
+            using ISession session = DbFactory.OpenSession();
+            session.Save(o);
+            session.Flush();
         }
     }
 }

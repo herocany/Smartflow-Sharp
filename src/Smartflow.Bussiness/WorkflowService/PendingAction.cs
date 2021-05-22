@@ -7,9 +7,9 @@ using Smartflow.Bussiness.Commands;
 using Smartflow.Bussiness.Models;
 using Smartflow.Bussiness.Queries;
 using Smartflow.Common;
-using Smartflow.Elements;
 using System.Text.RegularExpressions;
-using ZTT.MES.WF.Commands;
+using Smartflow.Core;
+using Smartflow.Core.Elements;
 
 namespace Smartflow.Bussiness.WorkflowService
 {
@@ -21,8 +21,7 @@ namespace Smartflow.Bussiness.WorkflowService
         {
             if (executeContext.Instance.State == WorkflowInstanceState.Reject || executeContext.Instance.State == WorkflowInstanceState.Kill)
             {
-                CommandBus.Dispatch<string>(new DeletePending(),
-                    executeContext.Instance.InstanceID);
+                CommandBus.Dispatch(new DeletePending(),executeContext.Instance.InstanceID);
             }
             else
             {
@@ -42,7 +41,7 @@ namespace Smartflow.Bussiness.WorkflowService
                         string instanceID = executeContext.Instance.InstanceID;
                         if (current.NodeType == WorkflowNodeCategory.End)
                         {
-                            CommandBus.Dispatch<string>(new DeletePending(), instanceID);
+                            CommandBus.Dispatch(new DeletePending(), instanceID);
                         }
                         else
                         {
@@ -65,7 +64,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 bridgeService.GetActorByGroup(current, executeContext.Direction) :
                 bridgeService.GetActorByGroup((String)executeContext.Data.Actor, (String)executeContext.Data.Group, (String)executeContext.Data.Organization, current, executeContext.Direction);
 
-            CommandBus.Dispatch<Dictionary<string, Object>>(new DeletePending(), new Dictionary<string, object>(){
+            CommandBus.Dispatch(new DeletePendingByMultipleCondition(), new Dictionary<string, object>(){
                 { "instanceID",instanceID},
                 { "nodeID", executeContext.From.NID }
             });
@@ -92,7 +91,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 { "instanceID",instanceID},
                 { "nodeID",NID }
             };
-            CommandBus.Dispatch<Dictionary<string, Object>>(new DeletePending(), deleteArg);
+            CommandBus.Dispatch(new DeletePendingByMultipleCondition(), deleteArg);
         }
 
         /// <summary>
@@ -103,12 +102,13 @@ namespace Smartflow.Bussiness.WorkflowService
         public void WritePending(string actorID, ExecutingContext executeContext)
         {
             var node = executeContext.To;
-            string categoryCode = (String)executeContext.Data.CategoryCode;
+            string CategoryCode = (String)executeContext.Data.CategoryCode;
             string instanceID = (String)executeContext.Instance.InstanceID;
-            Category model = new CategoryService().Query()
-                 .FirstOrDefault(cate => cate.NID == categoryCode);
 
-            Pending entry = new Pending
+            Category model = new CategoryService().Query()
+                 .FirstOrDefault(cate => cate.NID == CategoryCode);
+            
+            CommandBus.Dispatch(new CreatePending(), new Pending
             {
                 NID = Guid.NewGuid().ToString(),
                 ActorID = actorID,
@@ -117,11 +117,9 @@ namespace Smartflow.Bussiness.WorkflowService
                 Url = model.Url,
                 CreateTime = DateTime.Now,
                 NodeName = node.Name,
-                CategoryCode = categoryCode,
+                CategoryCode = CategoryCode,
                 CategoryName = model.Name
-            };
-
-            CommandBus.Dispatch<Pending>(new CreatePending(), entry);
+            });
         }
     }
 }

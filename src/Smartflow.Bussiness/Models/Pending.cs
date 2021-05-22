@@ -1,5 +1,4 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,55 +7,55 @@ namespace Smartflow.Bussiness.Models
 {
     public class Pending
     {
-        public string NID
+        public virtual string NID
         {
             get;
             set;
         }
 
-        public string ActorID
+        public virtual string ActorID
         {
             get;
             set;
         }
 
-        public string NodeID
+        public virtual string NodeID
         {
             get;
             set;
         }
 
-        public string InstanceID
+        public virtual string InstanceID
         {
             get;
             set;
         }
 
-        public string NodeName
+        public virtual string NodeName
         {
             get;
             set;
         }
 
-        public string CategoryCode
+        public virtual string CategoryCode
         {
             get;
             set;
         }
 
-        public string CategoryName
+        public virtual string CategoryName
         {
             get;
             set;
         }
 
-        public string Url
+        public virtual string Url
         {
             get;
             set;
         }
 
-        public DateTime CreateTime
+        public virtual DateTime CreateTime
         {
             get;
             set;

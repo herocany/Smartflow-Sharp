@@ -7,19 +7,19 @@ namespace Smartflow.Bussiness.Models
 {
     public class Script
     {
-        public string InstanceID
+        public virtual string InstanceID
         {
             get;
             set;
         }
 
-        public string Key
+        public virtual string Key
         {
             get;
             set;
         }
 
-        public string CategoryCode
+        public virtual string CategoryCode
         {
             get;
             set;

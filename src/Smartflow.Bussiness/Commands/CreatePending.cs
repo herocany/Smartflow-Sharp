@@ -4,16 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dapper;
-using Smartflow.Bussiness.Scripts;
+using NHibernate;
 
 namespace Smartflow.Bussiness.Commands
 {
-    public class CreatePending: ICommand<Pending>
+    public class CreatePending: ICommand
     {
-        public void Execute(Pending model)
+        public void Execute(Object o)
         {
-            DBUtils.CreateWFConnection().Execute(ResourceManage.SQL_PENDING_INSERT, model);
+            using ISession session = DbFactory.OpenSession();
+            session.Save(o);
+            session.Flush();
         }
     }
 }

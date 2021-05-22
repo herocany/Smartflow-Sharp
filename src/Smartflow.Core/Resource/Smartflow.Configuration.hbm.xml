@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Smartflow.Core"
+                   namespace="Smartflow.Core">
+
+  <class name="WorkflowConfiguration" table="t_config">
+    <id name="ID" column="ID" type="Int64" generator="assigned" />
+    <property name="Name" column="Name" type="String" />
+    <property name="ConnectionString" column="ConnectionString" type="String"  />
+    <property name="ProviderName" column="ProviderName" type="String"  />
+  </class>
+  <class name="WorkflowStructure" table="t_structure">
+    <id name="NID" column="NID" type="String">
+      <generator class="uuid.hex">
+        <param name="format"></param>
+        <param name="separator"></param>
+      </generator>
+    </id>
+    <property name="Name" column="Name" type="String" />
+    <property name="CategoryCode" column="CategoryCode" type="String"  />
+    <property name="CategoryName" column="CategoryName" type="String"  />
+    <property name="Resource" column="Resource" type="String"  />
+    <property name="Status" column="Status" type="Int32"  />
+    <property name="CreateTime" column="CreateTime" type="DateTime"  />
+    <property name="Memo" column="Memo" type="String"  />
+  </class>
+  <class name="WorkflowCooperation" table="t_cooperation">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="TransitionID" column="TransitionID" type="String" />
+		<property name="InstanceID" column="InstanceID" type="String" />
+		<property name="NodeID" column="NodeID" type="String" />
+		<property name="CreateTime" column="CreateTime" type="DateTime" />
+	</class>
+	
+  <class name="WorkflowAssistant" table="t_assistant">
+		<id name="NID" column="NID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="InstanceID" column="InstanceID" type="String" />
+		<property name="NodeID" column="NodeID" type="String" />
+		<property name="Total" column="Total" type="Int32" />
+	</class>
+</hibernate-mapping>

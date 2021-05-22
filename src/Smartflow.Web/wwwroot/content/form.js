@@ -1,0 +1,26 @@
+﻿/********************************************************************
+ License: https://github.com/chengderen/Smartflow/blob/master/LICENSE 
+ Home page: https://www.smartflow-sharp.com
+ ********************************************************************
+ */
+; (function () {
+
+    window.setting = {
+        load: function (nx) {
+            var form = layui.form;
+            form.val('form-bus', {
+                name: nx.name,
+                url: nx.url
+            });
+        },
+        set: function (nx) {
+            var form = layui.form.val('form-bus');
+            nx.name = form.name;
+            nx.url = form.url;
+            if (nx.brush) {
+                nx.brush.text(nx.name);
+            }
+        }
+    };
+
+})();

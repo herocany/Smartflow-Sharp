@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Smartflow.Bussiness.Commands;
 using Smartflow.Bussiness.Interfaces;
 using Smartflow.Bussiness.Models;
 using Smartflow.Bussiness.Queries;
-using Smartflow.Bussiness.WorkflowService;
 using Smartflow.Common;
-using Smartflow.Elements;
-using Smartflow.Web.Code;
+using Smartflow.Common.Logging;
+using Smartflow.Core;
+using Smartflow.Core.Elements;
 using Smartflow.Web.Models;
 
 namespace Smartflow.Web.Controllers
 {
-    public class SMFController : ApiController
+    [ApiController]
+    public class SMFController : ControllerBase
     {
         private readonly AbstractBridgeService _abstractService;
         private readonly IPendingService _pendingService;
         private readonly IBridgeService _bridgeService;
-
+        private readonly IActorService _actorService;
+        private readonly IMapper _mapper;
         protected IWorkflowNodeService NodeService
         {
             get
@@ -29,38 +30,35 @@ namespace Smartflow.Web.Controllers
                 return WorkflowGlobalServiceProvider.Resolve<AbstractWorkflow>().NodeService;
             }
         }
-
-        public SMFController(AbstractBridgeService abstractService, IPendingService pendingService, IBridgeService bridgeService)
+        public SMFController(AbstractBridgeService abstractService, IPendingService pendingService, IBridgeService bridgeService, IActorService actorService, IMapper mapper)
         {
             _abstractService = abstractService;
             _pendingService = pendingService;
             _bridgeService = bridgeService;
+            _actorService = actorService;
+            _mapper = mapper;
         }
 
         /// <summary>
         /// 启动
         /// </summary>
-        [HttpPost]
+        [Route("api/smf/start"), HttpPost]
         public string Start(BridgeCommandDto dto)
         {
-            Category category = new CategoryService().Query()
-                                .FirstOrDefault(cate => cate.NID == dto.CategoryCode);
-
+            Category category = new CategoryService().Query().FirstOrDefault(cate => cate.NID == dto.CategoryCode);
             WorkflowStructure workflowStructure =
-                _abstractService.WorkflowStructureService.Query()
-                .FirstOrDefault(e => e.CategoryCode == category.NID && e.Status == 1);
-
-            var model = EmitCore.Convert<BridgeCommandDto, Bridge>(dto);
+                _abstractService.WorkflowStructureService.Query().FirstOrDefault(e => e.CategoryCode == category.NID && e.Status == 1);
             string instanceID = WorkflowEngine.Instance.Start(workflowStructure.Resource);
+
+            Bridge model = _mapper.Map<Bridge>(dto);
             model.InstanceID = instanceID;
             model.Comment = String.IsNullOrEmpty(model.Comment) ? category.Name : model.Comment;
             model.CreateTime = DateTime.Now;
             CommandBus.Dispatch(new CreateBridge(), model);
-
-            var b = _bridgeService.Query(instanceID);
+            var user = _actorService.GetUserByID(model.Creator);
             WorkflowInstance Instance = WorkflowInstance.GetInstance(instanceID);
             var current = GetCurrent(Instance, model.Creator);
-            string serialObject = GetAuditNext(current, model.CategoryCode, b.Creator, b.Name, out string selectTransitionID);
+            string serialObject = GetAuditNext(current, model.CategoryCode, model.Creator, user.Name, out string selectTransitionID);
 
             WorkflowEngine.Instance.Jump(new WorkflowContext()
             {
@@ -72,6 +70,7 @@ namespace Smartflow.Web.Controllers
                 Current = current
             });
 
+            LogProxy.Instance.Info(string.Format("启动{0}流程 实例ID{1}", model.CategoryCode, instanceID));
             return instanceID;
         }
 
@@ -81,19 +80,19 @@ namespace Smartflow.Web.Controllers
         /// <param name="id">实例ID</param>
         /// <returns></returns>
 
-        [HttpPost]
-        public dynamic Get(ActorCommandDto dto)
+        [Route("api/smf/{instanceID}/node/{actorID}"), HttpGet]
+        public dynamic Get(string instanceID, string actorID)
         {
-            WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
-            IList<Pending> pendings = _pendingService.GetPending(instance.InstanceID, dto.ActorID);
+            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            IList<Pending> pendings = _pendingService.GetPending(instance.InstanceID, actorID);
 
             if (pendings.Count > 0)
             {
-                var current = GetCurrent(instance, dto.ActorID);
+                var current = GetCurrent(instance, actorID);
                 Dictionary<string, object> queryArg = new Dictionary<string, object>
                 {
-                    { "actorID",dto.ActorID },
-                    { "instanceID",dto.ID },
+                    { "actorID",actorID },
+                    { "instanceID",instanceID },
                     { "nodeID",current.NID}
                 };
 
@@ -120,7 +119,6 @@ namespace Smartflow.Web.Controllers
                 };
             }
         }
-
         private Node GetCurrent(WorkflowInstance instance, string actorID)
         {
             IList<Pending> pendings = _pendingService.GetPending(instance.InstanceID, actorID);
@@ -135,7 +133,7 @@ namespace Smartflow.Web.Controllers
         /// 跳转
         /// </summary>
         /// <param name="context"></param>
-        [HttpPost]
+        [Route("api/smf/jump"), HttpPost]
         public void Jump(PostContextDto context)
         {
             WorkflowInstance Instance = WorkflowInstance.GetInstance(context.InstanceID);
@@ -151,113 +149,51 @@ namespace Smartflow.Web.Controllers
             });
         }
 
-
         /// <summary>
         /// 重新发起流程
         /// </summary>
         /// <param name="dto"></param>
-        [HttpPost]
-        public void Reboot(WorkflowDeleteDto dto)
+        [Route("api/smf/{instanceID}/{categoryCode}/reboot/{id}"), HttpPost]
+        public void Reboot(string instanceID, string categoryCode, string id)
         {
-            WorkflowInstance wfInstance = WorkflowInstance.GetInstance(dto.InstanceID);
+            WorkflowInstance wfInstance = WorkflowInstance.GetInstance(instanceID);
             string resourceXml = wfInstance.Resource;
-            CommandBus.Dispatch<string>(new DeleteWFRecord(), dto.InstanceID);
 
-            string instanceID = WorkflowEngine.Instance.Start(resourceXml);
-            Bridge bridge = _bridgeService.GetBridge(dto.Key);
-            bridge.InstanceID = instanceID;
-            CommandBus.Dispatch<Bridge>(new UpdateBridge(), bridge);
+            CommandBus.Dispatch(new DeleteWFRecord(), instanceID);
+            string newInstanceID = WorkflowEngine.Instance.Start(resourceXml);
 
-            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            Bridge bridge = _bridgeService.GetBridge(id);
+            bridge.InstanceID = newInstanceID;
+            CommandBus.Dispatch(new UpdateBridge(), bridge);
+
+            var user = _actorService.GetUserByID(bridge.Creator);
+            WorkflowInstance instance = WorkflowInstance.GetInstance(newInstanceID);
             var current = GetCurrent(instance, bridge.Creator);
-            List<Transition> transitions = NodeService.GetExecuteTransition(current);
-            Transition transitionSelect = transitions.FirstOrDefault();
 
-            Node nextNode = NodeService.FindNodeByID(transitionSelect.Destination, instanceID);
-            var node = NodeService.GetNode(nextNode);
-
-            List<string> groupIDs = new List<string>();
-            List<string> actorIDs = new List<string>();
-            List<string> carbonIDs = new List<string>();
-            List<string> organizationIDs = new List<string>();
-
-            foreach (Group g in node.Groups)
-            {
-                groupIDs.Add(g.ID.ToString());
-            }
-            foreach (Carbon c in node.Carbons)
-            {
-                carbonIDs.Add(c.ID.ToString());
-            }
-            foreach (Actor item in node.Actors)
-            {
-                actorIDs.Add(item.ID);
-            }
-            foreach (Smartflow.Elements.Organization item in node.Organizations)
-            {
-                organizationIDs.Add(item.ID);
-            }
-
-            var serialObject = Newtonsoft.Json.JsonConvert.SerializeObject(new
-            {
-                CategoryCode = dto.CategoryCode,
-                UUID = bridge.Creator,
-                bridge.Name,
-                Group = string.Join(",", groupIDs),
-                Actor = string.Join(",", actorIDs),
-                Carbon = string.Join(",", carbonIDs),
-                Organization = string.Join(",", organizationIDs)
-            });
-
+            string serialObject = GetAuditNext(current, categoryCode, bridge.Creator, user.Name, out string selectTransitionID);
             WorkflowEngine.Instance.Jump(new WorkflowContext()
             {
                 Instance = instance,
                 ActorID = bridge.Creator,
                 Message = String.Empty,
-                TransitionID = transitionSelect.NID,
+                TransitionID = selectTransitionID,
                 Current = GetCurrent(instance, bridge.Creator),
                 Data = Newtonsoft.Json.JsonConvert.DeserializeObject(serialObject)
             });
-        }
-
-        /// <summary>
-        /// 跳转
-        /// </summary>
-        /// <param name="context"></param>
-        [HttpPost]
-        public void Kill(PostLostContextDto dto)
-        {
-            WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
-            Node current = NodeService.FindNodeByID(dto.Destination, dto.ID);
-            WorkflowEngine.Instance.Kill(instance, new WorkflowContext()
-            {
-                Message = dto.Message,
-                Instance = instance,
-                NodeID = current.NID,
-                Data = dto.Data,
-                Current = current
-            });
-        }
-
-        [HttpPost]
-        public IEnumerable<Transition> GetTransition(ActorCommandDto dto)
-        {
-            WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
-            var current = GetCurrent(instance, dto.ActorID);
-            return NodeService.GetExecuteTransition(current);
         }
 
         private string GetAuditNext(Node current, string categoryCode, string creator, string name, out string selectTransitionID)
         {
             string instanceID = current.InstanceID;
             Transition transitionSelect = current.Transitions.FirstOrDefault();
-            Node n = NodeService.FindNodeByID(transitionSelect.Destination, instanceID);
-            var node = NodeService.GetNode(n);
+            Node node = NodeService.FindNodeByID(transitionSelect.Destination, instanceID);
+
             selectTransitionID = transitionSelect.NID;
             List<string> groupIDs = new List<string>();
             List<string> actorIDs = new List<string>();
             List<string> carbonIDs = new List<string>();
             List<string> organizationIDs = new List<string>();
+
             foreach (Group g in node.Groups)
             {
                 groupIDs.Add(g.ID.ToString());
@@ -270,7 +206,7 @@ namespace Smartflow.Web.Controllers
             {
                 actorIDs.Add(item.ID);
             }
-            foreach (Smartflow.Elements.Organization item in node.Organizations)
+            foreach (Smartflow.Core.Elements.Organization item in node.Organizations)
             {
                 organizationIDs.Add(item.ID);
             }
@@ -288,17 +224,42 @@ namespace Smartflow.Web.Controllers
         }
 
         /// <summary>
+        /// 跳转
+        /// </summary>
+        [Route("api/smf/{categoryCode}/{instanceID}/kill/{destination}"), HttpPost]
+        public void Kill(string categoryCode, string instanceID, string destination)
+        {
+            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            Node current = NodeService.FindNodeByID(destination, instanceID);
+            WorkflowEngine.Instance.Kill(instance, new WorkflowContext()
+            {
+                Message = "终止流程",
+                Instance = instance,
+                NodeID = current.NID,
+                Data = new { CategoryCode = categoryCode },
+                Current = current
+            });
+        }
+
+        [Route("api/smf/{instanceID}/transition/{actorID}/list"), HttpGet]
+        public IEnumerable<Transition> GetTransition(string instanceID, string actorID)
+        {
+            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            var current = GetCurrent(instance, actorID);
+            return NodeService.GetExecuteTransition(current);
+        }
+
+        /// <summary>
         ///  获取参与者信息
         /// </summary>
-        [HttpPost]
-        public dynamic GetActorByNext(RequestInstanceDto dto)
+        [Route("api/smf/{instanceID}/actor/{destination}/next"), HttpGet]
+        public dynamic GetActorByNext(string instanceID, string destination)
         {
-            Transition transition = NodeService.GetNextTransition(dto.Destination, dto.ID);
-            Node current = NodeService.FindNodeByID(transition.Destination, dto.ID);
-            var node = NodeService.GetNode(current);
+            Transition transition = NodeService.GetNextTransition(destination, instanceID);
+            Node node = NodeService.FindNodeByID(transition.Destination, instanceID);
             return new
             {
-                NodeType = current.NodeType.ToString(),
+                NodeType = node.NodeType.ToString(),
                 Actor = node.Actors,
                 Group = node.Groups,
                 Organization = node.Organizations,
@@ -309,11 +270,11 @@ namespace Smartflow.Web.Controllers
         /// <summary>
         ///  获取节点类型
         /// </summary>
-        [HttpPost]
-        public string GetNodeTypeByNext(RequestInstanceDto dto)
+        [Route("api/smf/{instanceID}/next/{destination}"), HttpGet]
+        public string GetNodeTypeByNext(string instanceID, string destination)
         {
-            Transition transition = NodeService.GetNextTransition(dto.Destination, dto.ID);
-            Node current = NodeService.FindNodeByID(transition.Destination, dto.ID);
+            Transition transition = NodeService.GetNextTransition(destination, instanceID);
+            Node current = NodeService.FindNodeByID(transition.Destination, instanceID);
             return current.NodeType.ToString();
         }
 
@@ -322,23 +283,22 @@ namespace Smartflow.Web.Controllers
         /// </summary>
         /// <param name="id">实例ID</param>
         /// <returns></returns>
-        [HttpPost]
-        public int GetNodeCooperation(ActorCommandDto dto)
+        [Route("api/smf/{instanceID}/cooperation/{actorID}"), HttpGet]
+        public int GetNodeCooperation(string instanceID, string actorID)
         {
-            WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
-
-            Node current = GetCurrent(instance, dto.ActorID);
-            return String.IsNullOrEmpty(current.Cooperation)?0:1;
+            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            Node current = GetCurrent(instance, actorID);
+            return String.IsNullOrEmpty(current.Cooperation) ? 0 : 1;
         }
 
         /// <summary>
         ///  获取参与者信息
         /// </summary>
-        [HttpPost]
-        public dynamic GetCurrentNodeActor(RequestInstanceDto dto)
+        [Route("api/smf/{instanceID}/actor/current/{destination}"), HttpGet]
+        public dynamic GetCurrentNodeActor(string instanceID, string destination)
         {
-            WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
-            Node current = instance.Current.Where(e => e.NID == dto.Destination).FirstOrDefault();
+            WorkflowInstance instance = WorkflowInstance.GetInstance(instanceID);
+            Node current = instance.Current.Where(e => e.NID == destination).FirstOrDefault();
             return new
             {
                 NodeType = current.NodeType.ToString(),

@@ -1,0 +1,998 @@
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\workplace\Smartflow.Core\src\Smartflow.Web
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_supervise this_
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_25_0_,
+        this_.CategoryName as categoryname2_25_0_,
+        this_.CategoryCode as categorycode3_25_0_,
+        this_.Comment as comment4_25_0_,
+        this_.[Key] as Key5_25_0_,
+        this_.NodeName as nodename6_25_0_,
+        this_.NodeID as nodeid7_25_0_,
+        this_.[State] as State8_25_0_,
+        this_.Name as name9_25_0_,
+        this_.OrganizationName as organizationname10_25_0_,
+        this_.Creator as creator11_25_0_,
+        this_.CreateTime as createtime12_25_0_ 
+    FROM
+        v_supervise this_ 
+    ORDER BY
+        this_.CreateTime desc;
+    @p0 = 10 [Type: Int32 (0:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        t_structure this_
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.NID as nid1_11_0_,
+        this_.Name as name2_11_0_,
+        this_.CategoryCode as categorycode3_11_0_,
+        this_.CategoryName as categoryname4_11_0_,
+        this_.Resource as resource5_11_0_,
+        this_.Status as status6_11_0_,
+        this_.CreateTime as createtime7_11_0_,
+        this_.Memo as memo8_11_0_ 
+    FROM
+        t_structure this_;
+    @p0 = 10 [Type: Int32 (0:0:0)]
+NHibernate: 
+    select
+        category0_.NID as nid1_18_,
+        category0_.Name as name2_18_,
+        category0_.Url as url3_18_,
+        category0_.ParentID as parentid4_18_ 
+    from
+        t_category category0_
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        Creator =@p0 
+        AND InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_INSTANCE 
+            WHERE
+                State='Running'
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_24_0_,
+        this_.CategoryName as categoryname2_24_0_,
+        this_.CategoryCode as categorycode3_24_0_,
+        this_.Comment as comment4_24_0_,
+        this_.[Key] as Key5_24_0_,
+        this_.NodeName as nodename6_24_0_,
+        this_.[State] as State7_24_0_,
+        this_.Name as name8_24_0_,
+        this_.OrganizationName as organizationname9_24_0_,
+        this_.Creator as creator10_24_0_,
+        this_.CreateTime as createtime11_24_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        Creator =@p1 
+        AND InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_INSTANCE 
+            WHERE
+                State='Running'
+        )  
+    ORDER BY
+        this_.CreateTime desc;
+    @p0 = 10 [Type: Int32 (0:0:0)],
+    @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_24_0_,
+        this_.CategoryName as categoryname2_24_0_,
+        this_.CategoryCode as categorycode3_24_0_,
+        this_.Comment as comment4_24_0_,
+        this_.[Key] as Key5_24_0_,
+        this_.NodeName as nodename6_24_0_,
+        this_.[State] as State7_24_0_,
+        this_.Name as name8_24_0_,
+        this_.OrganizationName as organizationname9_24_0_,
+        this_.Creator as creator10_24_0_,
+        this_.CreateTime as createtime11_24_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p1 
+        ) 
+    ORDER BY
+        this_.CreateTime desc;
+    @p0 = 10 [Type: Int32 (0:0:0)],
+    @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                Name<>'开始' 
+                AND AuditUserID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_24_0_,
+        this_.CategoryName as categoryname2_24_0_,
+        this_.CategoryCode as categorycode3_24_0_,
+        this_.Comment as comment4_24_0_,
+        this_.[Key] as Key5_24_0_,
+        this_.NodeName as nodename6_24_0_,
+        this_.[State] as State7_24_0_,
+        this_.Name as name8_24_0_,
+        this_.OrganizationName as organizationname9_24_0_,
+        this_.Creator as creator10_24_0_,
+        this_.CreateTime as createtime11_24_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                Name<>'开始' 
+                AND AuditUserID =@p1 
+        ) 
+    ORDER BY
+        this_.CreateTime desc;
+    @p0 = 10 [Type: Int32 (0:0:0)],
+    @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p0;
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_24_0_,
+        this_.CategoryName as categoryname2_24_0_,
+        this_.CategoryCode as categorycode3_24_0_,
+        this_.Comment as comment4_24_0_,
+        this_.[Key] as Key5_24_0_,
+        this_.NodeName as nodename6_24_0_,
+        this_.[State] as State7_24_0_,
+        this_.Name as name8_24_0_,
+        this_.OrganizationName as organizationname9_24_0_,
+        this_.Creator as creator10_24_0_,
+        this_.CreateTime as createtime11_24_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p1 
+    ORDER BY
+        this_.CreateTime desc;
+    @p0 = 10 [Type: Int32 (0:0:0)],
+    @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        category0_.NID as nid1_18_,
+        category0_.Name as name2_18_,
+        category0_.Url as url3_18_,
+        category0_.ParentID as parentid4_18_ 
+    from
+        t_category category0_
+NHibernate: 
+    select
+        bridge0_.InstanceID as instanceid1_19_,
+        bridge0_.CategoryCode as categorycode2_19_,
+        bridge0_.[Key] as Key3_19_,
+        bridge0_.Comment as comment4_19_,
+        bridge0_.Creator as creator5_19_,
+        bridge0_.CreateTime as createtime6_19_ 
+    from
+        t_bridge bridge0_ 
+    where
+        bridge0_.[Key]=@p0;
+    @p0 = '22297fcd-6985-4e3f-a0e3-574f8055be7e' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        bridge0_.InstanceID as instanceid1_19_,
+        bridge0_.CategoryCode as categorycode2_19_,
+        bridge0_.[Key] as Key3_19_,
+        bridge0_.Comment as comment4_19_,
+        bridge0_.Creator as creator5_19_,
+        bridge0_.CreateTime as createtime6_19_ 
+    from
+        t_bridge bridge0_ 
+    where
+        bridge0_.[Key]=@p0;
+    @p0 = '22297fcd-6985-4e3f-a0e3-574f8055be7e' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        workflowin0_.InstanceID as instanceid1_0_0_,
+        workflowin0_.[State] as State2_0_0_,
+        workflowin0_.Resource as resource3_0_0_ 
+    FROM
+        t_instance workflowin0_ 
+    WHERE
+        workflowin0_.InstanceID=@p0;
+    @p0 = '502aebc1-3f1f-4a46-8d8f-582eeec02114' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        record0_.NID as nid1_22_,
+        record0_.NodeID as nodeid2_22_,
+        record0_.Name as name3_22_,
+        record0_.Comment as comment4_22_,
+        record0_.CreateTime as createtime5_22_,
+        record0_.InstanceID as instanceid6_22_,
+        record0_.Url as url7_22_,
+        record0_.AuditUserID as audituserid8_22_,
+        record0_.AuditUserName as auditusername9_22_ 
+    from
+        t_record record0_ 
+    where
+        record0_.InstanceID=@p0 
+    order by
+        record0_.CreateTime asc;
+    @p0 = '502aebc1-3f1f-4a46-8d8f-582eeec02114' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        node0_.NID as nid1_1_,
+        node0_.ID as id2_1_,
+        node0_.Name as name3_1_,
+        node0_.InstanceID as instanceid4_1_,
+        node0_.Cooperation as cooperation5_1_,
+        node0_.Assistant as assistant6_1_,
+        node0_.NodeType as nodetype7_1_,
+        node0_.Veto as veto8_1_,
+        node0_.Back as back9_1_,
+        node0_.Url as url10_1_ 
+    from
+        t_node node0_ 
+    where
+        node0_.InstanceID=@p0 
+        and (
+            node0_.ID in (
+                select
+                    workflowli1_.RelationshipID 
+                from
+                    t_link workflowli1_ 
+                where
+                    workflowli1_.InstanceID=@p0
+            )
+        );
+    @p0 = '502aebc1-3f1f-4a46-8d8f-582eeec02114' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        command0_.NID as nid1_9_0_,
+        command0_.ID as id2_9_0_,
+        command0_.InstanceID as instanceid3_9_0_,
+        command0_.[Text] as Text4_9_0_,
+        command0_.RelationshipID as relationshipid5_9_0_ 
+    FROM
+        t_command command0_ 
+    WHERE
+        command0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        carbons0_.RelationshipID as relationshipid5_6_1_,
+        carbons0_.NID as nid1_6_1_,
+        carbons0_.NID as nid1_6_0_,
+        carbons0_.ID as id2_6_0_,
+        carbons0_.Name as name3_6_0_,
+        carbons0_.InstanceID as instanceid4_6_0_ 
+    FROM
+        t_carbon carbons0_ 
+    WHERE
+        carbons0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        organizati0_.RelationshipID as relationshipid5_7_1_,
+        organizati0_.NID as nid1_7_1_,
+        organizati0_.NID as nid1_7_0_,
+        organizati0_.ID as id2_7_0_,
+        organizati0_.Name as name3_7_0_,
+        organizati0_.InstanceID as instanceid4_7_0_ 
+    FROM
+        t_organization organizati0_ 
+    WHERE
+        organizati0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        actors0_.RelationshipID as relationshipid5_8_1_,
+        actors0_.NID as nid1_8_1_,
+        actors0_.NID as nid1_8_0_,
+        actors0_.ID as id2_8_0_,
+        actors0_.Name as name3_8_0_,
+        actors0_.InstanceID as instanceid4_8_0_ 
+    FROM
+        t_actor actors0_ 
+    WHERE
+        actors0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        groups0_.RelationshipID as relationshipid5_5_1_,
+        groups0_.NID as nid1_5_1_,
+        groups0_.NID as nid1_5_0_,
+        groups0_.ID as id2_5_0_,
+        groups0_.Name as name3_5_0_,
+        groups0_.InstanceID as instanceid4_5_0_ 
+    FROM
+        t_group groups0_ 
+    WHERE
+        groups0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        transition0_.RelationshipID as relationshipid8_2_1_,
+        transition0_.NID as nid1_2_1_,
+        transition0_.NID as nid1_2_0_,
+        transition0_.ID as id2_2_0_,
+        transition0_.Name as name3_2_0_,
+        transition0_.InstanceID as instanceid4_2_0_,
+        transition0_.Origin as origin5_2_0_,
+        transition0_.Destination as destination6_2_0_,
+        transition0_.Expression as expression7_2_0_ 
+    FROM
+        t_transition transition0_ 
+    WHERE
+        transition0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        rules0_.RelationshipID as relationshipid5_4_1_,
+        rules0_.NID as nid1_4_1_,
+        rules0_.NID as nid1_4_0_,
+        rules0_.ID as id2_4_0_,
+        rules0_.Name as name3_4_0_,
+        rules0_.InstanceID as instanceid4_4_0_ 
+    FROM
+        t_rule rules0_ 
+    WHERE
+        rules0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        actions0_.RelationshipID as relationshipid5_3_1_,
+        actions0_.NID as nid1_3_1_,
+        actions0_.NID as nid1_3_0_,
+        actions0_.ID as id2_3_0_,
+        actions0_.Name as name3_3_0_,
+        actions0_.InstanceID as instanceid4_3_0_ 
+    FROM
+        t_action actions0_ 
+    WHERE
+        actions0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        pending0_.NID as nid1_23_,
+        pending0_.ActorID as actorid2_23_,
+        pending0_.InstanceID as instanceid3_23_,
+        pending0_.NodeID as nodeid4_23_,
+        pending0_.NodeName as nodename5_23_,
+        pending0_.CategoryCode as categorycode6_23_,
+        pending0_.CategoryName as categoryname7_23_,
+        pending0_.Url as url8_23_,
+        pending0_.CreateTime as createtime9_23_ 
+    from
+        t_pending pending0_ 
+    where
+        pending0_.InstanceID=@p0 
+        and pending0_.ActorID=@p1;
+    @p0 = '502aebc1-3f1f-4a46-8d8f-582eeec02114' [Type: String (4000:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        workflowin0_.InstanceID as instanceid1_0_0_,
+        workflowin0_.[State] as State2_0_0_,
+        workflowin0_.Resource as resource3_0_0_ 
+    FROM
+        t_instance workflowin0_ 
+    WHERE
+        workflowin0_.InstanceID=@p0;
+    @p0 = '502aebc1-3f1f-4a46-8d8f-582eeec02114' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        node0_.NID as nid1_1_,
+        node0_.ID as id2_1_,
+        node0_.Name as name3_1_,
+        node0_.InstanceID as instanceid4_1_,
+        node0_.Cooperation as cooperation5_1_,
+        node0_.Assistant as assistant6_1_,
+        node0_.NodeType as nodetype7_1_,
+        node0_.Veto as veto8_1_,
+        node0_.Back as back9_1_,
+        node0_.Url as url10_1_ 
+    from
+        t_node node0_ 
+    where
+        node0_.InstanceID=@p0 
+        and (
+            node0_.ID in (
+                select
+                    workflowli1_.RelationshipID 
+                from
+                    t_link workflowli1_ 
+                where
+                    workflowli1_.InstanceID=@p0
+            )
+        );
+    @p0 = '502aebc1-3f1f-4a46-8d8f-582eeec02114' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        command0_.NID as nid1_9_0_,
+        command0_.ID as id2_9_0_,
+        command0_.InstanceID as instanceid3_9_0_,
+        command0_.[Text] as Text4_9_0_,
+        command0_.RelationshipID as relationshipid5_9_0_ 
+    FROM
+        t_command command0_ 
+    WHERE
+        command0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        carbons0_.RelationshipID as relationshipid5_6_1_,
+        carbons0_.NID as nid1_6_1_,
+        carbons0_.NID as nid1_6_0_,
+        carbons0_.ID as id2_6_0_,
+        carbons0_.Name as name3_6_0_,
+        carbons0_.InstanceID as instanceid4_6_0_ 
+    FROM
+        t_carbon carbons0_ 
+    WHERE
+        carbons0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        organizati0_.RelationshipID as relationshipid5_7_1_,
+        organizati0_.NID as nid1_7_1_,
+        organizati0_.NID as nid1_7_0_,
+        organizati0_.ID as id2_7_0_,
+        organizati0_.Name as name3_7_0_,
+        organizati0_.InstanceID as instanceid4_7_0_ 
+    FROM
+        t_organization organizati0_ 
+    WHERE
+        organizati0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        actors0_.RelationshipID as relationshipid5_8_1_,
+        actors0_.NID as nid1_8_1_,
+        actors0_.NID as nid1_8_0_,
+        actors0_.ID as id2_8_0_,
+        actors0_.Name as name3_8_0_,
+        actors0_.InstanceID as instanceid4_8_0_ 
+    FROM
+        t_actor actors0_ 
+    WHERE
+        actors0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        groups0_.RelationshipID as relationshipid5_5_1_,
+        groups0_.NID as nid1_5_1_,
+        groups0_.NID as nid1_5_0_,
+        groups0_.ID as id2_5_0_,
+        groups0_.Name as name3_5_0_,
+        groups0_.InstanceID as instanceid4_5_0_ 
+    FROM
+        t_group groups0_ 
+    WHERE
+        groups0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        transition0_.RelationshipID as relationshipid8_2_1_,
+        transition0_.NID as nid1_2_1_,
+        transition0_.NID as nid1_2_0_,
+        transition0_.ID as id2_2_0_,
+        transition0_.Name as name3_2_0_,
+        transition0_.InstanceID as instanceid4_2_0_,
+        transition0_.Origin as origin5_2_0_,
+        transition0_.Destination as destination6_2_0_,
+        transition0_.Expression as expression7_2_0_ 
+    FROM
+        t_transition transition0_ 
+    WHERE
+        transition0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        rules0_.RelationshipID as relationshipid5_4_1_,
+        rules0_.NID as nid1_4_1_,
+        rules0_.NID as nid1_4_0_,
+        rules0_.ID as id2_4_0_,
+        rules0_.Name as name3_4_0_,
+        rules0_.InstanceID as instanceid4_4_0_ 
+    FROM
+        t_rule rules0_ 
+    WHERE
+        rules0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        actions0_.RelationshipID as relationshipid5_3_1_,
+        actions0_.NID as nid1_3_1_,
+        actions0_.NID as nid1_3_0_,
+        actions0_.ID as id2_3_0_,
+        actions0_.Name as name3_3_0_,
+        actions0_.InstanceID as instanceid4_3_0_ 
+    FROM
+        t_action actions0_ 
+    WHERE
+        actions0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        node0_.NID as nid1_1_,
+        node0_.ID as id2_1_,
+        node0_.Name as name3_1_,
+        node0_.InstanceID as instanceid4_1_,
+        node0_.Cooperation as cooperation5_1_,
+        node0_.Assistant as assistant6_1_,
+        node0_.NodeType as nodetype7_1_,
+        node0_.Veto as veto8_1_,
+        node0_.Back as back9_1_,
+        node0_.Url as url10_1_ 
+    from
+        t_node node0_ 
+    where
+        node0_.InstanceID=@p0 
+        and node0_.ID=@p1;
+    @p0 = '502aebc1-3f1f-4a46-8d8f-582eeec02114' [Type: String (4000:0:0)], @p1 = '34' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        command0_.NID as nid1_9_0_,
+        command0_.ID as id2_9_0_,
+        command0_.InstanceID as instanceid3_9_0_,
+        command0_.[Text] as Text4_9_0_,
+        command0_.RelationshipID as relationshipid5_9_0_ 
+    FROM
+        t_command command0_ 
+    WHERE
+        command0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        carbons0_.RelationshipID as relationshipid5_6_1_,
+        carbons0_.NID as nid1_6_1_,
+        carbons0_.NID as nid1_6_0_,
+        carbons0_.ID as id2_6_0_,
+        carbons0_.Name as name3_6_0_,
+        carbons0_.InstanceID as instanceid4_6_0_ 
+    FROM
+        t_carbon carbons0_ 
+    WHERE
+        carbons0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        organizati0_.RelationshipID as relationshipid5_7_1_,
+        organizati0_.NID as nid1_7_1_,
+        organizati0_.NID as nid1_7_0_,
+        organizati0_.ID as id2_7_0_,
+        organizati0_.Name as name3_7_0_,
+        organizati0_.InstanceID as instanceid4_7_0_ 
+    FROM
+        t_organization organizati0_ 
+    WHERE
+        organizati0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        actors0_.RelationshipID as relationshipid5_8_1_,
+        actors0_.NID as nid1_8_1_,
+        actors0_.NID as nid1_8_0_,
+        actors0_.ID as id2_8_0_,
+        actors0_.Name as name3_8_0_,
+        actors0_.InstanceID as instanceid4_8_0_ 
+    FROM
+        t_actor actors0_ 
+    WHERE
+        actors0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        groups0_.RelationshipID as relationshipid5_5_1_,
+        groups0_.NID as nid1_5_1_,
+        groups0_.NID as nid1_5_0_,
+        groups0_.ID as id2_5_0_,
+        groups0_.Name as name3_5_0_,
+        groups0_.InstanceID as instanceid4_5_0_ 
+    FROM
+        t_group groups0_ 
+    WHERE
+        groups0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        transition0_.RelationshipID as relationshipid8_2_1_,
+        transition0_.NID as nid1_2_1_,
+        transition0_.NID as nid1_2_0_,
+        transition0_.ID as id2_2_0_,
+        transition0_.Name as name3_2_0_,
+        transition0_.InstanceID as instanceid4_2_0_,
+        transition0_.Origin as origin5_2_0_,
+        transition0_.Destination as destination6_2_0_,
+        transition0_.Expression as expression7_2_0_ 
+    FROM
+        t_transition transition0_ 
+    WHERE
+        transition0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        rules0_.RelationshipID as relationshipid5_4_1_,
+        rules0_.NID as nid1_4_1_,
+        rules0_.NID as nid1_4_0_,
+        rules0_.ID as id2_4_0_,
+        rules0_.Name as name3_4_0_,
+        rules0_.InstanceID as instanceid4_4_0_ 
+    FROM
+        t_rule rules0_ 
+    WHERE
+        rules0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        actions0_.RelationshipID as relationshipid5_3_1_,
+        actions0_.NID as nid1_3_1_,
+        actions0_.NID as nid1_3_0_,
+        actions0_.ID as id2_3_0_,
+        actions0_.Name as name3_3_0_,
+        actions0_.InstanceID as instanceid4_3_0_ 
+    FROM
+        t_action actions0_ 
+    WHERE
+        actions0_.RelationshipID=@p0;
+    @p0 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        u.ID AS id1_1_0_,
+        u.Name AS name2_1_0_,
+        u.OrganizationCode AS organizationcode3_1_0_,
+        [dbo].[FN_GetOrganizationName](u.OrganizationCode) As organizationname4_1_0_    
+    from
+        t_sys_user u 
+    where
+        u.ID in (
+            select
+                p.ActorID 
+            from
+                [Smartflow.Core].[dbo].[t_pending] p 
+            where
+                p.InstanceID=@p0 
+                and p.NodeID=@p1
+        );
+    @p0 = '502aebc1-3f1f-4a46-8d8f-582eeec02114' [Type: String (4000:0:0)], @p1 = '0d73259946ce4355af5fa01de3f37d0a' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        category0_.NID as nid1_18_,
+        category0_.Name as name2_18_,
+        category0_.Url as url3_18_,
+        category0_.ParentID as parentid4_18_ 
+    from
+        t_category category0_
+NHibernate: 
+    select
+        bridge0_.InstanceID as instanceid1_19_,
+        bridge0_.CategoryCode as categorycode2_19_,
+        bridge0_.[Key] as Key3_19_,
+        bridge0_.Comment as comment4_19_,
+        bridge0_.Creator as creator5_19_,
+        bridge0_.CreateTime as createtime6_19_ 
+    from
+        t_bridge bridge0_ 
+    where
+        bridge0_.[Key]=@p0;
+    @p0 = 'ad3cb593-f01a-43d2-b92a-3c068ce237e2' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        bridge0_.InstanceID as instanceid1_19_,
+        bridge0_.CategoryCode as categorycode2_19_,
+        bridge0_.[Key] as Key3_19_,
+        bridge0_.Comment as comment4_19_,
+        bridge0_.Creator as creator5_19_,
+        bridge0_.CreateTime as createtime6_19_ 
+    from
+        t_bridge bridge0_ 
+    where
+        bridge0_.[Key]=@p0;
+    @p0 = 'ad3cb593-f01a-43d2-b92a-3c068ce237e2' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        record0_.NID as nid1_22_,
+        record0_.NodeID as nodeid2_22_,
+        record0_.Name as name3_22_,
+        record0_.Comment as comment4_22_,
+        record0_.CreateTime as createtime5_22_,
+        record0_.InstanceID as instanceid6_22_,
+        record0_.Url as url7_22_,
+        record0_.AuditUserID as audituserid8_22_,
+        record0_.AuditUserName as auditusername9_22_ 
+    from
+        t_record record0_ 
+    where
+        record0_.InstanceID=@p0 
+    order by
+        record0_.CreateTime asc;
+    @p0 = '61f6987c-e4c2-4d7d-8a44-c4142d431ae4' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        workflowin0_.InstanceID as instanceid1_0_0_,
+        workflowin0_.[State] as State2_0_0_,
+        workflowin0_.Resource as resource3_0_0_ 
+    FROM
+        t_instance workflowin0_ 
+    WHERE
+        workflowin0_.InstanceID=@p0;
+    @p0 = '61f6987c-e4c2-4d7d-8a44-c4142d431ae4' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        node0_.NID as nid1_1_,
+        node0_.ID as id2_1_,
+        node0_.Name as name3_1_,
+        node0_.InstanceID as instanceid4_1_,
+        node0_.Cooperation as cooperation5_1_,
+        node0_.Assistant as assistant6_1_,
+        node0_.NodeType as nodetype7_1_,
+        node0_.Veto as veto8_1_,
+        node0_.Back as back9_1_,
+        node0_.Url as url10_1_ 
+    from
+        t_node node0_ 
+    where
+        node0_.InstanceID=@p0 
+        and (
+            node0_.ID in (
+                select
+                    workflowli1_.RelationshipID 
+                from
+                    t_link workflowli1_ 
+                where
+                    workflowli1_.InstanceID=@p0
+            )
+        );
+    @p0 = '61f6987c-e4c2-4d7d-8a44-c4142d431ae4' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        command0_.NID as nid1_9_0_,
+        command0_.ID as id2_9_0_,
+        command0_.InstanceID as instanceid3_9_0_,
+        command0_.[Text] as Text4_9_0_,
+        command0_.RelationshipID as relationshipid5_9_0_ 
+    FROM
+        t_command command0_ 
+    WHERE
+        command0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        carbons0_.RelationshipID as relationshipid5_6_1_,
+        carbons0_.NID as nid1_6_1_,
+        carbons0_.NID as nid1_6_0_,
+        carbons0_.ID as id2_6_0_,
+        carbons0_.Name as name3_6_0_,
+        carbons0_.InstanceID as instanceid4_6_0_ 
+    FROM
+        t_carbon carbons0_ 
+    WHERE
+        carbons0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        organizati0_.RelationshipID as relationshipid5_7_1_,
+        organizati0_.NID as nid1_7_1_,
+        organizati0_.NID as nid1_7_0_,
+        organizati0_.ID as id2_7_0_,
+        organizati0_.Name as name3_7_0_,
+        organizati0_.InstanceID as instanceid4_7_0_ 
+    FROM
+        t_organization organizati0_ 
+    WHERE
+        organizati0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        actors0_.RelationshipID as relationshipid5_8_1_,
+        actors0_.NID as nid1_8_1_,
+        actors0_.NID as nid1_8_0_,
+        actors0_.ID as id2_8_0_,
+        actors0_.Name as name3_8_0_,
+        actors0_.InstanceID as instanceid4_8_0_ 
+    FROM
+        t_actor actors0_ 
+    WHERE
+        actors0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        groups0_.RelationshipID as relationshipid5_5_1_,
+        groups0_.NID as nid1_5_1_,
+        groups0_.NID as nid1_5_0_,
+        groups0_.ID as id2_5_0_,
+        groups0_.Name as name3_5_0_,
+        groups0_.InstanceID as instanceid4_5_0_ 
+    FROM
+        t_group groups0_ 
+    WHERE
+        groups0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        transition0_.RelationshipID as relationshipid8_2_1_,
+        transition0_.NID as nid1_2_1_,
+        transition0_.NID as nid1_2_0_,
+        transition0_.ID as id2_2_0_,
+        transition0_.Name as name3_2_0_,
+        transition0_.InstanceID as instanceid4_2_0_,
+        transition0_.Origin as origin5_2_0_,
+        transition0_.Destination as destination6_2_0_,
+        transition0_.Expression as expression7_2_0_ 
+    FROM
+        t_transition transition0_ 
+    WHERE
+        transition0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        rules0_.RelationshipID as relationshipid5_4_1_,
+        rules0_.NID as nid1_4_1_,
+        rules0_.NID as nid1_4_0_,
+        rules0_.ID as id2_4_0_,
+        rules0_.Name as name3_4_0_,
+        rules0_.InstanceID as instanceid4_4_0_ 
+    FROM
+        t_rule rules0_ 
+    WHERE
+        rules0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        actions0_.RelationshipID as relationshipid5_3_1_,
+        actions0_.NID as nid1_3_1_,
+        actions0_.NID as nid1_3_0_,
+        actions0_.ID as id2_3_0_,
+        actions0_.Name as name3_3_0_,
+        actions0_.InstanceID as instanceid4_3_0_ 
+    FROM
+        t_action actions0_ 
+    WHERE
+        actions0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        pending0_.NID as nid1_23_,
+        pending0_.ActorID as actorid2_23_,
+        pending0_.InstanceID as instanceid3_23_,
+        pending0_.NodeID as nodeid4_23_,
+        pending0_.NodeName as nodename5_23_,
+        pending0_.CategoryCode as categorycode6_23_,
+        pending0_.CategoryName as categoryname7_23_,
+        pending0_.Url as url8_23_,
+        pending0_.CreateTime as createtime9_23_ 
+    from
+        t_pending pending0_ 
+    where
+        pending0_.InstanceID=@p0 
+        and pending0_.ActorID=@p1;
+    @p0 = '61f6987c-e4c2-4d7d-8a44-c4142d431ae4' [Type: String (4000:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        workflowin0_.InstanceID as instanceid1_0_0_,
+        workflowin0_.[State] as State2_0_0_,
+        workflowin0_.Resource as resource3_0_0_ 
+    FROM
+        t_instance workflowin0_ 
+    WHERE
+        workflowin0_.InstanceID=@p0;
+    @p0 = '61f6987c-e4c2-4d7d-8a44-c4142d431ae4' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        node0_.NID as nid1_1_,
+        node0_.ID as id2_1_,
+        node0_.Name as name3_1_,
+        node0_.InstanceID as instanceid4_1_,
+        node0_.Cooperation as cooperation5_1_,
+        node0_.Assistant as assistant6_1_,
+        node0_.NodeType as nodetype7_1_,
+        node0_.Veto as veto8_1_,
+        node0_.Back as back9_1_,
+        node0_.Url as url10_1_ 
+    from
+        t_node node0_ 
+    where
+        node0_.InstanceID=@p0 
+        and (
+            node0_.ID in (
+                select
+                    workflowli1_.RelationshipID 
+                from
+                    t_link workflowli1_ 
+                where
+                    workflowli1_.InstanceID=@p0
+            )
+        );
+    @p0 = '61f6987c-e4c2-4d7d-8a44-c4142d431ae4' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        command0_.NID as nid1_9_0_,
+        command0_.ID as id2_9_0_,
+        command0_.InstanceID as instanceid3_9_0_,
+        command0_.[Text] as Text4_9_0_,
+        command0_.RelationshipID as relationshipid5_9_0_ 
+    FROM
+        t_command command0_ 
+    WHERE
+        command0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        carbons0_.RelationshipID as relationshipid5_6_1_,
+        carbons0_.NID as nid1_6_1_,
+        carbons0_.NID as nid1_6_0_,
+        carbons0_.ID as id2_6_0_,
+        carbons0_.Name as name3_6_0_,
+        carbons0_.InstanceID as instanceid4_6_0_ 
+    FROM
+        t_carbon carbons0_ 
+    WHERE
+        carbons0_.RelationshipID=@p0;
+    @p0 = '67cf7cb44ebc49029c1b30185bf0bb4f' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        organizati0_.RelationshipID as relationshipid5_7_1_,
+        organizati0_.NID as nid1_7_1_,
+        organizati0_.NID as nid1_7_0_,
+        organizati0_.ID as id2_7_0_,
+        organizati0_.Name as name3_7_0_,
+        organizati0_.Ins

@@ -7,12 +7,18 @@ using System.Text;
 
 namespace Smartflow.Bussiness.Interfaces
 {
-    public interface IActorService : IQuery<IList<User>, string>, IQuery<IList<User>, Dictionary<string, string>>
+    public interface IActorService 
     {
+        User GetUserByID(string id);
+
+        IList<User> GetUserByRoleIDs(IEnumerable<string> ids);
+
         string GetOrganizationCode(string id);
 
-        IList<User> GetActorByOrganization(string organizationCodes);
+        IList<User> GetActorByOrganization(IEnumerable<string> organizationCodes);
 
-        IList<User> GetActorByRole(string id);
+        IList<User> GetActorByRole(IEnumerable<string> ids);
+
+        IList<User> Query(Dictionary<string, string> queryArg);
     }
 }

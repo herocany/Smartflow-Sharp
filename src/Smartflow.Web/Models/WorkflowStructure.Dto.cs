@@ -1,55 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 
 namespace Smartflow.Web.Models
 {
     public class WorkflowStructureDto
     {
-        public string NID
+        public virtual string NID
         {
             get;
             set;
         }
 
-        public string Name
+        public virtual string Name
         {
             get;
             set;
         }
 
-        public string CategoryCode
+        public virtual string CategoryCode
         {
             get;
             set;
         }
 
-        public string CategoryName
+        public virtual string CategoryName
         {
             get;
             set;
         }
 
-        public string Resource
+        public virtual string Resource
         {
             get;
             set;
         }
 
-        public DateTime CreateTime
+        public virtual int Status
         {
             get;
             set;
         }
 
-        public int Status
+        public virtual DateTime CreateTime
         {
             get;
             set;
         }
 
-        public string Memo
+        public virtual string Memo
         {
             get;
             set;

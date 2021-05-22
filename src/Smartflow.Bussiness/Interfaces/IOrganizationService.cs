@@ -7,8 +7,10 @@ using System.Text;
 
 namespace Smartflow.Bussiness.Interfaces
 {
-    public interface IOrganizationService : IQuery<IList<Organization>, string>
+    public interface IOrganizationService
     {
+        IList<Organization> Query(string id);
+
         void Load(string id, IList<Organization> all);
     }
 }

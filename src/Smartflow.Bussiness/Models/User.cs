@@ -1,5 +1,4 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,25 +7,25 @@ namespace Smartflow.Bussiness.Models
 {
     public class User
     {
-        public string ID
+        public virtual string ID
         {
             get;
             set;
         }
 
-        public string Name
+        public virtual string Name
         {
             get;
             set;
         }
 
-        public string OrganizationCode
+        public virtual string OrganizationCode
         {
             get;
             set;
         }
 
-        public string OrganizationName
+        public virtual string OrganizationName
         {
             get;
             set;

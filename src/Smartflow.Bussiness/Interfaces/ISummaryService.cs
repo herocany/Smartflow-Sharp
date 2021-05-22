@@ -8,8 +8,10 @@ using System.Text;
 
 namespace Smartflow.Bussiness.Interfaces
 {
-    public interface ISummaryService:IQuery<IList<Summary>, Dictionary<string, string>>, IPagingQuery<IList<Summary>, Paging>
+    public interface ISummaryService:IPagingQuery<IList<Summary>, Paging>
     {
-        IList<Summary> QuerySupervise(Paging info, out int total);
+        IList<Summary> Query(Dictionary<string, string> queryArg);
+
+        IList<Supervise> QuerySupervise(Paging info, out int total);
     }
 }

@@ -1,0 +1,130 @@
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\workplace\Smartflow.Core\src\Smartflow.Web
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        t_structure this_
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.NID as nid1_11_0_,
+        this_.StructName as structname2_11_0_,
+        this_.CateCode as catecode3_11_0_,
+        this_.CateName as catename4_11_0_,
+        this_.StructXml as structxml5_11_0_,
+        this_.Status as status6_11_0_,
+        this_.CreateDateTime as createdatetime7_11_0_,
+        this_.Memo as memo8_11_0_ 
+    FROM
+        t_structure this_;
+    @p0 = 10 [Type: Int32 (0:0:0)]
+NHibernate: 
+    select
+        category0_.NID as nid1_16_,
+        category0_.Name as name2_16_,
+        category0_.Url as url3_16_,
+        category0_.ParentID as parentid4_16_ 
+    from
+        t_category category0_
+NHibernate: 
+    SELECT
+        workflowst0_.NID as nid1_11_0_,
+        workflowst0_.StructName as structname2_11_0_,
+        workflowst0_.CateCode as catecode3_11_0_,
+        workflowst0_.CateName as catename4_11_0_,
+        workflowst0_.StructXml as structxml5_11_0_,
+        workflowst0_.Status as status6_11_0_,
+        workflowst0_.CreateDateTime as createdatetime7_11_0_,
+        workflowst0_.Memo as memo8_11_0_ 
+    FROM
+        t_structure workflowst0_ 
+    WHERE
+        workflowst0_.NID=@p0;
+    @p0 = '9AA6B216-8A95-47FF-A1B2-4C01F504ECBD' [Type: String (4000:0:0)]
+NHibernate: 
+    select
+        workflowst0_.NID as nid1_11_,
+        workflowst0_.StructName as structname2_11_,
+        workflowst0_.CateCode as catecode3_11_,
+        workflowst0_.CateName as catename4_11_,
+        workflowst0_.StructXml as structxml5_11_,
+        workflowst0_.Status as status6_11_,
+        workflowst0_.CreateDateTime as createdatetime7_11_,
+        workflowst0_.Memo as memo8_11_ 
+    from
+        t_structure workflowst0_ 
+    order by
+        workflowst0_.CreateDateTime desc
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        t_structure this_
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.NID as nid1_11_0_,
+        this_.StructName as structname2_11_0_,
+        this_.CateCode as catecode3_11_0_,
+        this_.CateName as catename4_11_0_,
+        this_.StructXml as structxml5_11_0_,
+        this_.Status as status6_11_0_,
+        this_.CreateDateTime as createdatetime7_11_0_,
+        this_.Memo as memo8_11_0_ 
+    FROM
+        t_structure this_;
+    @p0 = 10 [Type: Int32 (0:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        t_structure this_
+NHibernate: 
+    select
+        category0_.NID as nid1_16_,
+        category0_.Name as name2_16_,
+        category0_.Url as url3_16_,
+        category0_.ParentID as parentid4_16_ 
+    from
+        t_category category0_
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.NID as nid1_11_0_,
+        this_.StructName as structname2_11_0_,
+        this_.CateCode as catecode3_11_0_,
+        this_.CateName as catename4_11_0_,
+        this_.StructXml as structxml5_11_0_,
+        this_.Status as status6_11_0_,
+        this_.CreateDateTime as createdatetime7_11_0_,
+        this_.Memo as memo8_11_0_ 
+    FROM
+        t_structure this_;
+    @p0 = 10 [Type: Int32 (0:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        t_structure this_
+NHibernate: 
+    select
+        category0_.NID as nid1_16_,
+        category0_.Name as name2_16_,
+        category0_.Url as url3_16_,
+        category0_.ParentID as parentid4_16_ 
+    from
+        t_category category0_
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.NID as nid1_11_0_,
+        this_.StructName as structname2_11_0_,
+        this_.CateCode as catecode3_11_0_,
+        this_.CateName as catename4_11_0_,
+        this_.StructXml as structxml5_11_0_,
+        this_.Status as status6_11_0_,
+        this_.CreateDateTime as createdatetime7_11_0_,
+        this_.Memo as memo8_11_0_ 
+    FROM
+        t_struct

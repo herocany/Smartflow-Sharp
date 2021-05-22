@@ -6,7 +6,8 @@ using Smartflow.Bussiness.Commands;
 using Smartflow.Bussiness.Models;
 using Smartflow.Bussiness.WorkflowService;
 using Smartflow.Common;
-using Smartflow.Elements;
+using Smartflow.Core;
+
 
 namespace Smartflow.Bussiness.WorkflowService
 {
@@ -21,7 +22,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 string UUID = (String)executeContext.Data.UUID;
                 string auditUserName = (String)executeContext.Data.Name;
 
-                CommandBus.Dispatch<Record>(new CreateRecord(), new Record
+                CommandBus.Dispatch(new CreateRecord(), new Record
                 {
                     InstanceID = executeContext.Instance.InstanceID,
                     Name = executeContext.From.Name,
@@ -32,7 +33,6 @@ namespace Smartflow.Bussiness.WorkflowService
                     Url = string.Empty,
                     AuditUserName = auditUserName,
                     NID = Guid.NewGuid().ToString(),
-
                 });
             }
         }

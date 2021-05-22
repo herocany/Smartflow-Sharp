@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Smartflow.Bussiness"
+                   namespace="Smartflow.Bussiness.Models">
+
+	<class name="Organization" table="t_sys_organization">
+		<id name="ID" column="ID" type="String">
+			<generator class="uuid.hex">
+				<param name="format"></param>
+				<param name="separator"></param>
+			</generator>
+		</id>
+		<property name="ParentID" column="ParentID" type="String" />
+		<property name="Name" column="Name" type="String" />
+	</class>
+
+	<class name="User" table="t_sys_user">
+		<id name="ID" column="ID" type="String" generator="assigned" />
+		<property name="Name" column="Name" type="String" />
+		<property name="OrganizationCode" column="OrganizationCode" type="String" />
+		<property name="OrganizationName" column="OrganizationName" type="String" />
+	</class>
+
+	<sql-query name="queryActorByOrganization">
+		<return alias="u" class="Smartflow.Bussiness.Models.User"/>
+		select u.ID AS {u.ID},
+		u.Name AS {u.Name},
+		u.OrganizationCode AS {u.OrganizationCode},
+		[dbo].[FN_GetOrganizationName](u.OrganizationCode) As {u.OrganizationName}
+		from t_sys_user u where OrganizationCode in (:OrganizationCodes)
+	</sql-query>
+
+	<sql-query name="queryActorByRole">
+		<return alias="u" class="Smartflow.Bussiness.Models.User"/>
+		select u.ID AS {u.ID},
+		u.Name AS {u.Name},
+		u.OrganizationCode AS {u.OrganizationCode},
+		[dbo].[FN_GetOrganizationName](u.OrganizationCode) As {u.OrganizationName}
+		from t_sys_user u where u.ID in (select r.uid from t_sys_umr r  where r.rid in (:RIDS))
+	</sql-query>
+
+
+	<sql-query name="queryMultipleUserByID">
+		<return alias="u" class="Smartflow.Bussiness.Models.User"/>
+		select u.ID AS {u.ID},
+		u.Name AS {u.Name},
+		u.OrganizationCode AS {u.OrganizationCode},
+		[dbo].[FN_GetOrganizationName](u.OrganizationCode) As {u.OrganizationName}
+		from t_sys_user u where u.ID in (:IDS)
+	</sql-query>
+
+	<sql-query name="queryUserByMulitlpeCondition">
+		<return alias="u" class="Smartflow.Bussiness.Models.User"/>
+		select u.ID AS {u.ID},
+		u.Name AS {u.Name},
+		u.OrganizationCode AS {u.OrganizationCode},
+		[dbo].[FN_GetOrganizationName](u.OrganizationCode) As {u.OrganizationName}
+		from t_sys_user u where  u.ID in (select p.ActorID from [Smartflow.Core].[dbo].[t_pending] p where p.InstanceID=:InstanceID and p.NodeID=:NodeID)
+	</sql-query>
+
+	<sql-query name="queryUserByID">
+		<return alias="u" class="Smartflow.Bussiness.Models.User"/>
+		select u.ID AS {u.ID},
+		u.Name AS {u.Name},
+		u.OrganizationCode AS {u.OrganizationCode},
+		[dbo].[FN_GetOrganizationName](u.OrganizationCode) As {u.OrganizationName}
+		from t_sys_user u where  u.ID=:ID
+	</sql-query>
+</hibernate-mapping>

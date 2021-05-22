@@ -1,5 +1,4 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,61 +7,61 @@ namespace Smartflow.Bussiness.Models
 {
     public class Record
     {
-        public string NID
+        public virtual string NID
         {
             get;
             set;
         }
 
-        public string Name
+        public virtual string Name
         {
             get;
             set;
         }
 
-        public string Comment
+        public virtual string Comment
         {
             get;
             set;
         }
 
-        public string InstanceID
+        public virtual string InstanceID
         {
             get;
             set;
         }
 
-        public DateTime CreateTime
+        public virtual DateTime CreateTime
         {
             get;
             set;
         }
 
-        public string Url
+        public virtual string Url
         {
             get;
             set;
         }
 
-        public string AuditUserID
+        public virtual string AuditUserID
         {
             get;
             set;
         }
 
-        public string AuditUserName
+        public virtual string AuditUserName
         {
             get;
             set;
         }
 
-        public string NodeName
+        public virtual string NodeName
         {
             get;
             set;
         }
 
-        public string NodeID
+        public virtual string NodeID
         {
             get;
             set;

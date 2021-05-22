@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../content/layui/css/layui.css" rel="stylesheet" />
+   
+    <script src="../content/jquery.min.js"></script>
+    <script src="../content/layui/layui.all.js"></script>
+    <script src="../content/common.js"></script>
+    <script src="../content/easyAction.js"></script>
+</head>
+<body>
+    <form class="layui-form" lay-filter="form_normal">
+        <div class="layui-form-item">
+            <select placeholder="请选择数据" class="layui-select" name="id" style="width:100%;" lay-filter="node_normal_select" id="node_normal_select"></select>
+        </div>
+        <div class="layui-form-item">
+            <textarea placeholder="请输入SQL脚本" class="layui-textarea" name="text" spellcheck="false" id="node_normal_script"></textarea>
+        </div>
+    </form>
+</body>
+</html>

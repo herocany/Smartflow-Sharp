@@ -7,39 +7,38 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-
-using Dapper;
 using Smartflow;
 using System.Configuration;
 using Smartflow.Common;
 using Smartflow.Bussiness.Models;
 using Smartflow.Bussiness.Queries;
-using Smartflow.Elements;
 using Smartflow.Bussiness.Interfaces;
+using Smartflow.Core;
+using Smartflow.Core.Elements;
+using NHibernate;
+using Smartflow.Common.Logging;
 
 namespace Smartflow.Bussiness.WorkflowService
 {
     public class BaseBridgeService : AbstractBridgeService
     {
-        private readonly IDbConnection connection = DBUtils.CreateConnection();
         private readonly IActorService _actorService = new ActorService();
 
         public override List<WorkflowGroup> GetGroup()
         {
-            string query = " SELECT * FROM T_SYS_ROLE WHERE 1=1 AND Type=0 ";
-            List<WorkflowGroup> groupList = new List<WorkflowGroup>();
-            using (IDataReader dr = connection.ExecuteReader(query))
+            string query = " SELECT * FROM T_SYS_ROLE WHERE 1=1 AND TYPE=0 ";
+            List<WorkflowGroup>  workflowGroups = new List<WorkflowGroup>();
+            using IDataReader dr = DbFactory.ExecuteReader(DbFactory.OpenBussinessSession(), query);
+            while (dr.Read())
             {
-                while (dr.Read())
+                workflowGroups.Add(new WorkflowGroup()
                 {
-                    groupList.Add(new WorkflowGroup()
-                    {
-                        ID = dr["ID"].ToString(),
-                        Name = dr["Name"].ToString()
-                    });
-                }
+                    ID = dr["ID"].ToString(),
+                    Name = dr["Name"].ToString()
+                });
             }
-            return groupList;
+
+            return workflowGroups;
         }
 
         public override List<WorkflowActor> GetActor(int pageIndex, int pageSize, out int total, Dictionary<string, string> queryArg)
@@ -59,10 +58,11 @@ namespace Smartflow.Bussiness.WorkflowService
                 conditionStr = string.Format("{0} AND OrganizationCode LIKE '{1}%'", conditionStr, queryArg["orgCode"]);
             }
 
-            string query = String.Format("SELECT TOP {0} *,(SELECT Name FROM[dbo].[t_sys_organization] WHERE ID = OrganizationCode) OrganizationName  FROM T_SYS_USER WHERE Type=0 AND Status=0 AND ID NOT IN (SELECT TOP {1} ID  FROM T_SYS_USER WHERE 1=1 {2} ORDER BY Type ASC) {2}  ORDER BY Type ASC ", pageSize, pageSize * (pageIndex - 1), conditionStr);
-            total = connection.ExecuteScalar<int>(String.Format("SELECT COUNT(1) FROM T_SYS_USER WHERE 1=1 AND Type=0 AND Status=0   {0}", conditionStr));
+            string query = String.Format("SELECT TOP {0} *,(SELECT Name FROM [dbo].[t_sys_organization] WHERE ID = OrganizationCode) OrganizationName  FROM T_SYS_USER WHERE  Type=0 AND ID NOT IN (SELECT TOP {1} ID  FROM T_SYS_USER WHERE 1=1 AND Type=0  {2} ORDER BY Type ASC) {2}  ORDER BY Type ASC ", pageSize, pageSize * (pageIndex - 1), conditionStr);
+            object totalRow = DbFactory.ExecuteScalar(DbFactory.OpenBussinessSession(),String.Format("SELECT COUNT(1) FROM T_SYS_USER WHERE  Type=0 AND 1=1 {0}", conditionStr));
+            total = Convert.ToInt32(totalRow);
             List<WorkflowActor> actors = new List<WorkflowActor>();
-            using (var dr = connection.ExecuteReader(query))
+            using (var dr = DbFactory.ExecuteReader(DbFactory.OpenBussinessSession(),query))
             {
                 while (dr.Read())
                 {
@@ -90,23 +90,21 @@ namespace Smartflow.Bussiness.WorkflowService
             else
             {
                 string conditionStr = string.Format(" AND ID IN ({0})", Utils.BindQuot(queryArg["actor"]));
-                string query = String.Format(" SELECT *,(SELECT Name FROM[dbo].[t_sys_organization] WHERE ID = OrganizationCode) OrganizationName  FROM T_SYS_USER WHERE 1=1 AND Type=0 AND Status=0 {0} ORDER BY Type  ", conditionStr);
+                string query = String.Format(" SELECT *,(SELECT Name FROM  t_sys_organization WHERE ID = OrganizationCode) OrganizationName  FROM T_SYS_USER WHERE 1=1 AND Type=0 {0} ORDER BY Type  ", conditionStr);
                 List<WorkflowActor> actors = new List<WorkflowActor>();
-                using (var dr = connection.ExecuteReader(query))
+                using IDataReader dr = DbFactory.ExecuteReader(DbFactory.OpenBussinessSession(), query);
+                while (dr.Read())
                 {
-                    while (dr.Read())
+                    actors.Add(new WorkflowActor()
                     {
-                        actors.Add(new WorkflowActor()
+                        ID = dr["ID"].ToString(),
+                        Name = string.Format("{0}", dr["Name"]),
+                        Data = new
                         {
-                            ID = dr["ID"].ToString(),
-                            Name = string.Format("{0}", dr["Name"]),
-                            Data = new
-                            {
-                                OrgName = dr["OrganizationName"],
-                                OrgCode = dr["OrganizationCode"]
-                            }
-                        });
-                    }
+                            OrgName = dr["OrganizationName"],
+                            OrgCode = dr["OrganizationCode"]
+                        }
+                    });
                 }
                 return actors;
             }
@@ -122,15 +120,13 @@ namespace Smartflow.Bussiness.WorkflowService
         {
             if (direction == WorkflowOpertaion.Back && String.IsNullOrEmpty(node.Cooperation))
             {
-                dynamic dyObject = ConvertStr(node);
-                List<User> userList = GetAllActor((String)dyObject.Actors, (String)dyObject.Groups, (String)dyObject.Organizations);
                 WorkflowProcess process = base.ProcessService
-                                         .Get(node.InstanceID)
-                                         .Where(n => n.Origin == node.ID)
-                                         .OrderByDescending(e => e.CreateTime)
-                                         .FirstOrDefault();
+                                        .Get(node.InstanceID)
+                                        .Where(n => n.Origin == node.ID)
+                                        .OrderByDescending(e => e.CreateTime)
+                                        .FirstOrDefault();
 
-                return userList.Where(e => e.ID == process.ActorID).ToList();
+                return _actorService.GetUserByRoleIDs(new List<string> { process.ActorID }).ToList();
             }
             else
             {
@@ -152,15 +148,15 @@ namespace Smartflow.Bussiness.WorkflowService
 
             if (!String.IsNullOrEmpty(groups))
             {
-                userList.AddRange(_actorService.GetActorByRole(Utils.BindQuot(groups)));
+                userList.AddRange(_actorService.GetActorByRole(Utils.StringToList(groups)));
             }
             if (!String.IsNullOrEmpty(organizations))
             {
-                userList.AddRange(_actorService.GetActorByOrganization(Utils.BindQuot(organizations)));
+                userList.AddRange(_actorService.GetActorByOrganization(Utils.StringToList(organizations)));
             }
             if (!String.IsNullOrEmpty(actors))
             {
-                userList.AddRange(_actorService.Query(Utils.BindQuot(actors)));
+                userList.AddRange(_actorService.GetUserByRoleIDs(Utils.StringToList(actors)));
             }
             return userList;
         }
@@ -178,7 +174,7 @@ namespace Smartflow.Bussiness.WorkflowService
             {
                 ids.Add(item.ID);
             }
-            foreach (Smartflow.Elements.Organization item in node.Organizations)
+            foreach (Smartflow.Core.Elements.Organization item in node.Organizations)
             {
                 orgIds.Add(item.ID);
             }
@@ -195,7 +191,7 @@ namespace Smartflow.Bussiness.WorkflowService
             List<User> userList = new List<User>();
             if (!String.IsNullOrEmpty(carbons))
             {
-                userList.AddRange(_actorService.Query(Utils.BindQuot(carbons)));
+                userList.AddRange(_actorService.GetUserByRoleIDs(Utils.StringToList(carbons)));
             }
             else
             {
@@ -206,7 +202,7 @@ namespace Smartflow.Bussiness.WorkflowService
                 }
                 if (userStrs.Count > 0)
                 {
-                    userList.AddRange(_actorService.Query(Utils.BindQuot(String.Join(",", userStrs))));
+                    userList.AddRange(_actorService.GetUserByRoleIDs(userStrs));
                 }
             }
 
@@ -216,10 +212,10 @@ namespace Smartflow.Bussiness.WorkflowService
                    .ToList();
         }
 
-        private List<User> QueryActor(IList<User> users, IList<Smartflow.Elements.Rule> rules)
+        private List<User> QueryActor(IEnumerable<User> users, IEnumerable<Smartflow.Core.Elements.Rule> rules)
         {
             List<User> actorList = new List<User>();
-            foreach (Smartflow.Elements.Rule rule in rules)
+            foreach (Smartflow.Core.Elements.Rule rule in rules)
             {
                 WorkflowRuleType ruleType = (WorkflowRuleType)Enum.Parse(typeof(WorkflowRuleType), rule.ID, true);
                 if (ruleType == WorkflowRuleType.NODE_SEND_START_USER)
@@ -264,10 +260,12 @@ namespace Smartflow.Bussiness.WorkflowService
                 conditionStr = string.Format("{0} AND OrganizationCode LIKE '{1}%'", conditionStr, queryArg["orgCode"]);
             }
 
-            string query = String.Format("SELECT TOP {0} *,(SELECT Name FROM[dbo].[t_sys_organization] WHERE ID = OrganizationCode) OrganizationName FROM T_SYS_USER WHERE ID NOT IN (SELECT TOP {1} ID  FROM T_SYS_USER WHERE 1=1 {2} ORDER BY Type ASC) {2}  ORDER BY Type ASC ", pageSize, pageSize * (pageIndex - 1), conditionStr);
-            total = connection.ExecuteScalar<int>(String.Format("SELECT COUNT(1) FROM T_SYS_USER WHERE 1=1 {0}", conditionStr));
+            string query = String.Format("SELECT TOP {0} *,(SELECT Name FROM[dbo].[t_sys_organization] WHERE ID = OrganizationCode) OrganizationName FROM T_SYS_USER WHERE ID NOT IN (SELECT TOP {1} ID  FROM T_SYS_USER WHERE 1=1 AND Type=0 {2} ORDER BY Type ASC) {2}  ORDER BY Type ASC ", pageSize, pageSize * (pageIndex - 1), conditionStr);
+            ISession session=DbFactory.OpenBussinessSession();
+            object rowCount = DbFactory.ExecuteScalar(session, String.Format("SELECT COUNT(1) FROM T_SYS_USER WHERE 1=1 {0}", conditionStr));
+            total = Convert.ToInt32(rowCount);
             List<WorkflowCarbon> carbons = new List<WorkflowCarbon>();
-            using (var dr = connection.ExecuteReader(query))
+            using (var dr = DbFactory.ExecuteReader(session, query))
             {
                 while (dr.Read())
                 {
@@ -295,23 +293,21 @@ namespace Smartflow.Bussiness.WorkflowService
             else
             {
                 string conditionStr = string.Format(" AND ID IN ({0})", Utils.BindQuot(queryArg["carbon"]));
-                string query = String.Format(" SELECT *,(SELECT Name FROM[dbo].[t_sys_organization] WHERE ID = OrganizationCode) OrganizationName  FROM T_SYS_USER WHERE 1=1 {0} ORDER BY Type ASC ", conditionStr);
+                string query = String.Format(" SELECT *,(SELECT Name FROM t_sys_organization WHERE ID = OrganizationCode) OrganizationName  FROM T_SYS_USER WHERE 1=1 AND Type=0 {0} ORDER BY Type ASC ", conditionStr);
                 List<WorkflowCarbon> carbons = new List<WorkflowCarbon>();
-                using (var dr = connection.ExecuteReader(query))
+                using var dr = DbFactory.ExecuteReader(DbFactory.OpenBussinessSession(), query);
+                while (dr.Read())
                 {
-                    while (dr.Read())
+                    carbons.Add(new WorkflowCarbon()
                     {
-                        carbons.Add(new WorkflowCarbon()
+                        ID = dr["ID"].ToString(),
+                        Name = string.Format("{0}", dr["Name"]),
+                        Data = new
                         {
-                            ID = dr["ID"].ToString(),
-                            Name = string.Format("{0}", dr["Name"]),
-                            Data = new
-                            {
-                                OrgName = dr["OrganizationName"],
-                                OrgCode = dr["OrganizationCode"]
-                            }
-                        });
-                    }
+                            OrgName = dr["OrganizationName"],
+                            OrgCode = dr["OrganizationCode"]
+                        }
+                    });
                 }
                 return carbons;
             }

@@ -1,0 +1,655 @@
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\workplace\Smartflow.Core\src\Smartflow.Web
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        Creator =@p0 
+        AND InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_INSTANCE 
+            WHERE
+                State='Running'
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        Creator =@p1 
+        AND InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_INSTANCE 
+            WHERE
+                State='Running'
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p0;
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p1;
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_carbonCopy 
+            WHERE
+                ACTORID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_carbonCopy 
+            WHERE
+                ACTORID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p0;
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p1;
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p0;
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p1;
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_carbonCopy 
+            WHERE
+                ACTORID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_carbonCopy 
+            WHERE
+                ACTORID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p0;
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p1;
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                T_PENDING 
+            WHERE
+                ACTORID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p0 
+        );
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        InstanceID IN (
+            SELECT
+                InstanceID 
+            FROM
+                t_record 
+            WHERE
+                AuditUserID =@p1 
+        );
+    @p0 = 10 [Type: Int32 (0:0:0)], @p1 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        count(*) as y0_ 
+    FROM
+        v_summary this_ 
+    WHERE
+        this_.Creator = @p0;
+    @p0 = '594887FB-40ED-45AD-BDA9-B25A71D467C7' [Type: String (4000:0:0)]
+NHibernate: 
+    SELECT
+        TOP (@p0) this_.InstanceID as instanceid1_22_0_,
+        this_.CategoryName as categoryname2_22_0_,
+        this_.CategoryID as categoryid3_22_0_,
+        this_.Comment as comment4_22_0_,
+        this_.[Key] as Key5_22_0_,
+        this_.NodeName as nodename6_22_0_,
+        this_.[State] as State7_22_0_,
+        this_.RealName as realname8_22_0_,
+        this_.OrganizationName as organizationname9_22_0_,
+        this_.Creator as creator10_22_0_,
+        this_.CreateDateTime as createdatetime11_22_0_ 
+    FROM
+        v_

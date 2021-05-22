@@ -4,18 +4,21 @@ using System.Linq;
 using System.Text;
 using Smartflow.Bussiness.Models;
 using Smartflow.Common;
-using Dapper;
-using Smartflow.Bussiness.Scripts;
+using NHibernate;
+using Smartflow.Bussiness.Interfaces;
 
 namespace Smartflow.Bussiness.Queries
 {
-    public class RecordService : IQuery<List<Record>, string>
+    public class RecordService : IRecordService
     {
-        public List<Record> Query(string instanceID)
+        public IList<Record> GetRecordByInstanceID(string instanceID)
         {
-            return DBUtils.CreateWFConnection()
-                        .Query<Record>(ResourceManage.SQL_RECORD_SELECT, new { InstanceID = instanceID })
-                        .ToList();
+            using ISession session = DbFactory.OpenSession();
+            return
+                session.Query<Record>()
+                .Where(r => r.InstanceID == instanceID)
+                .OrderBy(e => e.CreateTime)
+                .ToList();
         }
     }
 }
