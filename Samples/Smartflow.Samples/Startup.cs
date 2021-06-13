@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Smartflow.BussinessService;
 using Smartflow.BussinessService.Interfaces;
 using Smartflow.BussinessService.Services;
@@ -40,12 +34,9 @@ namespace Smartflow.Samples
                 // options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; 
             });
 
-
             services.AddAutoMapper((mapper) => mapper.AddProfile(typeof(AutoMapperProfile)));
-
             services.AddTransient<IWorkflowService, WorkflowService>();
             services.AddTransient<IVacationService, VacationService>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,8 +46,6 @@ namespace Smartflow.Samples
             {
                 app.UseDeveloperExceptionPage();
             }
-
-
 
             app.UseRouting();
 
