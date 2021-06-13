@@ -31,6 +31,7 @@ $(function () {
         var selector = '#' + config.id;
         util.table({
             elem: selector
+            , toolbar: '#list-bar'
             , url: config.url
             , cols: [[
                 { type: 'radio' }
@@ -42,7 +43,7 @@ $(function () {
                     field: 'Comment', title: '标题', minWidth: 140, align: 'left', event: 'jump', templet: function (d) {
                         return "<span class=\"jump-click\">" + d.Comment + "</span>";
                     }
-                 }
+                }
                 , {
                     field: 'CreateTime', title: '创建时间', width: 200, align: 'center',
                     templet: function (d) { return layui.util.toDateString(d.CreateTime, 'yyyy.MM.dd HH:mm:ss'); }
@@ -59,7 +60,6 @@ $(function () {
                 }
             ]]
         });
-
         layui.table.on('tool(' + config.id + ')', function (obj) {
             var data = obj.data;
             var eventName = obj.event;
@@ -67,14 +67,18 @@ $(function () {
                 $this.jump(data);
             }
         });
+        layui.table.on('toolbar(' + config.id + ')', function (obj) {
+            var data = obj.data;
+            var eventName = obj.event;
+            $this.setting.methods[eventName].call($this);
+        });
     }
-
 
     Page.prototype.jump = function (obj) {
         var config = this.setting.config;
         var url = util.format(config.category, { id: obj.CategoryCode });
         util.ajaxWFService({
-            url:url,
+            url: url,
             type: 'get',
             success: function (data) {
                 util.openDetailFullLayer(data.Url, {
@@ -90,7 +94,7 @@ $(function () {
         var $this = this,
             config = $this.setting.config;
         var url = util.format(config.delete, { instanceID: data.InstanceID, categoryCode: data.CategoryCode, id: data.Key });
-        
+
         util.ajaxWFService({
             url: url,
             type: 'delete',
@@ -144,7 +148,7 @@ $(function () {
             category: 'api/setting/category/{id}/info',
             reboot: 'api/smf/{instanceID}/{categoryCode}/reboot/{id}'
         },
-        event: {
+        methods: {
             change: function () {
                 Page.check('supervise-table', function (data) {
                     if (data.State.toLowerCase() === 'running') {
@@ -163,7 +167,7 @@ $(function () {
                             util.ajaxWFService({
                                 type: 'post',
                                 url: url,
-                                dataType:'text',
+                                dataType: 'text',
                                 success: function () {
                                     $this.refresh();
                                 }
@@ -194,6 +198,9 @@ $(function () {
                     }
                 });
             }
+        },
+        event: {
+
         }
     });
 

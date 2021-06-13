@@ -7,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Smartflow;
-using System.Configuration;
 using Smartflow.Common;
 using Smartflow.Bussiness.Models;
 using Smartflow.Bussiness.Queries;
@@ -16,7 +14,6 @@ using Smartflow.Bussiness.Interfaces;
 using Smartflow.Core;
 using Smartflow.Core.Elements;
 using NHibernate;
-using Smartflow.Common.Logging;
 
 namespace Smartflow.Bussiness.WorkflowService
 {

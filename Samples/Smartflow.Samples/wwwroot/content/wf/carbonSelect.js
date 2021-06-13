@@ -39,7 +39,7 @@
                 layout: ['prev', 'page', 'next', 'count']
             }
             , where: {
-                arg: JSON.stringify({ carbon: carbons.join(',') })
+                arg: JSON.stringify({ carbon: carbons.join(',')})
             }
             , cols: [[
                 { checkbox: true, fixed: true }
@@ -88,7 +88,7 @@
             $('#left_table_1')[methodName]('layui-btn-disabled');
         });
     }
-
+   
     window.setting = {
         load: load,
         set: set
@@ -168,7 +168,7 @@ $(function () {
             layui.table.reload('table_right', {
                 page: false,
                 where: {
-                    arg: JSON.stringify({ carbon: carbons.join(',') })
+                    arg: JSON.stringify({carbon: carbons.join(',')})
                 }
             });
 
@@ -195,13 +195,13 @@ $(function () {
 
                 var config = {
                     page: { curr: 1 },
-                    where: { arg: JSON.stringify({ searchKey: key, carbon: carbons.join(',') }) }
+                    where: {arg: JSON.stringify({searchKey: key,carbon: carbons.join(',')})}
                 };
 
                 layui.table.reload('table_left', config);
                 layui.table.reload('table_right', {
                     page: false,
-                    where: { arg: JSON.stringify({ carbon: carbons.join(',') }) }
+                    where: {arg: JSON.stringify({carbon: carbons.join(',')})}
                 });
             }
 
@@ -220,7 +220,7 @@ $(function () {
                 }
             }
         });
-    }
+    } 
 
     function loadTree() {
         util.ajaxWFService({
@@ -229,14 +229,14 @@ $(function () {
             success: function (serverData) {
                 $.fn.zTree.init($("#ztree"), {
                     callback: {
-                        onClick: function (event, treeId, node) {
+                        onClick: function (event, treeId,node) {
                             $("#tree").val(node.Name);
                             $("#node-value").val(node.ID);
                         }
                     },
                     data: {
                         key: {
-                            name: 'Name'
+                            name:'Name'
                         },
                         simpleData: {
                             enable: true,

@@ -41,7 +41,7 @@
             , where: {
                 arg: JSON.stringify({ actor: actors.join(',')})
             }
-            , cellMinWidth: 80
+            , cellMinWidth: 80 
             , cols: [[
                 { checkbox: true, fixed: true }
                 , { field: 'ID', title: 'ID', hide: true }
@@ -110,11 +110,9 @@ $(function () {
             $("#zc").hide();
         }
     });
-
     $("#zc").hover(function () { }, function () {
         $("#zc").hide();
     });
-
     $('#reload').on('click', function () {
         var key = $('#title').val();
 
@@ -142,7 +140,6 @@ $(function () {
         $("#right_table_1").addClass('layui-btn-disabled');
         layui.table.reload('table_left', config);
     });
-
     $("#left_table_1").click(function () {
         var $this = $(this);
         var key = $('#title').val();
@@ -243,7 +240,6 @@ $(function () {
                 $.fn.zTree.init($("#ztree"), {
                     callback: {
                         onClick: function (event, treeId,node) {
-                           // alert(node.ID);
                             $("#tree").val(node.Name);
                             $("#node-value").val(node.ID);
                         }
@@ -263,5 +259,4 @@ $(function () {
             }
         });
     }
-
 });

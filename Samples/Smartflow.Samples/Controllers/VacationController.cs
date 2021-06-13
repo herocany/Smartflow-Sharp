@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Smartflow.BussinessService.Interfaces;
 using Smartflow.BussinessService.Models;
-using Smartflow.BussinessService.Services;
 using Smartflow.Samples.Models;
 
 namespace Smartflow.Samples.Controllers
@@ -13,27 +14,36 @@ namespace Smartflow.Samples.Controllers
     [ApiController]
     public class VacationController : ControllerBase
     {
-        private readonly VacationService vacationService = new VacationService();
+        private readonly IVacationService _vacationService;
+        private readonly IWorkflowService _workflowService;
         private readonly IMapper _mapper;
-        public VacationController(IMapper mapper)
+        public VacationController(IMapper mapper, IWorkflowService workflowService, IVacationService vacationService)
         {
             _mapper = mapper;
+            _workflowService = workflowService;
+            _vacationService = vacationService;
         }
 
         [Route("api/vacation/persistent"), HttpPost]
-        public string Post(VacationDto vacation)
+        public async Task<string> PostAsync(VacationDto vacation)
         {
             vacation.CreateTime = DateTime.Now;
             vacation.NID = Guid.NewGuid().ToString();
             var model = _mapper.Map<VacationDto, Vacation>(vacation);
-            vacationService.Insert(model);
-           return CommonMethods.Start(vacation.NID, "001001", vacation.UID,String.Format("{0}请假{1}天", vacation.Name, vacation.Day));
+            _vacationService.Persistent(model);
+            return await _workflowService.StartAsync(new Brigde
+            {
+                CategoryCode = "001001",
+                Key = vacation.NID,
+                Comment = String.Format("{0}请假{1}天", vacation.Name, vacation.Day),
+                Creator = vacation.UID
+            });
         }
 
         [Route("api/vacation/{id}/info"), HttpGet]
         public VacationDto Get(string id)
         {
-            return _mapper.Map<Vacation, VacationDto>(vacationService.Get(id));
+            return _mapper.Map<Vacation, VacationDto>(_vacationService.GetVacationByID(id));
         }
 
         public static dynamic Success(Object data, int total)

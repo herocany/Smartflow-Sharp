@@ -61,6 +61,8 @@
         nx.group = roleArray;
     }
 
+
+
     window.setting = {
         load: loadGroup,
         set: setGroup

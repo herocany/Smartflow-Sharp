@@ -2,10 +2,10 @@
     window.util = {
         prefix: 'http://localhost:8083/',
         smf: 'http://localhost:8097/',
-        process: 'http://localhost:8097/pages/image.html?id=',
-        pending: 'http://localhost:8083/WF/pending.html?id=',
-        actor: 'http://localhost:8083/WF/actorSelect.html',
-        carbon: 'http://localhost:8083/WF/carbonSelect.html',
+        process: 'http://localhost:8083/wf/image.html?id=',
+        pending: 'http://localhost:8083/wf/pending.html?id=',
+        actor: 'http://localhost:8083/wf/actorSelect.html',
+        carbon: 'http://localhost:8083/wf/carbonSelect.html',
         ajaxService: function (settings) {
             var url = util.prefix + settings.url;
             var defaultSettings = $.extend({

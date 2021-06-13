@@ -2,10 +2,10 @@
 
     function doGetSelectTransition(instanceID, actorID, callback) {
         var $this = this;
-        var url = util.format("api/smf/{instanceID}/transition/{actorID}/list", { instanceID: instanceID, actorID: actorID });
+        var url = 'api/smf/'+instanceID+'/transition/'+actorID+'/list';
         util.ajaxWFService({
             url: url,
-            type: 'get',
+            type:'get',
             success: function (serverData) {
                 callback && callback(serverData);
             }

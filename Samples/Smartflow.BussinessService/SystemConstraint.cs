@@ -7,6 +7,6 @@ namespace Smartflow.BussinessService
 {
     public class SystemConstraint
     {
-        public static readonly string CONST_WORKFLOW_START = GlobalObjectService.Configuration.GetSection("Start").Value;
+        public static readonly string CONST_WORKFLOW_URL = GlobalObjectService.Configuration.GetSection("WorkflowService").Value;
     }
 }

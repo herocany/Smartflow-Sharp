@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Smartflow.BussinessService;
+using Smartflow.BussinessService.Interfaces;
+using Smartflow.BussinessService.Services;
 using Smartflow.Samples.Profile;
 
 namespace Smartflow.Samples
@@ -40,6 +42,10 @@ namespace Smartflow.Samples
 
 
             services.AddAutoMapper((mapper) => mapper.AddProfile(typeof(AutoMapperProfile)));
+
+            services.AddTransient<IWorkflowService, WorkflowService>();
+            services.AddTransient<IVacationService, VacationService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,19 +1,16 @@
-﻿using Microsoft.AspNetCore.Hosting.Internal;
-using Microsoft.VisualBasic.CompilerServices;
+﻿/********************************************************************
+ License: https://github.com/chengderen/Smartflow/blob/master/LICENSE 
+ Home page: http://www.smartflow-sharp.com
+ Github : https://github.com/chengderen/Smartflow-Sharp
+ ********************************************************************
+ */
 using NHibernate;
 using NHibernate.Cfg;
-using NHibernate.SqlCommand;
-using NHibernate.Tool.hbm2ddl;
-using NHibernate.Transaction;
-using NHibernate.Type;
 using Smartflow.Common.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace Smartflow.Common
 {
