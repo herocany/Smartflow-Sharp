@@ -1,8 +1,16 @@
-﻿using System;
+﻿/********************************************************************
+ License: https://github.com/chengderen/Smartflow/blob/master/LICENSE 
+ Home page: http://www.smartflow-sharp.com
+ Github : https://github.com/chengderen/Smartflow-Sharp
+ ********************************************************************
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Smartflow.Abstraction.Body;
+using Smartflow.Abstraction.DTO;
 using Smartflow.Bussiness.Commands;
 using Smartflow.Bussiness.Interfaces;
 using Smartflow.Bussiness.Models;
@@ -10,7 +18,6 @@ using Smartflow.Common;
 using Smartflow.Core;
 using Smartflow.Core.Elements;
 using Smartflow.Web.Code;
-using Smartflow.Web.Models;
 
 namespace Smartflow.Web.Controllers
 {
@@ -173,7 +180,7 @@ namespace Smartflow.Web.Controllers
         }
 
         [Route("api/setting/pending/delete"), HttpDelete]
-        public void Delete(PendingDeleteDto dto)
+        public void Delete(PendingDeleteBody dto)
         {
             string[] ids = dto.ActorIDs.Split(',');
             if (ids.Length > 0)
@@ -193,7 +200,7 @@ namespace Smartflow.Web.Controllers
         }
 
         [Route("api/setting/pending/persistent"), HttpPost]
-        public void Persistent(PendingCommandDto dto)
+        public void Persistent(PendingBody dto)
         {
             WorkflowInstance instance = WorkflowInstance.GetInstance(dto.ID);
             var node = instance.Current.FirstOrDefault(e => e.ID == dto.NodeID);
@@ -276,10 +283,10 @@ namespace Smartflow.Web.Controllers
         }
 
         [Route("api/setting/structure/persistent"), HttpPost]
-        public void Persistent(WorkflowStructureCommandDto commandDto)
+        public void Persistent(WorkflowStructureBody commandDto)
         {
             commandDto.Resource = Uri.UnescapeDataString(commandDto.Resource);
-            WorkflowStructure structure = _mapper.Map<WorkflowStructureCommandDto, WorkflowStructure>(commandDto);
+            WorkflowStructure structure = _mapper.Map<WorkflowStructureBody, WorkflowStructure>(commandDto);
             structure.CreateTime = DateTime.Now;
             if (!String.IsNullOrEmpty(commandDto.NID))
             {

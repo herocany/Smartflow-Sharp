@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Smartflow.Web.Models
+namespace Smartflow.Abstraction.DTO
 {
     public class RecordDto
     {

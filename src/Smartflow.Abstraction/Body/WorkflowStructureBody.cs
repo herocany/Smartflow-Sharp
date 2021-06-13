@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/********************************************************************
+ License: https://github.com/chengderen/Smartflow/blob/master/LICENSE 
+ Home page: http://www.smartflow-sharp.com
+ Github : https://github.com/chengderen/Smartflow-Sharp
+ ********************************************************************
+ */
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Smartflow.Web.Models
+namespace Smartflow.Abstraction.Body
 {
-    public class WorkflowStructureCommandDto
+    public class WorkflowStructureBody
     {
         [Key]
-        public virtual string NID
+        public string NID
         {
             get;
             set;
@@ -17,7 +19,7 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public virtual string Name
+        public string Name
         {
             get;
             set;
@@ -25,7 +27,7 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public virtual string CategoryCode
+        public string CategoryCode
         {
             get;
             set;
@@ -33,7 +35,7 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public virtual string CategoryName
+        public string CategoryName
         {
             get;
             set;
@@ -41,13 +43,13 @@ namespace Smartflow.Web.Models
 
         [Required]
         [DataType(DataType.Text)]
-        public virtual string Resource
+        public string Resource
         {
             get;
             set;
         }
 
-        public virtual int Status
+        public int Status
         {
             get;
             set;
@@ -55,7 +57,7 @@ namespace Smartflow.Web.Models
 
         [Required]
         [StringLength(50)]
-        public virtual string Memo
+        public string Memo
         {
             get;
             set;

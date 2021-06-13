@@ -1,8 +1,15 @@
-﻿using System;
+﻿/********************************************************************
+ License: https://github.com/chengderen/Smartflow/blob/master/LICENSE 
+ Home page: http://www.smartflow-sharp.com
+ Github : https://github.com/chengderen/Smartflow-Sharp
+ ********************************************************************
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Smartflow.Abstraction.Body;
 using Smartflow.Bussiness.Commands;
 using Smartflow.Bussiness.Interfaces;
 using Smartflow.Bussiness.Models;
@@ -11,7 +18,6 @@ using Smartflow.Common;
 using Smartflow.Common.Logging;
 using Smartflow.Core;
 using Smartflow.Core.Elements;
-using Smartflow.Web.Models;
 
 namespace Smartflow.Web.Controllers
 {
@@ -43,7 +49,7 @@ namespace Smartflow.Web.Controllers
         /// 启动
         /// </summary>
         [Route("api/smf/start"), HttpPost]
-        public string Start(BridgeCommandDto dto)
+        public string Start(BridgeBody dto)
         {
             Category category = new CategoryService().Query().FirstOrDefault(cate => cate.NID == dto.CategoryCode);
             WorkflowStructure workflowStructure =
@@ -134,7 +140,7 @@ namespace Smartflow.Web.Controllers
         /// </summary>
         /// <param name="context"></param>
         [Route("api/smf/jump"), HttpPost]
-        public void Jump(PostContextDto context)
+        public void Jump(PostContextBody context)
         {
             WorkflowInstance Instance = WorkflowInstance.GetInstance(context.InstanceID);
             var current = GetCurrent(Instance, context.ActorID);

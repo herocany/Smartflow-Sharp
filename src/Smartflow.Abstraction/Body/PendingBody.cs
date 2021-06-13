@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/********************************************************************
+ License: https://github.com/chengderen/Smartflow/blob/master/LICENSE 
+ Home page: http://www.smartflow-sharp.com
+ Github : https://github.com/chengderen/Smartflow-Sharp
+ ********************************************************************
+ */
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
-namespace Smartflow.Web.Models
+namespace Smartflow.Abstraction.Body
 {
-    public class PendingCommandDto
+    public class PendingBody
     {
         [Required]
         [StringLength(50)]

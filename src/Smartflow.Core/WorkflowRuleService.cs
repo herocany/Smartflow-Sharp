@@ -1,4 +1,10 @@
-﻿using NHibernate;
+﻿/********************************************************************
+ License: https://github.com/chengderen/Smartflow/blob/master/LICENSE 
+ Home page: http://www.smartflow-sharp.com
+ Github : https://github.com/chengderen/Smartflow-Sharp
+ ********************************************************************
+ */
+using NHibernate;
 using Smartflow.Common;
 using Smartflow.Core.Elements;
 using System;
