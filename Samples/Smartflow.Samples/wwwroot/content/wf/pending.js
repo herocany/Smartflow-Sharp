@@ -45,6 +45,7 @@ $(function () {
         util.ajaxWFService({
             url: url,
             type: 'delete',
+            dataType:'text',
             success: function () {
                 layui.table.reload(config.task);
             }
@@ -123,6 +124,7 @@ $(function () {
         var table = layui.table;
         util.table({
             elem: selector
+            , toolbar: config.toolbar
             , page: true
             , url: config.url
             , where: {
@@ -156,12 +158,16 @@ $(function () {
                 }
             ]]
         });
-        table.on('tool(task-table)', function (obj) {
+
+        table.on('tool(' + config.task + ')', function (obj) {
             var data = obj.data;
             var eventName = obj.event;
             if (eventName === 'jump') {
                 $this.jump(data);
             }
+        });
+        table.on('toolbar(' + config.task + ')', function (obj) {
+            $this.setting.methods[obj.event].call($this);
         });
     }
     Page.check = function (id, callback) {
@@ -178,11 +184,12 @@ $(function () {
         config: {
             id: 'pending-table',
             task: 'task-table',
+            toolbar:'#task-list-bar',
             delete: 'api/setting/summary/{instanceID}/{categoryCode}/delete/{id}',
             url: 'api/setting/summary/query/page',
             category: 'api/setting/category/{id}/info'
         },
-        event: {
+        methods: {
             delete: function () {
                 var $this = this;
                 Page.check('task-table', function (data) {
@@ -195,6 +202,9 @@ $(function () {
                     });
                 });
             }
+        },
+        event: {
+   
         }
     });
 

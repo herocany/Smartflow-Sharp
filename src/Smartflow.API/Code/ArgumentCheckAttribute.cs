@@ -30,7 +30,12 @@ namespace Smartflow.API.Code
                         }
                     }
                 }
-                ResultData data = new ResultData(999, "参数不合法");
+                ResultData data = new ResultData
+                {
+                    Code = 999,
+                    Message = "参数不合法",
+                    Data=null
+                };
                 if (errors.Count > 0)
                 {
                     string errorMessage = errors.Count > 0 && !String.IsNullOrEmpty(string.Join("", errors)) ? string.Join("", errors) : data.Message;

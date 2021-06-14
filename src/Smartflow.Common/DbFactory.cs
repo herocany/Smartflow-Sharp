@@ -118,8 +118,6 @@ namespace Smartflow.Common
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex);
-                System.Diagnostics.Trace.WriteLine(ex);
                 transaction.Rollback();
                 throw ex;
             }

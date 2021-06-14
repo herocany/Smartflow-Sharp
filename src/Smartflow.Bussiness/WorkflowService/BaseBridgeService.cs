@@ -109,7 +109,7 @@ namespace Smartflow.Bussiness.WorkflowService
 
         public List<User> GetActorByGroup(Node node, WorkflowOpertaion direction)
         {
-            dynamic dyObject = ConvertStr(node);
+            dynamic dyObject = this.ToJoin(node);
             return GetActorByGroup((String)dyObject.Actors, (String)dyObject.Groups, (String)dyObject.Organizations, node, direction);
         }
 
@@ -158,7 +158,7 @@ namespace Smartflow.Bussiness.WorkflowService
             return userList;
         }
 
-        private dynamic ConvertStr(Node node)
+        private dynamic ToJoin(Node node)
         {
             List<string> gList = new List<string>();
             List<string> ids = new List<string>();

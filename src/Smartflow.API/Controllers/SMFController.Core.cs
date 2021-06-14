@@ -70,7 +70,7 @@ namespace Smartflow.API.Controllers
             {
                 Instance = Instance,
                 ActorID = model.Creator,
-                Message = "提交",
+                Message = category.Name,
                 TransitionID = selectTransitionID,
                 Data = Newtonsoft.Json.JsonConvert.DeserializeObject(serialObject),
                 Current = current
@@ -103,8 +103,7 @@ namespace Smartflow.API.Controllers
                 };
 
                 var pending = _pendingService.Query(queryArg).FirstOrDefault();
-                var hasAuth = (current.NodeType == WorkflowNodeCategory.Start && instance.State == WorkflowInstanceState.Running) ?
-                    true : instance.State == WorkflowInstanceState.Running && pending != null;
+                var hasAuth = (current.NodeType == WorkflowNodeCategory.Start && instance.State == WorkflowInstanceState.Running) || instance.State == WorkflowInstanceState.Running && pending != null;
                 return new
                 {
                     current.NID,
