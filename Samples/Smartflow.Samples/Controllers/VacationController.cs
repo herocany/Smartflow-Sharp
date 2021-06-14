@@ -35,7 +35,6 @@ namespace Smartflow.Samples.Controllers
             {
                 CategoryCode = "001001",
                 Key = vacation.NID,
-                Comment = String.Format("{0}请假{1}天", vacation.Name, vacation.Day),
                 Creator = vacation.UID
             });
         }
