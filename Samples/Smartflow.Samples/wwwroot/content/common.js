@@ -14,7 +14,6 @@
                 contentType: 'application/json',
                 cache: false,
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                   
                     alert('流程发生异常,请与系统管理员联系');
                 }
             }, settings, { url: url });
@@ -28,10 +27,6 @@
                 contentType: 'application/json',
                 cache: false,
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    console.log(url);
-                    console.log(XMLHttpRequest);
-                    console.log(textStatus);
-                    console.log(errorThrown);
                     alert('流程发生异常,请与系统管理员联系');
                 }
             }, settings, { url: url });
@@ -180,7 +175,7 @@
                 , parseData: function (res) {
                     return {
                         "code": (res.Code == 200 ? 0 : res.Code),
-                        "msg": res.Message,
+                        "msg": (res.Code == 200 ? '' : res.Data),
                         "count": res.Total,
                         "data": res.Data
                     };

@@ -66,11 +66,7 @@ namespace Smartflow.API
 
             services.AddAutoMapper((mapper) => mapper.AddProfile(typeof(SmartflowProfile)));
             XmlConfigurator.Configure(LogManager.CreateRepository(GlobalObjectService.Configuration.GetSection("Logging:Program").Value), new FileInfo("log4net.config"));
-
-            services.AddHibernate(System.IO.Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "hibernate.cfg.xml"
-            ));
+            services.AddHibernate(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"hibernate.cfg.xml"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

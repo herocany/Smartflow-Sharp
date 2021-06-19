@@ -30,19 +30,20 @@ namespace Smartflow.API.Code
                         }
                     }
                 }
-                ResultData data = new ResultData
+
+                var data = new ResultData
                 {
                     Code = 999,
-                    Message = "参数不合法",
-                    Data=null
+                    Data = "参数不合法"
                 };
                 if (errors.Count > 0)
                 {
-                    string errorMessage = errors.Count > 0 && !String.IsNullOrEmpty(string.Join("", errors)) ? string.Join("", errors) : data.Message;
-                    data.Message = string.Format("{0}", errorMessage);
+                    string errorMessage = errors.Count > 0 && !String.IsNullOrEmpty(string.Join("", errors)) ? string.Join("", errors) : data.Data.ToString();
+                    data.Data = string.Format("{0}", errorMessage);
                 }
                 actionContext.Result = new JsonResult(data);
             }
+
             base.OnActionExecuting(actionContext);
         }
     }

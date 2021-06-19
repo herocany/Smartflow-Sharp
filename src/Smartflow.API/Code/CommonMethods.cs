@@ -15,7 +15,7 @@ namespace Smartflow.API.Code
         {
             return new ResultData
             {
-                Code = (int)HttpStatusCode.OK,
+                Code = 200,
                 Total = total,
                 Data=data
             };
