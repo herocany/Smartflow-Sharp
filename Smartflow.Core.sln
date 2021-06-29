@@ -19,7 +19,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smartflow.Samples", "Sample
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smartflow.Abstraction", "src\Smartflow.Abstraction\Smartflow.Abstraction.csproj", "{3000F9C4-966E-45FA-8484-CDC1B66A9FBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartflow.API", "src\Smartflow.API\Smartflow.API.csproj", "{53094925-0A71-4407-AB30-B92978BA4CE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smartflow.API", "src\Smartflow.API\Smartflow.API.csproj", "{53094925-0A71-4407-AB30-B92978BA4CE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{1EB48586-17E8-4682-A09F-7D24DEDDE049}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{638D3A81-B011-4E5B-860B-E21E958C5068}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +62,10 @@ Global
 		{53094925-0A71-4407-AB30-B92978BA4CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53094925-0A71-4407-AB30-B92978BA4CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53094925-0A71-4407-AB30-B92978BA4CE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EB48586-17E8-4682-A09F-7D24DEDDE049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EB48586-17E8-4682-A09F-7D24DEDDE049}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EB48586-17E8-4682-A09F-7D24DEDDE049}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EB48586-17E8-4682-A09F-7D24DEDDE049}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +78,7 @@ Global
 		{700ECB1D-DBFC-45C5-9F14-E24060649E83} = {38564511-FB1C-4615-940C-2D572AC143C8}
 		{3000F9C4-966E-45FA-8484-CDC1B66A9FBC} = {7163226A-E5D2-45C5-9B8B-4739F4C2524B}
 		{53094925-0A71-4407-AB30-B92978BA4CE6} = {7163226A-E5D2-45C5-9B8B-4739F4C2524B}
+		{1EB48586-17E8-4682-A09F-7D24DEDDE049} = {38564511-FB1C-4615-940C-2D572AC143C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36149782-1554-4111-A20E-B56700CC0DB9}
