@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npoi.Mapper;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,12 +12,10 @@ namespace WebApplication1.Controllers
     public class TestController : ControllerBase
     {
         private readonly TestDbContext testDbContext;
-        private readonly ICache cache;
 
-        public TestController(TestDbContext testDbContext, ICache cache)
+        public TestController(TestDbContext testDbContext)
         {
             this.testDbContext = testDbContext;
-            this.cache = cache;
         }
         [HttpPost]
         public async Task<IActionResult> add()
@@ -26,14 +26,14 @@ namespace WebApplication1.Controllers
             };
             testDbContext.Add(entity);
             await testDbContext.SaveChangesAsync();
-            await cache.DelAsync("hc_user1");
+            await RedisHelper.DelAsync("hc_user1");
             return this.Ok(entity);
         }
         [HttpGet]
         public async Task<IActionResult> get()
         {
             var aa = await testDbContext.hc_user.ToListAsync();
-            var list = await cache.CacheShellAsync("hc_user1", async () =>
+            var list = await RedisHelper.CacheShellAsync("hc_user1", (int)TimeSpan.FromMinutes(3).TotalSeconds, async () =>
              {
                  return await testDbContext.hc_user.ToListAsync();
              });
@@ -42,7 +42,18 @@ namespace WebApplication1.Controllers
         [HttpDelete]
         public async Task<IActionResult> del()
         {
-            return this.Ok(await cache.DelAsync("hc_user"));
+            return this.Ok(await RedisHelper.DelAsync("hc_user"));
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("export")]
+        public async Task<IActionResult> export()
+        {
+            //var mapper = new Mapper("test.xslx");
+            await Task.CompletedTask;
+            return this.Ok();
         }
     }
 }
