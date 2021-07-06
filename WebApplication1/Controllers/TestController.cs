@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Npoi.Mapper;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
 {
+    /// <summary>
+    /// 测试
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class TestController : ControllerBase
@@ -29,6 +33,11 @@ namespace WebApplication1.Controllers
             await RedisHelper.DelAsync("hc_user1");
             return this.Ok(entity);
         }
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(hc_user), (int)HttpStatusCode.OK)]
         [HttpGet]
         public async Task<IActionResult> get()
         {
